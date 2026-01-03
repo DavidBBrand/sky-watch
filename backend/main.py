@@ -1,23 +1,25 @@
 import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from skyfield.api import load
+from skyfield.api import load, Topos
+from skyfield import almanac
+from datetime import datetime, timedelta
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
-# Configuration - Change these to your local coordinates!
-LAT = "35.92"  # Example: Franklin, TN
-LON = "-86.86"
+# # Configuration - Change these to your local coordinates!
+# LAT = "35.92"  # Example: Franklin, TN
+# LON = "-86.86"
 
-# Load the ephemeris once
-eph = load('de421.bsp')
+# # Load the ephemeris once
+# eph = load('de421.bsp')
 
 def get_weather_description(code):
     """Maps Open-Meteo WMO codes to human-readable strings"""
@@ -42,6 +44,69 @@ def get_moon():
     illumination = m.fraction_illuminated(sun)
     return {"illumination": round(illumination * 100, 2)}
 
+
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+LAT = 35.92  # Franklin, TN
+LON = -86.86
+# Create a Topos object for coordinate-based calculations
+LOCATION = Topos(latitude_degrees=LAT, longitude_degrees=LON)
+
+eph = load('de421.bsp')
+earth = eph['earth']
+observer = earth + LOCATION
+
+@app.get("/sky-summary")
+def get_sky_summary():
+    ts = load.timescale()
+    t = ts.now()
+    
+    # --- 1. MOON DATA ---
+    sun, moon = eph['sun'], eph['moon']
+    m = observer.at(t).observe(moon).apparent()
+    illumination = m.fraction_illuminated(sun)
+
+    # --- 2. SUNRISE/SUNSET ---
+    # Find events between midnight today and midnight tomorrow
+    t0 = ts.utc(t.utc_datetime().year, t.utc_datetime().month, t.utc_datetime().day)
+    t1 = ts.utc(t0.utc_datetime() + timedelta(days=1))
+    
+    times, events = almanac.find_discrete(t0, t1, almanac.sunrise_sunset(eph, LOCATION))
+    
+    # --- 3. PLANET VISIBILITY ---
+    # Planets to track
+    target_planets = {
+        "Venus": eph['venus'],
+        "Mars": eph['mars'],
+        "Jupiter": eph['jupiter_barycenter'],
+        "Saturn": eph['saturn_barycenter']
+    }
+    
+    planet_data = {}
+    for name, body in target_planets.items():
+        astrometric = observer.at(t).observe(body)
+        alt, az, distance = astrometric.apparent().altaz()
+        planet_data[name] = {
+            "altitude": round(alt.degrees, 1),
+            "is_visible": alt.degrees > 0  # Above the horizon
+        }
+
+    return {
+        "moon": {"illumination": round(illumination * 100, 2)},
+        "sun": {
+            "sunrise": times[events == 1][0].utc_iso() if any(events == 1) else None,
+            "sunset": times[events == 0][0].utc_iso() if any(events == 0) else None,
+        },
+        "planets": planet_data
+    }
+    
 @app.get("/weather")
 def get_weather():
     # Added temperature_unit=fahrenheit and windspeed_unit=mph
