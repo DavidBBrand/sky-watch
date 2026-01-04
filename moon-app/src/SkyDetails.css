@@ -17,13 +17,17 @@
     
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
     color: white;
-    transition: transform 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: default;
 }
 
+/* The Zoom Effect */
 .sky-details-card:hover {
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    transform: scale(1.06); /* Matches MoonTracker zoom */
+    border: 1px solid rgba(255, 255, 255, 0.4); /* Brightens border on hover */
+    box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.25); /* Deepens shadow for depth */
+    background: rgba(255, 255, 255, 0.15); /* Slightly increases opacity */
 }
-
 .planet-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

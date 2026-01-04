@@ -29,6 +29,7 @@ body {
     /* Layout */
     padding: 25px;
     min-width: 280px;
+    min-height: 300px;
     flex: 1; /* Allows it to grow/shrink in your horizontal row */
     max-width: 350px;
     
@@ -40,7 +41,7 @@ body {
 
 /* Hover effect for interactivity */
 .weather-card:hover {
-    transform: translateY(-5px);
+    transform: scale(1.06);
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.4);
 }
