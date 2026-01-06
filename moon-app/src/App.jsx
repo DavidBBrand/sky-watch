@@ -80,10 +80,11 @@ function App() {
           <SkyDetails skyData={skyData} />
         ) : (
           <div className="sky-details-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ opacity: 0.5 }}>Connecting to Sky Station...</p>
+            <p style={{ opacity: 0.5, color: 'red'}}>Connecting to Sky Station...</p>
           </div>
         )}
       </div>
+      <p style={{ fontSize: '0.7rem', opacity: '0.3'}}>Copyright © 2026 David Brand </p>
     </div>
   );
 }

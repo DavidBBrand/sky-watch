@@ -26,7 +26,7 @@ const Weather = () => {
 
   // Error State - kept simple but themed
   if (error)
-    return <div className="weather-card" style={{ color: "#ff4444" }}>Weather currently unavailable</div>;
+    return <div className="weather-card" style={{ color: "#992323ff" }}>Weather currently unavailable</div>;
 
   // Loading State - uses theme colors
   if (!weather) 
