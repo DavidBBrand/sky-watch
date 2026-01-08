@@ -9,7 +9,7 @@
   --card-border: rgba(255, 255, 255, 0.4);
   --text-main: #3e3323;
   --text-sub: rgba(62, 51, 35, 0.7);
-  --star-opacity: 0; /* Hide stars during day */
+  --star-opacity: 0; 
 }
 
 [data-theme='night'] {
@@ -22,7 +22,7 @@
   --card-border: rgba(255, 255, 255, 0.1);
   --text-main: #ffffff;
   --text-sub: rgba(255, 255, 255, 0.6);
-  --star-opacity: 0.3; /* Show stars at night */
+  --star-opacity: 0.6; /* Increased for your bigger stars */
 }
 
 /* 2. Global Reset & Base Styles */
@@ -32,7 +32,9 @@ body {
   min-height: 100vh;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   
-  /* Dynamic Background */
+  /* Use containment to prevent layout recalculations from leaking */
+  contain: paint;
+  
   background-color: var(--bg-color);
   background-image: 
     radial-gradient(at 0% 0%, var(--mesh-1) 0px, transparent 50%),
@@ -41,37 +43,36 @@ body {
   background-attachment: fixed;
   
   color: var(--text-main);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* OPTIMIZATION: Only transition specific colors, NOT 'all' */
+  transition: background-color 0.8s ease, color 0.8s ease;
+  
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* 3. Night Mode Stars */
-/* 3. Night Mode Stars */
+/* 3. Night Mode Stars (Hardware Accelerated) */
 body::before {
   content: "";
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
   
-  /* Larger, crisp stars and softer, glowing stars */
+  /* Bigger, layered stars */
   background-image: 
-    /* Layer 1: Small "distant" stars */
-    radial-gradient(1px 1px at 25px 35px, #fff, rgba(0,0,0,0)),
-    radial-gradient(1px 1px at 150px 250px, #fff, rgba(0,0,0,0)),
-    
-    /* Layer 2: Medium stars */
-    radial-gradient(3px 3px at 50px 100px, #fff, rgba(0,0,0,0)),
-    radial-gradient(3px 3px at 280px 70px, #fff, rgba(0,0,0,0)),
-    
-    /* Layer 3: Large "hero" stars with a soft glow */
-    radial-gradient(4px 4px at 10px 400px, #ffffff, rgba(255, 255, 255, 0.1) 40%, transparent 100%),
-    radial-gradient(5px 5px at 77% 1%, #ffffff, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-
-  /* background-size controls the "density" of the star field */
-  background-size: 500px 500px; 
+    radial-gradient(1px 1px at 25px 35px, #fff, transparent),
+    radial-gradient(2px 2px at 50px 100px, #fff, transparent),
+    radial-gradient(3px 3px at 100px 400px, #ffffff, rgba(255, 255, 255, 0.1) 40%, transparent 100%),
+    radial-gradient(4px 4px at 85% 20%, #ffffff, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   
+  background-size: 500px 500px;
   opacity: var(--star-opacity);
-  transition: opacity 1.2s ease;
+  
+  /* GPU BOOST: Move rendering to the graphics card */
+  will-change: opacity;
+  transform: translateZ(0); 
+  
+  /* Hardware-friendly transition */
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
   pointer-events: none;
 }
@@ -81,3 +82,26 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
   letter-spacing: 4px;
+  /* Animating color is cheap; animating 'all' is expensive */
+  transition: color 0.8s ease;
+}
+
+button {
+  border-radius: 30px;
+  border: 1px solid var(--card-border);
+  padding: 0.6em 1.2em;
+  font-size: 0.9em;
+  font-weight: 500;
+  background: var(--card-bg);
+  color: var(--text-main);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  
+  /* OPTIMIZATION: Specific properties only */
+  transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.2);
+}

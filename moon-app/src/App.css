@@ -36,7 +36,7 @@
   cursor: pointer;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
   font-weight: 500;
 }
 
