@@ -84,7 +84,7 @@ function App() {
           </div>
         )}
       </div>
-      <p style={{ fontSize: '0.7rem', opacity: '0.3'}}>Copyright © 2026 David Brand </p>
+      <p style={{ fontSize: '0.2em', opacity: '0.18'}}>Copyright © 2026 David Brand </p>
     </div>
   );
 }
