@@ -66,6 +66,7 @@ def get_sky_summary():
         alt, az, distance = astrometric.apparent().altaz()
         planet_data[name] = {
             "altitude": round(float(alt.degrees), 1), # Ensure it's a float
+            "azimuth": round(float(az.degrees), 1), 
             "is_visible": bool(alt.degrees > 0)       # Ensure it's a standard bool
         }
 

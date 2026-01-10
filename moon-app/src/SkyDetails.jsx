@@ -32,6 +32,15 @@ const SkyDetails = ({ skyData }) => {
     return "High Overhead";
   }
 
+  const getCompassDirection = (az) => {
+  const azimuth = parseFloat(az);
+  // Divide 360 into 8 chunks of 45 degrees
+  const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  // Offset by 22.5 to center the labels (e.g., North is 337.5 to 22.5)
+  const index = Math.round(azimuth / 45) % 8;
+  return directions[index];
+};
+
   return (
     <div className="sky-details-card">
       <div
@@ -193,7 +202,13 @@ const SkyDetails = ({ skyData }) => {
                     marginTop: "4px"
                   }}
                 >
-                 {getAltitudeDescription(info.altitude)} ({info.altitude}°)
+                 {getCompassDirection(info.azimuth)} - {getAltitudeDescription(info.altitude)} ({info.altitude}° Alt / {info.azimuth}° Az)
+                </div>
+                <div style={{
+                  fontSize: "0.65rem",
+                  color: "var(--text-sub)",
+                  opacity: 0.8,}}>
+                  {info.altitude}° Altitude / {info.azimuth}° Azimuth
                 </div>
               </div>
             ))}
