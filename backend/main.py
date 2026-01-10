@@ -1,5 +1,5 @@
 import requests
-from fastapi import FastAPI
+from fastapi import FastAPI, Query 
 from fastapi.middleware.cors import CORSMiddleware
 from skyfield.api import load, Topos
 from skyfield import almanac
@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 
 app = FastAPI()
 
-# 1. CORS Middleware (Must be defined once)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,15 +14,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 2. Configuration & Global Data
-LAT = 35.92  # Franklin, TN
-LON = -86.86
-LOCATION = Topos(latitude_degrees=LAT, longitude_degrees=LON)
-
-# Load the ephemeris (the planetary map) once at startup
+# 1. Global Ephemeris Loading (Keep this outside the functions for speed)
 eph = load('de421.bsp')
 earth = eph['earth']
-observer = earth + LOCATION
 
 def get_weather_description(code):
     mapping = {
@@ -35,22 +28,26 @@ def get_weather_description(code):
     }
     return mapping.get(code, "Cloudy")
 
-# --- ENDPOINTS ---
+# --- UPDATED ENDPOINTS ---
 
 @app.get("/sky-summary")
-def get_sky_summary():
+def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86)):
     ts = load.timescale()
     t = ts.now()
+    
+    # Define location dynamically
+    user_location = Topos(latitude_degrees=lat, longitude_degrees=lon)
+    observer = earth + user_location
     
     # 1. MOON DATA
     sun_obj, moon = eph['sun'], eph['moon']
     m = observer.at(t).observe(moon).apparent()
     illumination = m.fraction_illuminated(sun_obj)
 
-    # 2. SUNRISE/SUNSET
+    # 2. SUNRISE/SUNSET (Dynamic Location)
     t0 = ts.utc(t.utc_datetime().year, t.utc_datetime().month, t.utc_datetime().day)
     t1 = ts.utc(t0.utc_datetime() + timedelta(days=1))
-    times, events = almanac.find_discrete(t0, t1, almanac.sunrise_sunset(eph, LOCATION))
+    times, events = almanac.find_discrete(t0, t1, almanac.sunrise_sunset(eph, user_location))
     
     # 3. PLANET VISIBILITY
     target_planets = {
@@ -65,9 +62,9 @@ def get_sky_summary():
         astrometric = observer.at(t).observe(body)
         alt, az, distance = astrometric.apparent().altaz()
         planet_data[name] = {
-            "altitude": round(float(alt.degrees), 1), # Ensure it's a float
-            "azimuth": round(float(az.degrees), 1), 
-            "is_visible": bool(alt.degrees > 0)       # Ensure it's a standard bool
+            "altitude": round(float(alt.degrees), 1),
+            "azimuth": round(float(az.degrees), 1),
+            "is_visible": bool(alt.degrees > 0)
         }
 
     return {
@@ -80,8 +77,8 @@ def get_sky_summary():
     }
 
 @app.get("/weather")
-def get_weather():
-    url = f"https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={LON}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph"
+def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph"
     try:
         response = requests.get(url)
         data = response.json()
@@ -93,13 +90,20 @@ def get_weather():
         }
     except Exception as e:
         return {"error": str(e)}
-
-@app.get("/moon-illumination") # Kept for backward compatibility with old components
-def get_moon():
+    
+@app.get("/moon-details")
+def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)):
     ts = load.timescale()
     t = ts.now()
-    sun, moon = eph['sun'], eph['moon']
-    m = earth.at(t).observe(moon).apparent()
-    illumination = m.fraction_illuminated(sun)
-    print(illumination)
-    return {"illumination": round(illumination * 100, 2)} 
+    
+    # Create the observer based on user input
+    user_location = Topos(latitude_degrees=lat, longitude_degrees=lon)
+    observer = earth + user_location
+    
+    # Calculate illumination
+    sun_obj, moon = eph['sun'], eph['moon']
+    m = observer.at(t).observe(moon).apparent()
+    illumination = m.fraction_illuminated(sun_obj)
+
+    # Return exactly what MoonTracker.jsx is looking for
+    return {"illumination": round(float(illumination * 100), 2)}
