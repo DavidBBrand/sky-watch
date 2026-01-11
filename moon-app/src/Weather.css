@@ -31,7 +31,7 @@
 
 /* Hover effect for interactivity */
 .weather-card:hover {
-    transform: scale(1.06);
+    transform: scale(1.21);
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     border: 1px solid var(--text-sub);
 }

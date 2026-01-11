@@ -27,7 +27,7 @@
 }
 
 .moon-card:hover {
-    transform: scale(1.06);
+    transform: scale(1.21);
     /* Hover glow also uses a variable now */
     border: 1px solid var(--text-sub);
     box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.2);
