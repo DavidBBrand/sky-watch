@@ -8,19 +8,27 @@ const MoonTracker = ({ lat, lon }) => {
   // Corrected single useEffect block
   useEffect(() => {
     setLoading(true);
-
-    // Fetching from the details endpoint we set up in main.py
+    let isMounted = true; // to prevent state updates if unmounted 
+    // Fetching from the details endpoint in main.py
     fetch(`http://127.0.0.1:8000/moon-details?lat=${lat}&lon=${lon}`)
       .then(response => response.json())
       .then(data => {
-        // We use data.illumination because that is the key in your Python return
-        setIllumination(data.illumination);
-        setLoading(false);
+        if (isMounted) {
+          setIllumination(data.illumination);
+          setLoading(false);
+        };
+        // reference data.illumination from main.py
+        
       })
       .catch(err => {
-        console.error("Error fetching moon data:", err);
-        setLoading(false);
+        if (isMounted) {
+          console.error("Error fetching moon data:", err);
+          setLoading(false);
+        }
+
       });
+
+      return () => { isMounted  = false; } // cleanup function
   }, [lat, lon]); 
 
   // --- The Graphic Sub-Component ---

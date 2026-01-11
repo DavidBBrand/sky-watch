@@ -59,11 +59,11 @@ function App() {
       </button>
 
       {/* 2. Header Section */}
-      <header style={{ textAlign: "center", marginBottom: "20px" }}>
+      <header style={{ textAlign: "center", marginBottom: "20px", fontSize: '1.5rem' }}>
         <h1 style={{ margin: 0, fontWeight: '300', color: 'var(--text-main)' }}>
           SKY DASHBOARD 
         </h1>
-        <p style={{ color: 'var(--text-sub)', letterSpacing: '2px', fontSize: '0.8rem', marginTop: '10px', textTransform: 'uppercase' }}>
+        <p style={{ color: 'var(--text-sub)', letterSpacing: '2px', fontSize: '1.4rem',fontWeight: '200', marginTop: '10px', textTransform: 'uppercase' }}>
           FOR {location.name} ({location.lat.toFixed(2)}° N, {location.lon.toFixed(2)}° W)
         </p>
       </header>

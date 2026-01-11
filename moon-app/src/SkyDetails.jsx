@@ -14,13 +14,23 @@ const SkyDetails = ({ skyData }) => {
     });
   };
   const planetIcons = {
-    Mercury: "☿️", // Or "🌑"
-    Venus: "♀️", // Or "🌕"
+    Mercury: "🌑",
+    Venus: "🌕",
     Mars: "🔴",
     Jupiter: "🟠",
     Saturn: "🪐",
     Uranus: "💎",
     Neptune: "🔵"
+  };
+  const getPlanetSymbol = (name) => {
+    const symbols = {
+      Venus: "♀",
+      Mars: "♂",
+      Jupiter: "♃",
+      Saturn: "♄",
+      Mercury: "☿"
+    };
+    return symbols[name] || "•";
   };
 
   const getAltitudeDescription = (alt) => {
@@ -30,16 +40,16 @@ const SkyDetails = ({ skyData }) => {
     if (altitude < 30) return "Low in Sky";
     if (altitude < 60) return "Mid Sky";
     return "High Overhead";
-  }
+  };
 
   const getCompassDirection = (az) => {
-  const azimuth = parseFloat(az);
-  // Divide 360 into 8 chunks of 45 degrees
-  const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
-  // Offset by 22.5 to center the labels (e.g., North is 337.5 to 22.5)
-  const index = Math.round(azimuth / 45) % 8;
-  return directions[index];
-};
+    const azimuth = parseFloat(az);
+    // Divide 360 into 8 chunks of 45 degrees
+    const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    // Offset by 22.5 to center the labels (e.g., North is 337.5 to 22.5)
+    const index = Math.round(azimuth / 45) % 8;
+    return directions[index];
+  };
 
   return (
     <div className="sky-details-card">
@@ -60,31 +70,16 @@ const SkyDetails = ({ skyData }) => {
               color: "var(--text-sub)",
               margin: 0
             }}
-          >
-            Celestial Observations
-          </p>
+          ></p>
           <h2
             style={{
-              fontSize: "1.2rem",
+              fontSize: "1.0rem",
               margin: "5px 0 0 0",
-              fontWeight: "600",
+              fontWeight: "300",
               color: "var(--text-main)"
             }}
-          >
-            Franklin, TN
-          </h2>
+          ></h2>
         </div>
-        <span
-          style={{
-            fontSize: "0.6rem",
-            background: "var(--card-border)",
-            color: "var(--text-main)",
-            padding: "4px 8px",
-            borderRadius: "10px"
-          }}
-        >
-          35.92° N
-        </span>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -92,8 +87,8 @@ const SkyDetails = ({ skyData }) => {
         <div>
           <h3
             style={{
-              color: "#3b82f6",
-              fontSize: "0.7rem",
+              color: "#426fb7",
+              fontSize: "1.2rem",
               textTransform: "uppercase",
               letterSpacing: "1px",
               marginBottom: "10px"
@@ -116,7 +111,7 @@ const SkyDetails = ({ skyData }) => {
               </p>
               <p
                 style={{
-                  fontSize: "0.6rem",
+                  fontSize: "0.8rem",
                   color: "var(--text-sub)",
                   margin: 0
                 }}
@@ -138,7 +133,7 @@ const SkyDetails = ({ skyData }) => {
               </p>
               <p
                 style={{
-                  fontSize: "0.6rem",
+                  fontSize: "0.8rem",
                   color: "var(--text-sub)",
                   margin: 0
                 }}
@@ -153,8 +148,8 @@ const SkyDetails = ({ skyData }) => {
         <div>
           <h3
             style={{
-              color: "#a855f7",
-              fontSize: "0.7rem",
+              color: "#854dbb",
+              fontSize: "1.2rem",
               textTransform: "uppercase",
               letterSpacing: "1px",
               marginBottom: "5px"
@@ -165,7 +160,7 @@ const SkyDetails = ({ skyData }) => {
           <div className="planet-grid">
             {Object.entries(planets).map(([name, info]) => (
               <div key={name} className="planet-item">
-                <div style={{ fontSize: "2.2rem", marginBottom: "5px" }}>
+                <div style={{ fontSize: "3.2rem", marginBottom: "5px" }}>
                   {planetIcons[name] || "✨"}
                 </div>
 
@@ -177,11 +172,14 @@ const SkyDetails = ({ skyData }) => {
                   }}
                 >
                   
+                  <span style={{ fontSize: "2.8rem", fontFamily: "serif",fontWeight: "400" }}>
+                    {getPlanetSymbol(name)}
+                  </span>
                 </div>
                 <div
                   style={{
-                    fontSize: "1rem",
-                    fontWeight: "600",
+                    fontSize: "2rem",
+                    fontWeight: "400",
                     marginBottom: "4px",
                     color: "var(--text-main)"
                   }}
@@ -197,17 +195,22 @@ const SkyDetails = ({ skyData }) => {
                 </span>
                 <div
                   style={{
-                    fontSize: "0.65rem",
+                    fontSize: "0.8rem",
                     color: "var(--text-sub)",
                     marginTop: "4px"
                   }}
                 >
-                 {getCompassDirection(info.azimuth)} - {getAltitudeDescription(info.altitude)} ({info.altitude}° Alt / {info.azimuth}° Az)
+                  {getCompassDirection(info.azimuth)} -{" "}
+                  {getAltitudeDescription(info.altitude)} ({info.altitude}° Alt
+                  / {info.azimuth}° Az)
                 </div>
-                <div style={{
-                  fontSize: "0.65rem",
-                  color: "var(--text-sub)",
-                  opacity: 0.8,}}>
+                <div
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "var(--text-sub)",
+                    opacity: 0.8
+                  }}
+                >
                   {info.altitude}° Altitude / {info.azimuth}° Azimuth
                 </div>
               </div>
