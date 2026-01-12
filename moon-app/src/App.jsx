@@ -117,6 +117,13 @@ function App() {
           >
             Solar Time: {getLocalSolarTime()}
           </span>
+          {/* Standard Time Offset */}
+          <span
+            style={{ fontSize: "0.7rem", opacity: 0.6, letterSpacing: "1px" }}
+          >
+            UTC OFFSET: {location.lon >= 0 ? "+" : ""}
+            {(location.lon / 15).toFixed(1)} HRS
+          </span>
         </div>
       </header>
 

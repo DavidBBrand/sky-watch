@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from skyfield.api import load, Topos
 from skyfield import almanac
 from datetime import datetime, timedelta
+import httpx 
 
 app = FastAPI()
 
@@ -76,21 +77,45 @@ def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86)):
         "planets": planet_data
     }
 
+# @app.get("/weather")
+# def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
+#     # Added &timezone=auto to the URL
+#     url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=auto"
+#     try:
+#         response = requests.get(url)
+#         data = response.json()
+#         current = data["current_weather"]
+#         return {
+#             "temp": round(current["temperature"]),
+#             "windspeed": current["windspeed"],
+#             "description": get_weather_description(current["weathercode"]),
+#             "timezone": data.get("timezone"), # Return the timezone name (e.g., "America/Chicago")
+#             "local_time": current["time"]      # Return the formatted local time string
+#         }
+#     except Exception as e:
+#         return {"error": str(e)}
+
+
 @app.get("/weather")
-def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
-    url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph"
-    try:
-        response = requests.get(url)
-        data = response.json()
-        current = data["current_weather"]
-        return {
-            "temp": round(current["temperature"]),
-            "windspeed": current["windspeed"],
-            "description": get_weather_description(current["weathercode"])
-        }
-    except Exception as e:
-        return {"error": str(e)}
+async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=auto"
     
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, timeout=5.0) # Set a timeout
+            data = response.json()
+            
+            current = data.get("current_weather", {})
+            return {
+                "temp": round(current.get("temperature", 0)),
+                "windspeed": current.get("windspeed", 0),
+                "description": get_weather_description(current.get("weathercode", 0)),
+                "timezone": data.get("timezone", "UTC"),
+                "local_time": current.get("time", "Unknown")
+            }
+        except Exception as e:
+            return {"error": "Weather service timeout"}
+
 @app.get("/moon-details")
 def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)):
     ts = load.timescale()
