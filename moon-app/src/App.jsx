@@ -8,7 +8,7 @@ import LocationSearch from "./LocationSearch.jsx";
 function App() {
   const [isNight, setIsNight] = useState(true);
   const [skyData, setSkyData] = useState(null);
-  
+
   // 1. DYNAMIC LOCATION STATE
   // Initialized to your Franklin, TN coordinates
   const [location, setLocation] = useState({
@@ -19,7 +19,10 @@ function App() {
 
   // UI THEME EFFECT
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', isNight ? 'night' : 'day');
+    document.documentElement.setAttribute(
+      "data-theme",
+      isNight ? "night" : "day"
+    );
   }, [isNight]);
 
   // 2. UPDATED DATA FETCH EFFECT
@@ -28,43 +31,64 @@ function App() {
     // We clear old data so the user sees a "loading" state when switching cities
     setSkyData(null);
 
-    fetch(`http://127.0.0.1:8000/sky-summary?lat=${location.lat}&lon=${location.lon}`)
+    fetch(
+      `http://127.0.0.1:8000/sky-summary?lat=${location.lat}&lon=${location.lon}`
+    )
       .then((response) => response.json())
       .then((data) => setSkyData(data))
       .catch((err) => console.error("FETCH ERROR:", err));
   }, [location]); // Dependency array includes location
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      width: '100%', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      paddingTop: '60px' 
-    }}>
-      
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        paddingTop: "60px"
+      }}
+    >
       {/* 1. Toggle Button */}
-      <button 
+      <button
         onClick={() => setIsNight(!isNight)}
-        className="theme-toggle-btn" 
+        className="theme-toggle-btn"
         style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
+          position: "absolute",
+          top: "20px",
+          right: "20px",
           zIndex: 100
         }}
       >
-        {isNight ? '🌙 Night Mode' : '☀️ Day Mode'}
+        {isNight ? "🌙 Night Mode" : "☀️ Day Mode"}
       </button>
 
       {/* 2. Header Section */}
-      <header style={{ textAlign: "center", marginBottom: "20px", fontSize: '1.5rem' }}>
-        <h1 style={{ margin: 0, fontWeight: '300', color: 'var(--text-main)' }}>
-          SKY DASHBOARD 
+      <header
+        style={{
+          textAlign: "center",
+          marginBottom: "20px",
+          fontSize: "1.5rem"
+        }}
+      >
+        <h1 style={{ margin: 0, fontWeight: "200", color: "var(--text-main)" }}>
+          SKY DASHBOARD
         </h1>
-        <p style={{ color: 'var(--text-sub)', letterSpacing: '2px', fontSize: '1.4rem',fontWeight: '200', marginTop: '10px', textTransform: 'uppercase' }}>
-          FOR {location.name} ({location.lat.toFixed(2)}° N, {location.lon.toFixed(2)}° W)
+       
+        <p
+          style={{
+            color: "var(--text-sub)",
+            letterSpacing: "2px",
+            fontSize: "1.0rem",
+            fontWeight: "200",
+            marginTop: "10px",
+            textTransform: "uppercase"
+          }}
+        >
+          FOR {location.name} ({Math.abs(location.lat).toFixed(2)}°
+          {location.lat >= 0 ? "N" : "S"},{Math.abs(location.lon).toFixed(2)}°
+          {location.lon >= 0 ? "E" : "W"})
         </p>
       </header>
 
@@ -76,7 +100,7 @@ function App() {
         style={{
           display: "flex",
           flexDirection: "row",
-          alignItems: "stretch", 
+          alignItems: "stretch",
           justifyContent: "center",
           gap: "25px",
           flexWrap: "wrap",
@@ -92,12 +116,23 @@ function App() {
         {skyData ? (
           <SkyDetails skyData={skyData} />
         ) : (
-          <div className="sky-details-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ opacity: 0.5, color: 'var(--text-sub)' }}>Synchronizing with {location.name}...</p>
+          <div
+            className="sky-details-card"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <p style={{ opacity: 0.5, color: "var(--text-sub)" }}>
+              Synchronizing with {location.name}...
+            </p>
           </div>
         )}
       </div>
-      <p style={{ fontSize: '0.6em', opacity: '0.4', marginTop: '40px' }}>Copyright © 2026 David Brand </p>
+      <p style={{ fontSize: "0.6em", opacity: "0.4", marginTop: "40px" }}>
+        Copyright © 2026 David Brand{" "}
+      </p>
     </div>
   );
 }
