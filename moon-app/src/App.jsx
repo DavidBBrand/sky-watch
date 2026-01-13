@@ -33,10 +33,17 @@ function App() {
     return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
   };
 
-  const formatTime = (isoString) => {
-    if (!isoString || isoString === "Unknown") return "--:--";
-    const date = new Date(isoString);
-    return date.toLocaleTimeString([], {
+  const getLiveLocalTime = () => {
+    if (!weatherData || !weatherData.utc_offset) return "--:--";
+
+    // 1. Get current UTC time from your computer
+    const now = new Date();
+    const utcTimestamp = now.getTime() + now.getTimezoneOffset() * 60000;
+
+    // 2. Apply the offset from the API (convert seconds to milliseconds)
+    const remoteTime = new Date(utcTimestamp + weatherData.utc_offset * 1000);
+
+    return remoteTime.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true
@@ -129,16 +136,16 @@ function App() {
           >
             Solar Time: {getLocalSolarTime()}
           </span>
-          {/* Standard Time Offset */}
-          {/* Local Standard Time Section */}
-          <span className="time-display">
-            LOCAL: {weatherData ? formatTime(weatherData.local_time) : "--:--"}
-          </span>
           <span
             style={{ fontSize: "0.7rem", opacity: 0.6, letterSpacing: "1px" }}
           >
             UTC OFFSET: {location.lon >= 0 ? "+" : ""}
             {(location.lon / 15).toFixed(1)} HRS
+          </span>
+          {/* Standard Time Offset */}
+          {/* Local Standard Time Section */}
+          <span className="time-display">
+            LOCAL STANDARD TIME: {weatherData ? getLiveLocalTime() : "--:--"}
           </span>
         </div>
       </header>

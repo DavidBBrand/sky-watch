@@ -23,10 +23,15 @@ const LocationSearch = ({ onLocationChange }) => {
 
       if (data && data.length > 0) {
         const { lat, lon, display_name } = data[0];
+        //split the address into an array of parts
+        const parts = display_name.split(',');
+        const shortName = parts.length > 2 
+          ? `${parts[0].trim()}, ${parts[parts.length - 3].trim()}, ${parts[parts.length - 1].trim()}`
+          : display_name;
         onLocationChange({
           lat: parseFloat(lat),
           lon: parseFloat(lon),
-          name: display_name.split(',')[0] // Just the city name
+          name: shortName // Just the city name
         });
         setQuery(''); // Clear search after success
       } else {

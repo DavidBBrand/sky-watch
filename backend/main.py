@@ -111,6 +111,7 @@ async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
                 "windspeed": current.get("windspeed", 0),
                 "description": get_weather_description(current.get("weathercode", 0)),
                 "timezone": data.get("timezone", "UTC"),
+                "utc_offset": data.get("utc_offset_seconds", 0) , # Return UTC offset in seconds
                 "local_time": current.get("time", "Unknown")
             }
         except Exception as e:
