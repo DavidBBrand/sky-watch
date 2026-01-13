@@ -1,17 +1,34 @@
 # 🌙 Sky Dashboard
 
-A full-stack dashboard featuring real-time moon illumination tracking and local weather data.
+A high-precision, observatory-style dashboard featuring real-time astronomical tracking and local weather synchronization.
 
-## 🚀 Project Structure
-- **/backend**: Python FastAPI server using `Skyfield` for astronomical calculations.
-- **/moon-app**: React frontend built with Vite and Tailwind CSS.
+## 🚀 Getting Started
 
-## 🛠️ Setup Instructions
+To run this application locally, you will need **two terminal windows** open (one for the backend and one for the frontend).
 
-### 1. Backend
+You must have Node.js and Python 3.8+ installed
+
+### Frontend Setup (React + Vite)
+Open your first terminal:
 ```bash
+cd moon-app
+npm install
+npm run dev
+
+# BACKEND SETUP
+# open your second terminal
+
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+
+# Activate the virtual environment
+# On Windows:
+.\venv\Scripts\activate
+# On Mac/Linux:
+source venv/bin/activate
+
+# Install libraries and dependencies
 pip install -r requirements.txt
-python main.py
+
+# Launch Uvicorn ASGI server
+uvicorn main:app --reload
