@@ -105,7 +105,7 @@ function App() {
           <span>{location.name}</span>
           <span>
             {Math.abs(location.lat).toFixed(2)}°{location.lat >= 0 ? "N" : "S"}{" "}
-            //
+            /{" "}
             {Math.abs(location.lon).toFixed(2)}°{location.lon >= 0 ? "E" : "W"}
           </span>
           <span
