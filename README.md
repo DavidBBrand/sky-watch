@@ -11,7 +11,7 @@ You must have Node.js and Python 3.8+ installed
 ### Frontend Setup (React + Vite)
 Open your first terminal:
 ```bash
-cd moon-app
+cd skyapp-frontend
 npm install
 npm run dev
 
