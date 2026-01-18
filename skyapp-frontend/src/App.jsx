@@ -5,7 +5,7 @@ import Weather from "./Weather.jsx";
 import SkyDetails from "./SkyDetails.jsx";
 import LocationSearch from "./LocationSearch.jsx";
 import GoldenHour from "./GoldenHour.jsx";
-
+import MapCard from "./MapCard.jsx";
 function App() {
   const [isNight, setIsNight] = useState(true);
   const [skyData, setSkyData] = useState(null);
@@ -179,7 +179,7 @@ function App() {
         style={{
           display: "flex",
           flexDirection: "row",
-          alignItems: "stretch",
+          alignItems: "start",
           justifyContent: "center",
           gap: "25px",
           flexWrap: "wrap",
@@ -212,6 +212,8 @@ function App() {
             </p>
           </div>
         )}
+
+        <MapCard lat={location.lat} lon={location.lon} />
       </div>
       <p style={{ fontSize: "0.6em", opacity: "0.4", marginTop: "40px" }}>
         Copyright © 2026 David Brand{" "}

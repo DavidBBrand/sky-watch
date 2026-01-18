@@ -98,7 +98,7 @@ const SkyDetails = ({ skyData }) => {
           </h3>
           <div style={{ display: "flex", gap: "10px" }}>
             <div className="planet-item" style={{ flex: 1 }}>
-              <span style={{ fontSize: "4.2rem" }}>🌅</span>
+              <span style={{ fontSize: "2.0rem" }}>🌅</span>
               <p
                 style={{
                   fontSize: "0.8rem",
@@ -120,7 +120,7 @@ const SkyDetails = ({ skyData }) => {
               </p>
             </div>
             <div className="planet-item" style={{ flex: 1 }}>
-              <span style={{ fontSize: "4.2rem" }}>🌇</span>
+              <span style={{ fontSize: "2.0rem" }}>🌇</span>
               <p
                 style={{
                   fontSize: "0.8rem",
@@ -160,7 +160,7 @@ const SkyDetails = ({ skyData }) => {
           <div className="planet-grid">
             {Object.entries(planets).map(([name, info]) => (
               <div key={name} className="planet-item">
-                <div style={{ fontSize: "3.2rem", marginBottom: "5px" }}>
+                <div style={{ fontSize: "1.2rem", marginBottom: "5px" }}>
                   {planetIcons[name] || "✨"}
                 </div>
 
@@ -172,13 +172,13 @@ const SkyDetails = ({ skyData }) => {
                   }}
                 >
                   
-                  <span style={{ fontSize: "2.8rem", fontFamily: "serif",fontWeight: "400" }}>
+                  <span style={{ fontSize: "1.0rem", fontFamily: "serif",fontWeight: "400" }}>
                     {getPlanetSymbol(name)}
                   </span>
                 </div>
                 <div
                   style={{
-                    fontSize: "2rem",
+                    fontSize: "1.2rem",
                     fontWeight: "400",
                     marginBottom: "4px",
                     color: "var(--text-main)"

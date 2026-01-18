@@ -150,4 +150,4 @@ def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)):
     illumination = m.fraction_illuminated(sun_obj)
 
     # Return exactly what MoonTracker.jsx is looking for
-    return {"illumination": round(float(illumination * 100), 2)}
+    return {"illumination": round(float(illumination * 100), 4)}

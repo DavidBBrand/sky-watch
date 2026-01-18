@@ -72,7 +72,7 @@ const Weather = ({ lat, lon, onDataReceived }) => {
 
       <h2
         style={{
-          fontSize: "5rem",
+          fontSize: "4rem",
           margin: "10px 0",
           color: "var(--text-main)",
           fontWeight: "200"
@@ -83,7 +83,7 @@ const Weather = ({ lat, lon, onDataReceived }) => {
 
       <p
         style={{
-          fontSize: "1.1rem",
+          fontSize: "1.2rem",
           fontWeight: "500",
           color: "var(--text-main)"
         }}
@@ -94,7 +94,7 @@ const Weather = ({ lat, lon, onDataReceived }) => {
       <div
         style={{
           marginTop: "15px",
-          fontSize: "0.9rem",
+          fontSize: "1.0rem",
           color: "var(--text-sub)"
         }}
       >
