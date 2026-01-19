@@ -86,8 +86,8 @@ const SkyDetails = ({ skyData }) => {
         {/* Solar Section */}
         <div>
           <h3
+            className="rainbow-warm"
             style={{
-              color: "#426fb7",
               fontSize: "1.2rem",
               textTransform: "uppercase",
               letterSpacing: "4px",

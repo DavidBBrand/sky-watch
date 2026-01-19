@@ -100,15 +100,7 @@ function App() {
 
       {/* 2. Header Section */}
       <header className="rainbow-animated" style={{ textAlign: "center", marginBottom: "30px" }}>
-        <h1 
-          // className="rainbow-warm"
-          // style={{
-          //   margin: 0,
-          //   fontWeight: "200",
-          //   color: "var(--text-main)",
-          //   fontSize: "3.5rem"
-          // }}
-        >
+        <h1>
           SKY DASHBOARD
         </h1>
         <div
@@ -119,7 +111,7 @@ function App() {
             gap: "5px",
             color: "var(--text-sub)",
             letterSpacing: "2px",
-            fontSize: "0.9rem",
+            fontSize: "1rem",
             textTransform: "uppercase",
             fontWeight: "300"
           }}
