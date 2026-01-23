@@ -48,17 +48,17 @@
 .rainbow-animated {
   background: linear-gradient(
     to right,
-    rgb(222, 222, 159),
-    rgb(240, 231, 231),
-    rgb(161, 161, 231),
-    rgb(246, 239, 239),
-    rgb(230, 218, 152)
+    rgb(221, 221, 174),
+    rgb(233, 213, 213),
+    rgb(191, 191, 228),
+    rgb(236, 217, 217),
+    rgb(226, 217, 169)
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: rainbow-shifty 3.8s linear infinite,
+  animation: rainbow-shifty 2s linear infinite,
     glow-pulse 3s ease-in-out infinite;
 }
 
