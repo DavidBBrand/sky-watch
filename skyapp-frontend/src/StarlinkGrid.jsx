@@ -20,7 +20,7 @@ const StarlinkGrid = () => {
         <div className="ping-indicator" style={{ backgroundColor: "#00ff9d" }}></div>
       </div>
 
-      <h2 className="iss-radar-text" style={{ margin: "15px 0 5px 0", fontSize: "1.4rem" }}>
+      <h2 className="radar-text" style={{ margin: "15px 0 5px 0", fontSize: "1.4rem" }}>
         STARLINK SECTOR
       </h2>
 

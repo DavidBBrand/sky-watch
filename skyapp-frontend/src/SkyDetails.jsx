@@ -64,7 +64,7 @@ const SkyDetails = ({ skyData }) => {
         <div>
           <p
             style={{
-              fontSize: "0.7rem",
+              fontSize: "1rem",
               textTransform: "uppercase",
               letterSpacing: "2px",
               color: "var(--text-sub)",
