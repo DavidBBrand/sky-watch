@@ -16,13 +16,12 @@ const StarlinkGrid = () => {
   return (
     <div className="starlink-card">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <p className="orbital-label">MESH NETWORK</p>
-        <div className="ping-indicator" style={{ backgroundColor: "#00ff9d" }}></div>
+        <p className="orbital-label">STARLINK MESH NETWORK</p>
+        <div className="ping-indicator2" style={{ backgroundColor: "#00ff2a" }}></div>
       </div>
-
-      <h2 className="radar-text" style={{ margin: "15px 0 5px 0", fontSize: "1.4rem" }}>
-        STARLINK SECTOR
-      </h2>
+<h2 className="iss-radar-text2" style={{ margin: "15px 0 5px 0", fontSize: "1.4rem" }}>
+  ORBITAL_NODES <span style={{ opacity: 0.5 }}>//</span> SL-MESH
+</h2>
 
       <div className="sat-visual-grid">
         {[...Array(12)].map((_, i) => (

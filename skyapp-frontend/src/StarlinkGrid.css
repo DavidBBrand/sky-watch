@@ -9,6 +9,7 @@
   border-radius: 15px;
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.8s ease;
+  color: var(--text-main);
 }
 .starlink-card:hover {
     transform: scale(1.02);
@@ -37,10 +38,10 @@
 
 .grid-node {
   height: 3px;
-  background: #05e992; /* Keeping the Starlink Teal signature */
+  background: #0ddf5a; /* Keeping the Starlink Teal signature */
   border-radius: 2px;
   opacity: 0.2;
-  animation: node-pulse 2.5s infinite ease-in-out;
+  animation: node-pulse 1.2s infinite ease-in-out;
 }
 
 @keyframes node-pulse {
@@ -69,10 +70,49 @@
 }
 
 .sector-tag {
-  font-size: 0.6rem;
+  font-size: 1.2rem;
   color: var(--text-sub);
   margin-top: 15px;
   opacity: 0.6;
   border-top: 1px solid rgba(255,255,255,0.05);
   padding-top: 10px;
+}
+
+.ping-indicator2 {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.ping-indicator2::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  background-color: inherit;
+  animation: ping-pulse 3.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.iss-radar-text2 {
+  background: conic-gradient(
+    from var(--angle),
+    rgb(16, 184, 16), 
+    var(--text-white, #ffffff4c), 
+    rgba(81, 222, 74, 0.2), 
+    rgb(16, 184, 16)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  display: inline-block;
+  animation: radar-spin2 .4s linear infinite;
+  font-weight: 800;
+}
+
+@keyframes radar-spin2 {
+  to {
+    --angle: 360deg;
+  }
 }
