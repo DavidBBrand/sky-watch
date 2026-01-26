@@ -1,0 +1,71 @@
+.starlink-card {
+  background: var(--card-bg, rgba(15, 15, 20, 0.8));
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  font-family: 'monospace';
+  transition: all 0.5s ease;
+}
+
+.orbital-label {
+  letter-spacing: 2px;
+  font-size: 0.7rem;
+  color: var(--text-sub);
+  margin: 0;
+  font-weight: 600;
+}
+
+.sat-visual-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+  padding: 12px;
+  background: rgba(0, 255, 157, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 157, 0.05);
+}
+
+.grid-node {
+  height: 3px;
+  background: #00ff9d; /* Keeping the Starlink Teal signature */
+  border-radius: 2px;
+  opacity: 0.2;
+  animation: node-pulse 2.5s infinite ease-in-out;
+}
+
+@keyframes node-pulse {
+  0%, 100% { opacity: 0.1; transform: scaleX(0.8); }
+  50% { opacity: 0.8; transform: scaleX(1.1); box-shadow: 0 0 10px #00ff9d; }
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.stat-caption {
+  font-size: 0.65rem;
+  color: var(--text-sub);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  color: var(--text-main);
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 5px 0 0 0;
+}
+
+.sector-tag {
+  font-size: 0.6rem;
+  color: var(--text-sub);
+  margin-top: 15px;
+  opacity: 0.6;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 10px;
+}

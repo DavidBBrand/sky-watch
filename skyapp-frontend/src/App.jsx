@@ -8,6 +8,7 @@ import GoldenHour from "./GoldenHour.jsx";
 import MapCard from "./MapCard.jsx";
 import MoonGraphic2 from "./MoonGraphic2.jsx";
 import ISSWatcher from "./ISSWatcher.jsx";
+import StarlinkGrid from "./StarlinkGrid.jsx";
 
 function App() {
   const [isNight, setIsNight] = useState(true);
@@ -178,6 +179,7 @@ function App() {
         />
         <MoonGraphic2 lat={location.lat} lon={location.lon} />
         <ISSWatcher lat={location.lat} lon={location.lon} />
+        <StarlinkGrid lat={location.lat} lon={location.lon} />
         <MapCard lat={location.lat} lon={location.lon} />
         {skyData ? (
           <SkyDetails skyData={skyData} />
