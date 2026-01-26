@@ -64,8 +64,8 @@
 
 /* 4. Connection Ping (Shared with your other components) */
 .ping-indicator {
-  width: 14px;
-  height: 14px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   position: relative;
 }
@@ -77,10 +77,17 @@
   width: 100%; height: 100%;
   border-radius: 50%;
   background-color: inherit;
-  animation: ping-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation: ping-pulse 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 @keyframes ping-pulse {
   0% { transform: scale(1); opacity: 0.8; }
   70%, 100% { transform: scale(3.5); opacity: 0; }
+}
+
+.iss-card:hover {
+    transform: scale(1.02);
+    /* Hover glow also uses a variable now */
+    border: 1px solid var(--text-sub);
+    box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.2);
 }

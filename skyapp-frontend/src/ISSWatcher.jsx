@@ -10,11 +10,17 @@ const ISSWatcher = ({ lat, lon }) => {
     // 1. Get the name of the user's location (Reverse Geocoding)
     const getLocalName = async () => {
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+        );
         const data = await res.json();
-        const city = data.address.city || data.address.town || data.address.village || "Unknown";
+        const city =
+          data.address.city ||
+          data.address.town ||
+          data.address.village ||
+          "Unknown";
         const state = data.address.state || "";
-        setCityName(`${city}${state ? ', ' + state : ''}`);
+        setCityName(`${city}${state ? ", " + state : ""}`);
       } catch (e) {
         setCityName("Ground Station");
       }
@@ -31,7 +37,7 @@ const ISSWatcher = ({ lat, lon }) => {
 
         setIssPos({ lat: latitude, lon: longitude });
 
-        const R = 3958.8; 
+        const R = 3958.8;
         const dLat = (latitude - lat) * (Math.PI / 180);
         const dLon = (longitude - lon) * (Math.PI / 180);
         const a =
@@ -48,32 +54,62 @@ const ISSWatcher = ({ lat, lon }) => {
     };
 
     fetchISS();
-    const interval = setInterval(fetchISS, 5000); 
+    const interval = setInterval(fetchISS, 5000);
     return () => clearInterval(interval);
   }, [lat, lon]);
 
-  const isNearby = distance < 500; 
+  const isNearby = distance < 500;
 
   return (
     <div className={`iss-card ${isNearby ? "nearby" : ""}`}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <p style={{
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}
+      >
+        <p
+          style={{
             letterSpacing: "2px",
             fontSize: "1.2rem",
             color: "var(--text-sub)",
-            margin: 0,
+            marginBottom: "25px",
             fontWeight: "600"
-          }}>
+          }}
+        >
           ORBITAL TRACKER
         </p>
-        <div className="ping-indicator" style={{ backgroundColor: isNearby ? "#4ade80" : "#16e755"  }}></div>
+      </div>
+      {/* --- Ping Section --- */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+          margin: "40px 0"
+        }}
+      >
+        <div
+          className="ping-indicator"
+          style={{
+            backgroundColor: isNearby ? "#4ade80" : "#16e755"
+          }}
+        ></div>
       </div>
 
-      <h2 className="iss-radar-text" style={{ margin: "15px 0 5px 0", fontSize: "1.4rem", animationDuration: isNearby ? "1.5s" : "4s" }}>
+      <h2
+        className="iss-radar-text"
+        style={{
+          margin: "15px 0 5px 0",
+          fontSize: "1.4rem",
+          animationDuration: isNearby ? "1.5s" : "4s"
+        }}
+      >
         INT'L SPACE STATION
       </h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
         <div
           className={isNearby ? "iss-radar-text" : ""}
           style={{
@@ -81,37 +117,44 @@ const ISSWatcher = ({ lat, lon }) => {
             fontWeight: "bold",
             color: isNearby ? "transparent" : "var(--text-main)",
             fontFamily: "monospace",
-            lineHeight: "1"
+            lineHeight: "1",
+            marginBottom: "20px",
+            marginTop: "25px"
           }}
         >
-          {distance ? `${Math.round(distance).toLocaleString()}mi` : "SCANNING..."}
+          {distance
+            ? `${Math.round(distance).toLocaleString()}mi`
+            : "SCANNING..."}
         </div>
-        
-        <p style={{ 
-          fontSize: '0.85rem', 
-          color: 'var(--text-sub)', 
-          textTransform: 'uppercase', 
-          letterSpacing: '1px',
-          margin: 0 
-        }}>
+
+        <p
+          style={{
+            fontSize: "0.85rem",
+            color: "var(--text-sub)",
+            textTransform: "uppercase",
+            letterSpacing: "1px",
+            margin: 0
+          }}
+        >
           from {cityName}
         </p>
       </div>
 
-      <p style={{
+      <p
+        style={{
           fontSize: "0.7rem",
           color: "var(--text-sub)",
           marginTop: "15px",
           fontFamily: "monospace",
           opacity: 0.8
-        }}>
-        LAT: {parseFloat(issPos.lat).toFixed(2)} | LON: {parseFloat(issPos.lon).toFixed(2)}
+        }}
+      >
+        LAT: {parseFloat(issPos.lat).toFixed(2)} | LON:{" "}
+        {parseFloat(issPos.lon).toFixed(2)}
       </p>
 
       {isNearby && (
-        <div className="proximity-alert">
-          LOW ORBIT PROXIMITY ALERT
-        </div>
+        <div className="proximity-alert">LOW ORBIT PROXIMITY ALERT</div>
       )}
     </div>
   );
