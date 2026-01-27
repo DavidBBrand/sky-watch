@@ -9,6 +9,7 @@ import MapCard from "./MapCard.jsx";
 import MoonGraphic2 from "./MoonGraphic2.jsx";
 import ISSWatcher from "./ISSWatcher.jsx";
 import StarlinkGrid from "./StarlinkGrid.jsx";
+import MoonGraphic3 from "./MoonGraphic3.jsx";
 
 function App() {
   const [isNight, setIsNight] = useState(true);
@@ -171,13 +172,14 @@ function App() {
         }}
       >
         {/* Pass location to these components so they can fetch their own weather/moon data too! */}
-        {/* <MoonTracker lat={location.lat} lon={location.lon} /> */}
+        <MoonTracker lat={location.lat} lon={location.lon} />
         <Weather
           lat={location.lat}
           lon={location.lon}
           onDataReceived={setWeatherData}
         />
         <MoonGraphic2 lat={location.lat} lon={location.lon} />
+        <MoonGraphic3 lat={location.lat} lon={location.lon} />
         <ISSWatcher lat={location.lat} lon={location.lon} />
         <StarlinkGrid lat={location.lat} lon={location.lon} />
         <MapCard lat={location.lat} lon={location.lon} />

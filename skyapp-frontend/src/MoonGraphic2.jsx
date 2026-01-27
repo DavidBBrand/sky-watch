@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./MoonTracker.css";
+import "./MoonGraphic2.css";
 
 const MoonTracker = ({ lat, lon }) => {
   const [moonData, setMoonData] = useState(null);
