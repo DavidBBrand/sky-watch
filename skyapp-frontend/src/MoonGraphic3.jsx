@@ -95,12 +95,11 @@ const MoonGraphic3 = ({ lat, lon }) => {
 
   return (
     <div className="moon-card">
-      <p style={{
-          fontSize: "1rem",
+      <p style={{fontSize: "1.2rem",
           textTransform: "uppercase",
           letterSpacing: "3px",
           color: "var(--text-sub)",
-          marginBottom: "20px",
+          marginBottom: "40px",
           textAlign: "center",
           fontWeight: "600"
         }}>

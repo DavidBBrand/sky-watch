@@ -157,7 +157,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: rainbow-shifty .8s linear infinite;
+  animation: rainbow-shifty 2.5s linear infinite;
   
 }
 
@@ -177,7 +177,7 @@
 /* Ensure the mini-map container can handle absolute layers */
 .mini-map-inner {
   position: relative;
-  width: 1200px;
+  width: 500px;
   height: 300px;
   overflow: hidden;
   padding: 0; /* Remove padding so map fills the glass card */
@@ -187,6 +187,7 @@
 .map-layer {
   position: absolute;
   top: 0;
+  
   left: 0;
   width: 100%;
   height: 100%;
