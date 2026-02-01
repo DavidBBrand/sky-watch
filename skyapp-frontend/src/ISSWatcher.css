@@ -11,22 +11,22 @@
   padding: 20px;
   border-radius: 15px;
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  transition: border-color 0.8s ease, box-shadow 0.8s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   min-width: 200px;
 }
 
 /* 2. The Radar Sweep Text Effect */
-.iss-radar-text {
-  background: conic-gradient(
-    from var(--angle),
-    #4ade80, 
-    var(--text-main, #ffffff), 
-    rgba(74, 222, 128, 0.2), 
-    #4ade80
-  );
+// .iss-radar-text {
+//   background: conic-gradient(
+//     from var(--angle),
+//     #19c95a, 
+//     var(--text-main, #ffffff), 
+//     rgba(74, 222, 128, 0.2), 
+//     #21e569
+//   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;

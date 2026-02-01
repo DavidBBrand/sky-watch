@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./MapCard.css";
 const MapCard = ({ lat, lon, theme }) => {
   const MAPBOX_TOKEN = "pk.eyJ1IjoiZGF2aWRiNTY3OCIsImEiOiJjbGxncHFqcWoweHV3M3JxaGxna2FqNHZmIn0.A4Yc2EE-9W2yKvn1C6S9TQ";
 

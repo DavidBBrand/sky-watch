@@ -91,13 +91,27 @@ function App() {
         <div className="search-wrapper">
           <LocationSearch onLocationChange={setLocation} />
         </div>
-        <div className="grid-full-width">
+        {/* <div className="grid-full-width">
           <MapCard
             lat={location.lat}
             lon={location.lon}
             theme={isNight ? "night" : "day"}
           />
-        </div>
+        </div> */}
+        {/* 3. Right Side Mini-Map with Pre-rendering */}
+         <div className="header-map-mini">
+          <div className="mini-map-inner glass-card">
+            
+            <div className={`map-layer ${isNight ? "night" : "hidden"}`}>
+              <MapCard lat={location.lat} lon={location.lon} theme="night" />
+            </div>
+            <div className={`map-layer ${!isNight ? "day" : "hidden"}`}>
+              <MapCard lat={location.lat} lon={location.lon} theme="day" />
+            </div>
+          </div>
+        </div> 
+        
+
       </header>
 
       <div className="dashboard-grid">

@@ -1,0 +1,35 @@
+.map-card {
+    /* Use variables for dynamic themes */
+    background: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--card-border);
+    
+    /* The "Glass" effect */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    /* Shape and Shadow */
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    
+    /* Layout */
+    padding: 25px;
+    min-width: 280px;
+    min-height: 300px;
+    flex: 1;
+    max-width: 350px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.8s ease;
+}
+
+/* Hover effect for interactivity */
+.map-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--text-sub);
+}
