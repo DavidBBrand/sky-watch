@@ -64,8 +64,8 @@
 
 /* 4. Connection Ping (Shared with your other components) */
 .ping-indicator {
-  width: 62px;
-  height: 62px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   position: relative;
 }
@@ -77,7 +77,7 @@
   width: 100%; height: 100%;
   border-radius: 50%;
   background-color: inherit;
-  animation: ping-pulse 2.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation: ping-pulse 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 @keyframes ping-pulse {
