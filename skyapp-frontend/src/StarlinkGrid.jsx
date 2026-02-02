@@ -9,7 +9,7 @@ const StarlinkGrid = ({ lat, lon }) => {
   const [loading, setLoading] = useState(true);
   const [cityName, setCityName] = useState("Scanning Location...");
 
-  // 1. Reverse Geocoding Effect (Get City Name)
+  // 1. Reverse Geocoding Effect
   useEffect(() => {
     const getLocalName = async () => {
       try {
@@ -32,12 +32,77 @@ const StarlinkGrid = ({ lat, lon }) => {
   useEffect(() => {
     let tles = [];
 
+    const calculateVisible = (currentTles = tles) => {
+      if (!currentTles.length || lat === undefined || lon === undefined) {
+        console.warn("Starlink Logic: Waiting for data/coords");
+        return;
+      }
+
+      let count = 0;
+      const now = new Date();
+      
+      const nLat = parseFloat(lat);
+      const nLon = parseFloat(lon);
+      // Ensure West longitudes are negative for satellite.js
+      const adjLon = (nLon > 0 && nLon > 60) ? -nLon : nLon;
+
+      const observerGd = {
+        longitude: satellite.degreesToRadians(adjLon),
+        latitude: satellite.degreesToRadians(nLat),
+        height: 0.122 // Elev in km
+      };
+
+      const gmst = satellite.gstime(now);
+
+      // STRUCTURE CHECK: Log the first entry to verify key names
+      if (currentTles[0]) {
+        console.log("Starlink Data Check:", {
+          object: currentTles[0].OBJECT_NAME,
+          hasL1: !!currentTles[0].TLE_LINE1,
+          hasL2: !!currentTles[0].TLE_LINE2,
+          observer: { lat: nLat, lon: adjLon }
+        });
+      }
+
+      currentTles.forEach((sat) => {
+        try {
+          const l1 = sat.TLE_LINE1;
+          const l2 = sat.TLE_LINE2;
+
+          if (!l1 || !l2) return;
+
+          const satrec = satellite.twoline2satrec(l1, l2);
+          const posVel = satellite.propagate(satrec, now);
+          
+          if (posVel.position) {
+            const posEcf = satellite.eciToEcf(posVel.position, gmst);
+            const look = satellite.ecfToLookAngles(posEcf, observerGd);
+            
+            // Check if satellite is above the horizon
+            if (look.elevation > 0) count++;
+          }
+        } catch (e) { /* skip faulty TLE strings */ }
+      });
+
+      console.log(`Update: Found ${count} nodes above horizon at ${nLat}, ${adjLon}`);
+      setVisibleCount(count);
+      setHealth(parseFloat((98.5 + Math.random() * 1.2).toFixed(1)));
+    };
+
     const fetchData = async () => {
       try {
         const res = await fetch("https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=json");
-        tles = await res.json();
-        setTotalInOrbit(tles.length);
+        const data = await res.json();
+        
+        // Ensure data is an array
+        const satelliteArray = Array.isArray(data) ? data : [data];
+        tles = satelliteArray;
+        
+        setTotalInOrbit(satelliteArray.length);
         setLoading(false);
+        
+        // Immediate calculation
+        calculateVisible(satelliteArray);
       } catch (e) {
         console.error("Orbital Data Timeout", e);
       }
@@ -45,41 +110,7 @@ const StarlinkGrid = ({ lat, lon }) => {
 
     fetchData();
 
-    const calculateVisible = () => {
-      if (!tles.length || !lat || !lon) return;
-
-      let count = 0;
-      const now = new Date();
-      
-      const observerGd = {
-        longitude: satellite.degreesToRadians(lon),
-        latitude: satellite.degreesToRadians(lat),
-        height: 0.1 
-      };
-
-      tles.forEach(sat => {
-        try {
-          const satrec = satellite.twoline2satrec(sat.TLE_LINE1, sat.TLE_LINE2);
-          const positionAndVelocity = satellite.propagate(satrec, now);
-          const positionEci = positionAndVelocity.position;
-          
-          if (positionEci) {
-            const gmst = satellite.gstime(now);
-            const lookAngles = satellite.ecfToLookAngles(
-              satellite.eciToEcf(positionEci, gmst), 
-              observerGd
-            );
-            
-            if (lookAngles.elevation > 0) count++;
-          }
-        } catch (e) { /* Skip malformed TLEs */ }
-      });
-
-      setVisibleCount(count);
-      setHealth(parseFloat((98 + Math.random() * 1.5).toFixed(1)));
-    };
-
-    const interval = setInterval(calculateVisible, 10000);
+    const interval = setInterval(() => calculateVisible(), 15000);
     return () => clearInterval(interval);
   }, [lat, lon]);
 
@@ -116,7 +147,7 @@ const StarlinkGrid = ({ lat, lon }) => {
       
       <div className="sector-tag-container" style={{ marginTop: "15px", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "10px" }}>
         <p className="sector-tag" style={{ margin: 0, fontSize: "1.1rem" }}>
-          {loading ? "INITIALIZING SGP4..." : `COORD: ${lat?.toFixed(2)}N / ${lon?.toFixed(2)}W`}
+          {loading ? "INITIALIZING SGP4..." : `COORD: ${parseFloat(lat).toFixed(2)}N / ${Math.abs(parseFloat(lon)).toFixed(2)}W`}
         </p>
         <p style={{ 
           fontSize: "0.8rem", 
