@@ -19,19 +19,17 @@
 }
 
 /* 2. The Radar Sweep Text Effect */
-// .iss-radar-text {
-//   background: conic-gradient(
-//     from var(--angle),
-//     #19c95a, 
-//     var(--text-main, #ffffff), 
-//     rgba(74, 222, 128, 0.2), 
-//     #21e569
-//   );
+ .iss-radar-text {   background: conic-gradient(
+    from var(--angle),
+    #19c95a, 
+    var(--text-main, #ffffff7b),     rgba(74, 222, 128, 0.2), 
+    #1cc85b
+   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
   display: inline-block;
-  animation: radar-spin 5s linear infinite;
+  animation: radar-spin 3s linear infinite;
   font-weight: 800;
 }
 
@@ -52,7 +50,7 @@
   font-weight: bold;
   color: #4ade80;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 5px;
   margin-top: 10px;
   animation: alert-blink 1s ease-in-out infinite;
 }
