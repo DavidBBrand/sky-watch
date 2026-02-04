@@ -9,65 +9,55 @@ const StarlinkGrid = ({ lat, lon }) => {
   const [loading, setLoading] = useState(true);
   const [cityName, setCityName] = useState("Scanning Location...");
 
-  // 1. Reverse Geocoding Effect
+  // 1. Reverse Geocoding
   useEffect(() => {
     const getLocalName = async () => {
       try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-        );
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
         const data = await res.json();
         const city = data.address.city || data.address.town || data.address.village || data.address.suburb || "Ground Station";
-        const state = data.address.state || "";
-        setCityName(`${city}${state ? ", " + state : ""}`);
+        setCityName(`${city}${data.address.state ? ", " + data.address.state : ""}`);
       } catch (e) {
-        setCityName("Orbital Uplink Established");
+        setCityName("Orbital Uplink Active");
       }
     };
-
     if (lat && lon) getLocalName();
   }, [lat, lon]);
 
-  // 2. Orbital Calculation Effect
+  // 2. Orbital Calculation
   useEffect(() => {
+    console.log("📡 Starlink Logic Initialized. Props:", { lat, lon });
+    
     let tles = [];
 
     const calculateVisible = (currentTles = tles) => {
-      if (!currentTles.length || lat === undefined || lon === undefined) {
-        console.warn("Starlink Logic: Waiting for data/coords");
+      if (!currentTles.length) {
+        console.warn("⚠️ No TLE data available for calculation.");
+        return;
+      }
+      if (lat === undefined || lon === undefined) {
+        console.warn("⚠️ Lat/Lon undefined. Calculation paused.");
         return;
       }
 
       let count = 0;
       const now = new Date();
-      
       const nLat = parseFloat(lat);
       const nLon = parseFloat(lon);
-      // Ensure West longitudes are negative for satellite.js
       const adjLon = (nLon > 0 && nLon > 60) ? -nLon : nLon;
 
       const observerGd = {
         longitude: satellite.degreesToRadians(adjLon),
         latitude: satellite.degreesToRadians(nLat),
-        height: 0.122 // Elev in km
+        height: 0.122
       };
 
       const gmst = satellite.gstime(now);
 
-      // STRUCTURE CHECK: Log the first entry to verify key names
-      if (currentTles[0]) {
-        console.log("Starlink Data Check:", {
-          object: currentTles[0].OBJECT_NAME,
-          hasL1: !!currentTles[0].TLE_LINE1,
-          hasL2: !!currentTles[0].TLE_LINE2,
-          observer: { lat: nLat, lon: adjLon }
-        });
-      }
-
       currentTles.forEach((sat) => {
         try {
-          const l1 = sat.TLE_LINE1;
-          const l2 = sat.TLE_LINE2;
+          const l1 = (sat.TLE_LINE1 || sat.tle_line1)?.trim();
+          const l2 = (sat.TLE_LINE2 || sat.tle_line2)?.trim();
 
           if (!l1 || !l2) return;
 
@@ -77,39 +67,34 @@ const StarlinkGrid = ({ lat, lon }) => {
           if (posVel.position) {
             const posEcf = satellite.eciToEcf(posVel.position, gmst);
             const look = satellite.ecfToLookAngles(posEcf, observerGd);
-            
-            // Check if satellite is above the horizon
             if (look.elevation > 0) count++;
           }
-        } catch (e) { /* skip faulty TLE strings */ }
+        } catch (e) {}
       });
 
-      console.log(`Update: Found ${count} nodes above horizon at ${nLat}, ${adjLon}`);
+      console.log(`✅ Calculation Finished: ${count} satellites visible.`);
       setVisibleCount(count);
       setHealth(parseFloat((98.5 + Math.random() * 1.2).toFixed(1)));
     };
 
     const fetchData = async () => {
+      console.log("🌐 Fetching Starlink TLEs from CelesTrak...");
       try {
         const res = await fetch("https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=json");
         const data = await res.json();
-        
-        // Ensure data is an array
         const satelliteArray = Array.isArray(data) ? data : [data];
-        tles = satelliteArray;
         
+        console.log(`📥 Data Received. Constellation size: ${satelliteArray.length}`);
+        tles = satelliteArray;
         setTotalInOrbit(satelliteArray.length);
         setLoading(false);
-        
-        // Immediate calculation
         calculateVisible(satelliteArray);
       } catch (e) {
-        console.error("Orbital Data Timeout", e);
+        console.error("❌ Fetch error:", e);
       }
     };
 
     fetchData();
-
     const interval = setInterval(() => calculateVisible(), 15000);
     return () => clearInterval(interval);
   }, [lat, lon]);
@@ -137,7 +122,9 @@ const StarlinkGrid = ({ lat, lon }) => {
       <div className="stats-row">
         <div className="stat-group">
           <p className="stat-caption">VISIBLE NODES</p>
-          <p className="stat-value">{loading ? "SCANNING" : visibleCount}</p>
+          <p className="stat-value" style={{ color: visibleCount > 0 ? "#00f2ff" : "#ff4d4d" }}>
+            {loading ? "SCANNING" : visibleCount}
+          </p>
         </div>
         <div className="stat-group">
           <p className="stat-caption">CONSTELLATION</p>
@@ -145,17 +132,11 @@ const StarlinkGrid = ({ lat, lon }) => {
         </div>
       </div>
       
-      <div className="sector-tag-container" style={{ marginTop: "15px", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "10px" }}>
+      <div className="sector-tag-container" style={{ marginTop: "15px", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "10px" }}>
         <p className="sector-tag" style={{ margin: 0, fontSize: "1.1rem" }}>
-          {loading ? "INITIALIZING SGP4..." : `COORD: ${parseFloat(lat).toFixed(2)}N / ${Math.abs(parseFloat(lon)).toFixed(2)}W`}
+          {loading ? "INITIALIZING..." : `COORD: ${parseFloat(lat).toFixed(2)}N / ${Math.abs(parseFloat(lon)).toFixed(2)}W`}
         </p>
-        <p style={{ 
-          fontSize: "0.8rem", 
-          color: "var(--text-sub)", 
-          textTransform: "uppercase", 
-          letterSpacing: "1px", 
-          marginTop: "4px" 
-        }}>
+        <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", marginTop: "4px" }}>
           REGION: {cityName}
         </p>
       </div>

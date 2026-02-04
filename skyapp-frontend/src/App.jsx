@@ -124,7 +124,7 @@ function App() {
 
         <ISSWatcher lat={location.lat} lon={location.lon} />
 
-        <div className="grid-span-2">
+        <div className="grid-span-1">
           <StarlinkGrid lat={location.lat} lon={location.lon} />
         </div>
 
