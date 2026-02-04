@@ -68,7 +68,6 @@ function App() {
       <header className="header-section">
         <h1 className="rainbow-animated">SKY DASHBOARD</h1>
 
-        {/* Telemetry now uses a flex-column to put each item on a new line */}
         <div className="telemetry-info">
           <span>{location.name}</span>
           <span>
@@ -87,35 +86,14 @@ function App() {
           {skyData?.sun?.phase && <GoldenHour sunData={skyData.sun} />}
         </div>
 
-        {/* Search bar is now part of the header vertical flow */}
         <div className="search-wrapper">
           <LocationSearch onLocationChange={setLocation} />
         </div>
-        {/* <div className="grid-full-width">
-          <MapCard
-            lat={location.lat}
-            lon={location.lon}
-            theme={isNight ? "night" : "day"}
-          />
-        </div> */}
-        {/* 3. Right Side Mini-Map with Pre-rendering */}
-         <div className="header-map-mini">
-          <div className="mini-map-inner glass-card">
-            
-            <div className={`map-layer ${isNight ? "night" : "hidden"}`}>
-              <MapCard lat={location.lat} lon={location.lon} theme="night" />
-            </div>
-            <div className={`map-layer ${!isNight ? "day" : "hidden"}`}>
-              <MapCard lat={location.lat} lon={location.lon} theme="day" />
-            </div>
-          </div>
-        </div> 
-        
-
       </header>
 
       <div className="dashboard-grid">
         <MoonGraphic3 lat={location.lat} lon={location.lon} />
+        
         <Weather
           lat={location.lat}
           lon={location.lon}
@@ -126,6 +104,15 @@ function App() {
 
         <div className="grid-span-1">
           <StarlinkGrid lat={location.lat} lon={location.lon} />
+        </div>
+
+        {/* --- MAP CARD GRID PLACEMENT --- */}
+        <div className="grid-span-1">
+          <MapCard
+            lat={location.lat}
+            lon={location.lon}
+            theme={isNight ? "night" : "day"}
+          />
         </div>
 
         {skyData ? (
