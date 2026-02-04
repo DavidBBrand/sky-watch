@@ -70,6 +70,8 @@
   transform-origin: bottom right;
   animation: scan 4s linear infinite;
   pointer-events: none;
+  /* clip scanner to shape of the radar dish circle */
+  clip-path: circle(100% at bottom right);
 }
 
 /* 4. The Nodes (The actual Satellites) */
