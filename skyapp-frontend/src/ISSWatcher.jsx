@@ -110,7 +110,7 @@ const ISSWatcher = ({ lat, lon }) => {
         ></div>
       </div>
     <svg 
-    className="iss-favicon" 
+    className="iss-favicon-small" 
     viewBox="0 0 24 24" 
     fill="currentColor"
   >

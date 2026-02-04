@@ -1,73 +1,98 @@
+/* 1. Base Card Styling (Dashboard Standard) */
 .starlink-card {
   font-family: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', 'Courier New', monospace;
   background: var(--card-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 25px; /* Increased slightly for better breathability */
+  padding: 25px;
   border-radius: 15px;
   border: 1px solid var(--card-border);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.8s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   color: var(--text-main);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 400px; /* Ensures consistent height with other cards */
 }
 
 .starlink-card:hover {
-  transform: translateY(-5px); /* Changed to translateY for a "lift" effect */
+  transform: translateY(-5px);
   box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
   border-color: var(--accent-color);
 }
 
+/* 2. Header & Labels */
 .orbital-label {
   letter-spacing: 2px;
-  font-size: 0.9rem; /* Reduced to match the ISS tracker's "standard" header size */
+  font-size: 0.8rem;
   color: var(--text-sub);
   margin: 0;
   font-weight: 600;
   text-transform: uppercase;
 }
 
-.sat-visual-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin: 20px 0;
-  padding: 15px;
-  /* Use the accent color with very low opacity for the background */
-  background: color-mix(in srgb, var(--accent-color), transparent 95%);
-  border-radius: 8px;
-  border: 1px solid var(--card-border);
+/* 3. The Radar System */
+.radar-container {
+  position: relative;
+  width: 180px; 
+  height: 180px;
+  margin: 20px auto;
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 70%);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-color), transparent 90%) 0%, transparent 80%);
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
 }
 
-.grid-node {
-  height: 3px;
-  background: var(--accent-color); /* Now reacts to the Day/Night accent */
-  border-radius: 2px;
-  opacity: 0.2;
-  animation: node-pulse 1.5s infinite ease-in-out;
+.radar-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 85%);
+  border-radius: 50%;
 }
 
-@keyframes node-pulse {
-  0%, 100% { 
-    opacity: 0.2; 
-    transform: scaleX(0.8); 
-  }
-  50% { 
-    opacity: 1; 
-    transform: scaleX(1.1); 
-    box-shadow: 0 0 12px var(--accent-color); 
-  }
+.radar-axis-h, .radar-axis-v {
+  position: absolute;
+  background: color-mix(in srgb, var(--accent-color), transparent 80%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.radar-axis-h { width: 100%; height: 1px; }
+.radar-axis-v { width: 1px; height: 100%; }
+
+.radar-scanner {
+  position: absolute;
+  width: 50%; height: 50%;
+  top: 0; left: 0;
+  background: linear-gradient(45deg, color-mix(in srgb, var(--accent-color), transparent 70%) 0%, transparent 100%);
+  transform-origin: bottom right;
+  animation: scan 4s linear infinite;
+  pointer-events: none;
 }
 
+/* 4. The Nodes (The actual Satellites) */
+.radar-node {
+  position: absolute;
+  width: 5px; height: 5px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-color);
+  transform: translate(-50%, -50%);
+  transition: all 1s linear;
+  z-index: 10;
+}
+
+/* 5. Stats Layout (Matches your other cards) */
 .stats-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
-  padding: 0 5px;
+  margin-top: 10px;
 }
 
 .stat-caption {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-sub);
   margin: 0;
   text-transform: uppercase;
@@ -76,18 +101,13 @@
 
 .stat-value {
   color: var(--text-main);
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 800;
-  margin: 5px 0 0 0;
-  font-variant-numeric: tabular-nums; /* Prevents numbers from jumping when they change */
+  margin: 2px 0 0 0;
+  font-variant-numeric: tabular-nums;
 }
 
-.sector-tag {
-  font-size: 0.85rem;
-  color: var(--text-sub);
-  margin-top: 20px;
-  opacity: 0.7;
-  border-top: 1px solid var(--card-border);
-  padding-top: 15px;
-  font-weight: 500;
+@keyframes scan {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
