@@ -8,11 +8,12 @@
   --card-bg: rgba(255, 255, 255, 0.25);
   --card-border: rgba(62, 51, 35, 0.2); 
   --text-main: #3e3323;
-  --text-sub: rgba(62, 51, 35, 0.7);
+  --text-sub: color-mix(in srgb, var(--text-main), transparent 30%);
   --accent-color: #008f11;
   --accent-color2: rgb(155, 54, 18);
-  --accent-color3: #FB8500;
+  --accent-color3: #be6806;
   --star-opacity: 0; 
+  --glass-blur: blur(10px);
 }
 
 [data-theme='night'] {
@@ -48,7 +49,8 @@ body {
   background-attachment: fixed;
   
   color: var(--text-main);
-  transition: background-color 0.8s ease, color 0.8s ease;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  isolation: isolate; /* Prevents child elements from leaking styles */
   
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -71,6 +73,8 @@ body::before {
   opacity: var(--star-opacity);
   will-change: opacity;
   transform: translateZ(0); 
+  backface-visibility: hidden;
+  perspective: 1000px; /* Enhance rendering performance */
   transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
   pointer-events: none;
@@ -92,8 +96,8 @@ button {
   font-weight: 600;
   background: var(--card-bg);
   color: var(--text-main);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  // backdrop-filter: var(--glass-blur);
+  // -webkit-backdrop-filter: var(--glass-blur);
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
