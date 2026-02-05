@@ -3,7 +3,7 @@
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', 'Courier New', monospace;
+  font-family:  'Roboto Mono', 'Courier New', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -54,6 +54,7 @@
   z-index: 10;
   font-size: 1.0rem;
   font-weight: 600;
+  margin: 20px;
 }
 
 /* Vertical Stack for Telemetry - Isolated to Header */
@@ -61,15 +62,16 @@
   display: flex;
   flex-direction: row;
   gap: 12px;
-  margin: 2px 0;
+  margin: 12px 0;
   text-align: center;
   color: var(--text-sub);
   letter-spacing: 1px;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 .derp {
-  color: orange;
+  color: var(--accent-color3);
+  
 }
 /* 5. Blended Search Input */
 .search-wrapper {
@@ -81,9 +83,10 @@
 }
 
 .search-wrapper input {
+  position: relative;
   width: 100%;
   max-width: 300px;
-  padding: 12px 20px;
+  padding: 12px 12px;
   border-radius: 25px;
   border: 1px solid var(--card-border);
   background: var(--card-bg);
@@ -114,7 +117,7 @@
   gap: 25px;
   width: 95%;
   max-width: 1250px;
-  padding: 20px;
+  padding: 10px;
   margin: 0 auto;
 }
 
@@ -123,7 +126,7 @@
 
 /* 7. UI Components & Typography */
 .theme-toggle-btn {
-  position:relative; /* Keep it pinned to the screen */
+  position: fixed; /* Keep it pinned to the screen */
   top: 20px;
   right: 20px;
   z-index: 1000; /* Highest priority to stay above everything */
@@ -138,6 +141,7 @@
   text-transform: uppercase;
   font-size: 0.75rem;
   transition: all 0.3s ease;
+  margin: 5px;
 }
 
 .accent-text {
@@ -150,7 +154,8 @@
   opacity: 0.6;
   margin-top: 40px;
   color: var(--text-sub);
-  letter-spacing: 4px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .rainbow-animated {
@@ -161,7 +166,8 @@
   color: transparent;
   animation: rainbow-shifty 2.5s linear infinite;
   font-family: 'Comfortaa';
-  letter-spacing: 20px
+  letter-spacing: 10px;
+  margin: 5px 5px;
 }
 
 @keyframes rainbow-shifty {
@@ -219,5 +225,6 @@
 
 
 .time-display {
-  color: lightBlue;
+  color:var(--accent-color);
+  text-shadow: rgba(6, 69, 19, 0.641) 0.5px 0.5px 0.5px;
 }
