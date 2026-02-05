@@ -66,7 +66,7 @@ function App() {
       </button>
 
       <header className="header-section">
-        <h2 className="rainbow-animated">SKY DASHBOARD</h2>
+        <h1 className="rainbow-animated">SKY DASHBOARD</h1>
 
         <div className="search-wrapper">
           <LocationSearch onLocationChange={setLocation} />
