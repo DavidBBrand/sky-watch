@@ -73,7 +73,7 @@ function App() {
         </div>
 
         <div className="telemetry-info">
-          <span>{location.name}</span>
+          <span className="derp">{location.name}</span>
           <span>
             {Math.abs(location.lat).toFixed(2)}°{location.lat >= 0 ? "N" : "S"}{" "}
             / {Math.abs(location.lon).toFixed(2)}°
