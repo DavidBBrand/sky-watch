@@ -69,7 +69,9 @@ def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86)):
         "Venus": eph['venus'],
         "Mars": eph['mars'],
         "Jupiter": eph['jupiter_barycenter'],
-        "Saturn": eph['saturn_barycenter']
+        "Saturn": eph['saturn_barycenter'],
+        "Uranus": eph['uranus_barycenter'],
+        "Neptune": eph['neptune_barycenter']
     }
 
     planet_data = {}
