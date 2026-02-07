@@ -28,7 +28,9 @@ const SkyDetails = ({ skyData }) => {
       Mars: "♂",
       Jupiter: "♃",
       Saturn: "♄",
-      Mercury: "☿"
+      Mercury: "☿",
+      Uranus: "♅",
+      Neptune: "♆"
     };
     return symbols[name] || "•";
   };
