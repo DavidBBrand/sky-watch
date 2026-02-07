@@ -20,20 +20,7 @@ const MapCard = ({ lat, lon, theme, skyData, location }) => {
       <h1 className="map-card-title"> {location?.name}</h1>
         
       <SolarCycle sun={skyData?.sun} />
-                <h3
-        className="rainbow-shwarma"
-        style={{
-        //   fontSize: "1.2rem",
-          textTransform: "uppercase",
-          letterSpacing: "4px",
-          fontFamily: "Jokerman"
-        //   marginBottom: "20px",
-        //   padding: "5px"
-          
-        }}
-      >
-        <i>Map O' The Land</i>
-      </h3>
+
 
       <img
         src={mapUrl}

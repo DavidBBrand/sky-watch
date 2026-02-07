@@ -45,19 +45,21 @@
   /* Warm Spectrum: Deep Red -> Orange -> Gold -> Amber -> Pinkish Red */
   background: linear-gradient(
     to right,
-    #ff4e50,
-    #988d51,
-    #24a533,
-    #e02d30,
-    #4327e1,
-    #f96e23
+    #a98c3a,
+    #fc913a,    
+    #bca740,
+    #fc913a,
+    #a68a3d
+
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
   animation: 
-    rainbow-shift 1.2s linear infinite,
-    glow-pulse .2s ease-in-out infinite; /* Slightly slower for a "glow" effect */
+    rainbow-shift 2.5s linear infinite,
+    glow-pulse 2.19s ease-in-out infinite; 
+  text-shadow: rgba(201, 38, 92, 0.644) 4px 4px 3px;
+  font-size: 2em;
   
 }
