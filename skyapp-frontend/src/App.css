@@ -80,7 +80,7 @@
   max-width: 600px; /* Constraints the wrapper area */
   display: flex;
   justify-content: center; /* Centers the search bar */
-  margin: 10px auto 0 auto; /* Centers the wrapper itself */
+  margin: 0px auto 0 auto; /* Centers the wrapper itself */
 }
 
 .search-wrapper input {
