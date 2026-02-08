@@ -9,13 +9,13 @@ const StarlinkGrid = ({ lat, lon }) => {
 
   // 1. Fetching OMM/JSON Data
   useEffect(() => {
-    fetch('/starlink.json')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/starlink.json")
+      .then((res) => res.json())
+      .then((data) => {
         setTles(Array.isArray(data) ? data : [data]);
         setLoading(false);
       })
-      .catch(e => {
+      .catch((e) => {
         console.error("🛰️ DATA LOAD ERROR:", e);
         setLoading(false);
       });
@@ -26,7 +26,7 @@ const StarlinkGrid = ({ lat, lon }) => {
 
     const now = new Date();
     const gmst = satellite.gstime(now);
-    
+
     // Observer: Franklin, TN (35.9N, -86.8W)
     // Documentation Note: Set the Observer in RADIANS
     const observerGd = {
@@ -45,10 +45,10 @@ const StarlinkGrid = ({ lat, lon }) => {
         if (satrec && !satrec.error) {
           // Propagate returns { position: {x,y,z}, velocity: {x,y,z} }
           const pv = satellite.propagate(satrec, now);
-          
+
           if (pv && pv.position) {
             const satEcf = satellite.eciToEcf(pv.position, gmst);
-            
+
             // CRITICAL FIX: ecfToLookAngles(observer, satellite)
             // Documentation states: observer first, satellite second
             const lookAngles = satellite.ecfToLookAngles(observerGd, satEcf);
@@ -57,7 +57,7 @@ const StarlinkGrid = ({ lat, lon }) => {
             if (lookAngles.elevation > 0) {
               const r = (1 - lookAngles.elevation / (Math.PI / 2)) * 50;
               const theta = lookAngles.azimuth - Math.PI / 2;
-              
+
               visiblePoints.push({
                 x: 50 + r * Math.cos(theta),
                 y: 50 + r * Math.sin(theta),
@@ -66,11 +66,13 @@ const StarlinkGrid = ({ lat, lon }) => {
             }
           }
         }
-      } catch (e) { /* skip */ }
+      } catch (e) {
+        /* skip */
+      }
     });
 
     setNodes(visiblePoints);
-    console.log(`📡 RADAR: Tracking ${visiblePoints.length} satellites.`);
+    // console.log(`📡 RADAR: Tracking ${visiblePoints.length} satellites.`);
   }, [tles, lat, lon]);
 
   useEffect(() => {
@@ -80,28 +82,37 @@ const StarlinkGrid = ({ lat, lon }) => {
   }, [updateRadar]);
 
   return (
-    <div className="starlink-card glass-card">
+    <div className="card-container">
+      <div className="starlink-card glass-card">
         <div className="starlink-card-title">STARLINK SATELLITE RADAR</div>
-        
-      <div className="radar-container">
-        <div className="radar-scanner"></div>
-        <div className="radar-axis-h"></div>
-        <div className="radar-axis-v"></div>
-        <div className="radar-ring r1"></div>
-        <div className="radar-ring r2"></div>
-        <div className="radar-ring r3"></div>
 
-        {nodes.map(n => (
-          <div key={n.id} className="radar-node" style={{ left: `${n.x}%`, top: `${n.y}%` }} />
-        ))}
-        {loading && <div className="radar-status">LINKING...</div>}
-      </div>
-      <div className="stats-row">
-        <span>ACTIVE: {nodes.length}</span>
-        <span>LOCATION: {parseFloat(lat).toFixed(1)}N {Math.abs(parseFloat(lon)).toFixed(1)}W</span>
+        <div className="radar-container">
+          <div className="radar-scanner"></div>
+          <div className="radar-axis-h"></div>
+          <div className="radar-axis-v"></div>
+          <div className="radar-ring r1"></div>
+          <div className="radar-ring r2"></div>
+          <div className="radar-ring r3"></div>
+
+          {nodes.map((n) => (
+            <div
+              key={n.id}
+              className="radar-node"
+              style={{ left: `${n.x}%`, top: `${n.y}%` }}
+            />
+          ))}
+          {loading && <div className="radar-status">LINKING...</div>}
+        </div>
+        <div className="stats-row">
+          <span>ACTIVE: {nodes.length}</span>
+          <span>
+            LOCATION: {parseFloat(lat).toFixed(1)}N{" "}
+            {Math.abs(parseFloat(lon)).toFixed(1)}W
+          </span>
+        </div>
       </div>
     </div>
   );
 };
 
-export default StarlinkGrid;  
+export default StarlinkGrid;

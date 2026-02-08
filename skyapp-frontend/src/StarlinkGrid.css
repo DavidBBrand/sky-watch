@@ -16,6 +16,19 @@
   justify-content: space-between;
   min-height: 500px; /* Ensures consistent height with other cards */
 }
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Change this: */
+    min-height: auto;        /* Let the content define the height */
+    padding: 40px 20px;      /* Vertical gap / Horizontal gap */
+    
+    width: 100%;             /* Ensure it spans the full width */
+    box-sizing: border-box;  /* Prevents padding from causing horizontal scroll */
+}
+
 
 .starlink-card:hover {
   transform: translateY(-5px);

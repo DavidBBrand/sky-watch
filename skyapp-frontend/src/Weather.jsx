@@ -34,18 +34,19 @@ const Weather = ({ lat, lon, onDataReceived }) => {
   }, [lat, lon, onDataReceived]);
 
   const getWeatherEmoji = (description) => {
-  const desc = description.toLowerCase();
-  if (desc.includes("thunderstorm")) return "⛈️";
-  if (desc.includes("drizzle") || desc.includes("rain")) return "🌧️";
-  if (desc.includes("snow")) return "❄️";
-  if (desc.includes("clear")) return "☀️";
-  if (desc.includes("clouds")) {
-    if (desc.includes("few") || desc.includes("scattered")) return "🌤️";
-    return "☁️";
-  }
-  if (desc.includes("mist") || desc.includes("fog") || desc.includes("haze")) return "🌫️";
-  return "🌡️"; // Default emoji
-};
+    const desc = description.toLowerCase();
+    if (desc.includes("thunderstorm")) return "⛈️";
+    if (desc.includes("drizzle") || desc.includes("rain")) return "🌧️";
+    if (desc.includes("snow")) return "❄️";
+    if (desc.includes("clear")) return "☀️";
+    if (desc.includes("clouds")) {
+      if (desc.includes("few") || desc.includes("scattered")) return "🌤️";
+      return "☁️";
+    }
+    if (desc.includes("mist") || desc.includes("fog") || desc.includes("haze"))
+      return "🌫️";
+    return "🌡️"; // Default emoji
+  };
 
   if (error)
     return (
@@ -67,7 +68,6 @@ const Weather = ({ lat, lon, onDataReceived }) => {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          
           <p
             style={{
               fontSize: "0.8rem",
@@ -88,50 +88,54 @@ const Weather = ({ lat, lon, onDataReceived }) => {
     );
 
   return (
-    <div className="weather-card">
-      <p
-        style={{
-          fontSize: "1.0rem",
-          textTransform: "uppercase",
-          letterSpacing: "3px",
-          color: "var(--text-sub)",
-          fontWeight: "500"
-        }}
-      >
-        Current Weather
-      </p>
+    <div className="card-container">
+      <div className="weather-card">
+        <p
+          style={{
+            fontSize: "1.0rem",
+            textTransform: "uppercase",
+            letterSpacing: "3px",
+            color: "var(--text-sub)",
+            fontWeight: "500"
+          }}
+        >
+          Current Weather
+        </p>
 
-      <h2
-        style={{
-          fontSize: "1rem",
-          margin: "2px 0",
-          color: "var(--text-main)",
-          fontWeight: "200"
-        }}
-      >
-        <div style={{ fontSize: "8rem" }}>{getWeatherEmoji(weather.description)}</div>
-        <h4 style={{ fontSize: "1.8rem", fontWeight: "400", margin: 0 }}>{weather.temp}°F</h4>
-        
-      </h2>
+        <h2
+          style={{
+            fontSize: "1rem",
+            margin: "2px 0",
+            color: "var(--text-main)",
+            fontWeight: "200"
+          }}
+        ></h2>
+        <div style={{ fontSize: "8rem" }}>
+          {getWeatherEmoji(weather.description)}
+        </div>
+        <h4 style={{ fontSize: "1.8rem", fontWeight: "400", margin: 0 }}>
+          {weather.temp}°F
+        </h4>
 
-      <p
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          color: "var(--text-main)"
-        }}
-      >
-        {weather.description}
-      </p>
+        <p
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "500",
+            color: "var(--text-main)"
+          }}
+        >
+          {weather.description}
+        </p>
 
-      <div
-        style={{
-          marginTop: "1rem",
-          fontSize: "1.4rem",
-          color: "var(--text-sub)"
-        }}
-      >
-        Wind: {weather.windspeed} mph
+        <div
+          style={{
+            marginTop: "1rem",
+            fontSize: "1.4rem",
+            color: "var(--text-sub)"
+          }}
+        >
+          Wind: {weather.windspeed} mph
+        </div>
       </div>
     </div>
   );

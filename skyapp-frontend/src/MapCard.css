@@ -8,7 +8,7 @@
     -webkit-backdrop-filter: blur(15px);
     
     /* Layout */
-    padding: 25px;
+    padding: 20px;
     min-width: 280px;
     flex: 1;
     max-width: 350px;
@@ -32,6 +32,36 @@
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     border: 1px solid var(--text-sub);
     
+}
+
+// .card-container {
+//     display: flex;
+//     justify-content: center; /* Horizontal centering */
+//     align-items: center;     /* Vertical centering */
+//     min-height: 100vh;       /* Ensure it takes up the full screen height */
+//     padding: 20px;           /* Prevents the card from touching screen edges */
+// }
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Change this: */
+    min-height: auto;        /* Let the content define the height */
+    padding: 40px 20px;      /* Vertical gap / Horizontal gap */
+    
+    width: 100%;             /* Ensure it spans the full width */
+    box-sizing: border-box;  /* Prevents padding from causing horizontal scroll */
+}
+
+/* Mobile Tweak for your Card */
+@media (max-width: 350px) {
+    .map-card {
+        min-width: 100%;    /* Allow it to shrink below 280px if needed */
+        max-width: 100%;    /* Keep it within the padding */
+        padding: 15px;      /* Slightly tighter padding for small screens */
+    }
 }
 
 .map-card-title {

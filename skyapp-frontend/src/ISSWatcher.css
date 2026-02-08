@@ -8,7 +8,7 @@
 .iss-card {
   background: var(--card-bg, rgba(20, 20, 25, 0.8));
   backdrop-filter: blur(10px);
-  padding: 20px;
+  padding: 30px;
   border-radius: 15px;
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
@@ -17,6 +17,19 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   min-width: 200px;
 }
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Change this: */
+    min-height: auto;        /* Let the content define the height */
+    padding: 40px 20px;      /* Vertical gap / Horizontal gap */
+    
+    width: 100%;             /* Ensure it spans the full width */
+    box-sizing: border-box;  /* Prevents padding from causing horizontal scroll */
+}
+
 
 /* 2. The Radar Sweep Text Effect */
  .iss-radar-text {   background: conic-gradient(
@@ -88,5 +101,18 @@
     /* Hover glow also uses a variable now */
     border: 1px solid var(--text-sub);
     box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.2);
+}
+
+.iss-favicon-small {
+    width: 200px;
+    height: 200px;
+}
+.svg-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;     /* Centers vertically */
+  width: 100%;             /* Ensures it takes up card width */
+  height: 100px;   
+          /* Or whatever height you need */
 }
 

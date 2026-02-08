@@ -1,8 +1,8 @@
 /* 1. Theme Variable Definitions */
 :root {
   /* Day Theme (Solar Sand) */
-  --bg-color: #bdb5a9;
-  --mesh-1: hsla(36, 28%, 75%, 1);
+  --bg-color: #be9f71;
+  --mesh-1: rgb(218, 181, 121);
   --mesh-2: hsla(210, 30%, 85%, 1);
   --mesh-3: hsla(40, 20%, 80%, 1);
   --card-bg: rgba(255, 255, 255, 0.25);
@@ -43,10 +43,13 @@ body {
   /* Background Logic */
   background-color: var(--bg-color);
   background-image: 
-    radial-gradient(at 0% 0%, var(--mesh-1) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, var(--mesh-2) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, var(--mesh-3) 0px, transparent 50%);
-  background-attachment: fixed;
+    /* chose brighter orange and blue hues to mimic chromatic abberation */
+    /* Heavy Orange Fringe */
+    radial-gradient(at 100% 0%, var(--mesh-1) 0%, transparent 55%),
+    /* Heavy Blue Fringe */
+    radial-gradient(at 0% 100%, var(--mesh-2) 0%, transparent 55%),
+    /* Sharp White Center to maintain readability */
+    radial-gradient(at 50% 50%, var(--mesh-3) 0%, transparent 80%);
   
   color: var(--text-main);
   transition: background-color 0.4s ease, color 0.4s ease;

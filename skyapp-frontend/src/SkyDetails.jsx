@@ -54,109 +54,114 @@ const SkyDetails = ({ skyData }) => {
   };
 
   return (
-    <div className="sky-details-card">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginBottom: "20px"
-        }}
-      >
-        <div>
-          <p
-            style={{
-              fontSize: "1rem",
-              textTransform: "uppercase",
-              letterSpacing: "2px",
-              color: "var(--text-sub)",
-              margin: 0
-            }}
-          ></p>
-          <h2
-            style={{
-              fontSize: "1.0rem",
-              margin: "5px 0 0 0",
-              fontWeight: "300",
-              color: "var(--text-main)"
-            }}
-          ></h2>
+    <div className="card-container">
+      <div className="sky-details-card">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            marginBottom: "20px"
+          }}
+        >
+          <div>
+            <p
+              style={{
+                fontSize: "1rem",
+                textTransform: "uppercase",
+                letterSpacing: "2px",
+                color: "var(--text-sub)",
+                margin: 0
+              }}
+            ></p>
+            <h2
+              style={{
+                fontSize: "1.0rem",
+                margin: "5px 0 0 0",
+                fontWeight: "300",
+                color: "var(--text-main)"
+              }}
+            ></h2>
+          </div>
         </div>
-      </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <div>
+            <h3
+              style={{
+                color: "#854dbb",
+                fontSize: "1.2rem",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                marginBottom: "5px"
+              }}
+            >
+              Planets
+            </h3>
+            <div className="planet-grid">
+              {Object.entries(planets).map(([name, info]) => (
+                <div key={name} className="planet-item">
+                  <div style={{ fontSize: "2.2rem", marginBottom: "5px" }}>
+                    {planetIcons[name] || "✨"}
+                  </div>
 
-        <div>
-          <h3
-            style={{
-              color: "#854dbb",
-              fontSize: "1.2rem",
-              textTransform: "uppercase",
-              letterSpacing: "1px",
-              marginBottom: "5px"
-            }}
-          >
-            Planets
-          </h3>
-          <div className="planet-grid">
-            {Object.entries(planets).map(([name, info]) => (
-              <div key={name} className="planet-item">
-                <div style={{ fontSize: "2.2rem", marginBottom: "5px" }}>
-                  {planetIcons[name] || "✨"}
-                </div>
-
-                <div
-                  style={{
-                    fontSize: "0.8rem",
-                    fontWeight: "600",
-                    color: "var(--text-main)"
-                  }}
-                >
-                  
-                  <span style={{ fontSize: "1.0rem", fontFamily: "serif",fontWeight: "400" }}>
-                    {getPlanetSymbol(name)}
+                  <div
+                    style={{
+                      fontSize: "0.8rem",
+                      fontWeight: "600",
+                      color: "var(--text-main)"
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "1.0rem",
+                        fontFamily: "serif",
+                        fontWeight: "400"
+                      }}
+                    >
+                      {getPlanetSymbol(name)}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "1.2rem",
+                      fontWeight: "400",
+                      marginBottom: "4px",
+                      color: "var(--text-main)"
+                    }}
+                  >
+                    {name}
+                  </div>
+                  <span
+                    className={`status-tag ${
+                      info.is_visible ? "status-visible" : "status-set"
+                    }`}
+                  >
+                    {info.is_visible ? "Visible" : "Set"}
                   </span>
+                  <div
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "var(--text-sub)",
+                      marginTop: "4px",
+                      opacity: 0.8
+                    }}
+                  >
+                    {getCompassDirection(info.azimuth)} at {info.azimuth}°
+                    Azimuth
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "var(--text-sub)",
+                      opacity: 0.8
+                    }}
+                  >
+                    {info.altitude}° Altitude
+                  </div>
                 </div>
-                <div
-                  style={{
-                    fontSize: "1.2rem",
-                    fontWeight: "400",
-                    marginBottom: "4px",
-                    color: "var(--text-main)"
-                  }}
-                >
-                  {name}
-                </div>
-                <span
-                  className={`status-tag ${
-                    info.is_visible ? "status-visible" : "status-set"
-                  }`}
-                >
-                  {info.is_visible ? "Visible" : "Set"}
-                </span>
-                <div
-                  style={{
-                    fontSize: "0.8rem",
-                    color: "var(--text-sub)",
-                    marginTop: "4px", 
-                    opacity: 0.8
-                  }}
-                >
-                  {getCompassDirection(info.azimuth)} {" "}
-                  
-                  at {info.azimuth}° Azimuth
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.8rem",
-                    color: "var(--text-sub)",
-                    opacity: 0.8
-                  }}
-                >
-                  {info.altitude}° Altitude
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

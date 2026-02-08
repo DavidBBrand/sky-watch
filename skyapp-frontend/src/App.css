@@ -128,7 +128,7 @@
 /* 7. UI Components & Typography */
 .theme-toggle-btn {
   position: fixed; /* Keep it pinned to the screen */
-  top: 20px;
+  top: 50px;
   right: 20px;
   z-index: 1000; /* Highest priority to stay above everything */
   padding: 10px 20px;

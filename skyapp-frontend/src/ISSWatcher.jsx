@@ -61,99 +61,105 @@ const ISSWatcher = ({ lat, lon }) => {
   const isNearby = distance !== null && distance < 500;
 
   return (
-    <div className={`iss-card ${isNearby ? "nearby" : ""}`}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
-        }}
-      >
-
-      </div>
-      {/* --- Ping Section --- */}
-
-
-
-    <svg 
-    className="iss-favicon-small" 
-    viewBox="0 0 24 24" 
-    fill="currentColor"
-  >
-    {/* Central Module */}
-    <rect x="10" y="8" width="4" height="8" rx="1" />
-    <rect x="7" y="11" width="10" height="2" rx="0.5" />
-    {/* Left Solar Arrays */}
-    <rect x="2" y="5" width="4" height="14" rx="1" opacity="0.8" />
-    {/* Right Solar Arrays */}
-    <rect x="18" y="5" width="4" height="14" rx="1" opacity="0.8" />
-    {/* Connecting Truss */}
-    <rect x="6" y="11.5" width="12" height="1" />
-  </svg>
+    <div className="card-container">
+      <div className={`iss-card ${isNearby ? "nearby" : ""}`}>
         <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-          margin: "40px 0"
-        }}
-      >
-        <div
-          className="ping-indicator"
           style={{
-            backgroundColor: isNearby ? "#aade4a" : "#16e782"
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center"
           }}
         ></div>
-      </div>
-  <h3 style={{ fontSize: "1.2rem", color: "var(--text-sub)", margin: "10px 0 0 0" }}>ISS Tracker</h3>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+       <div className="svg-container">
+        <svg
+          className="iss-favicon-small"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          {/* Central Module */}
+          <rect x="10" y="8" width="4" height="8" rx="1" />
+          <rect x="7" y="11" width="10" height="2" rx="0.5" />
+          {/* Left Solar Arrays */}
+          <rect x="2" y="5" width="4" height="14" rx="1" opacity="0.8" />
+          {/* Right Solar Arrays */}
+          <rect x="18" y="5" width="4" height="14" rx="1" opacity="0.8" />
+          {/* Connecting Truss */}
+          <rect x="6" y="11.5" width="12" height="1" />
+        </svg>
+       </div> 
         <div
-          className={isNearby ? "iss-radar-text" : ""}
           style={{
-            fontSize: "2.2rem",
-            fontWeight: "bold",
-            color: isNearby ? "transparent" : "var(--text-main)",
-            fontFamily: "monospace",
-            lineHeight: "1",
-            marginBottom: "20px",
-            marginTop: "25px"
+            display: "flex",
+            justifyContent: "center",
+            width: "100%"
           }}
         >
-          {distance
-            ? `${Math.round(distance).toLocaleString()}mi`
-            : "SCANNING..."}
+          <div
+            className="ping-indicator"
+            style={{
+              backgroundColor: isNearby ? "#aade4a" : "#16e782"
+            }}
+          ></div>
+        </div>
+        <h3
+          style={{
+            fontSize: "1.2rem",
+            color: "var(--text-sub)",
+            margin: "10px 0 0 0"
+          }}
+        >
+          ISS Tracker
+        </h3>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+          <div
+            className={isNearby ? "iss-radar-text" : ""}
+            style={{
+              fontSize: "2.2rem",
+              fontWeight: "bold",
+              color: isNearby ? "transparent" : "var(--text-main)",
+              fontFamily: "monospace",
+              lineHeight: "1",
+              marginBottom: "20px",
+              marginTop: "25px"
+            }}
+          >
+            {distance
+              ? `${Math.round(distance).toLocaleString()}mi`
+              : "SCANNING..."}
+          </div>
+
+          <p
+            style={{
+              fontSize: "0.85rem",
+              color: "var(--text-sub)",
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              margin: 0
+            }}
+          >
+            from {cityName}
+          </p>
         </div>
 
         <p
           style={{
-            fontSize: "0.85rem",
+            fontSize: "1.2rem",
             color: "var(--text-sub)",
-            textTransform: "uppercase",
-            letterSpacing: "1px",
-            margin: 0
+            marginTop: "15px",
+            fontFamily: "monospace",
+            opacity: 0.8
           }}
         >
-          from {cityName}
+          LAT: {parseFloat(issPos.lat).toFixed(2)} | LON:{" "}
+          {parseFloat(issPos.lon).toFixed(2)}
         </p>
+
+        {isNearby && (
+          <div className="proximity-alert">LOW ORBIT PROXIMITY ALERT</div>
+        )}
       </div>
-
-      <p
-        style={{
-          fontSize: "1.2rem",
-          color: "var(--text-sub)",
-          marginTop: "15px",
-          fontFamily: "monospace",
-          opacity: 0.8
-        }}
-      >
-        LAT: {parseFloat(issPos.lat).toFixed(2)} | LON:{" "}
-        {parseFloat(issPos.lon).toFixed(2)}
-      </p>
-
-      {isNearby && (
-        <div className="proximity-alert">LOW ORBIT PROXIMITY ALERT</div>
-      )}
     </div>
   );
 };

@@ -35,6 +35,19 @@
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     border: 1px solid var(--text-sub);
 }
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Change this: */
+    min-height: auto;        /* Let the content define the height */
+    padding: 40px 20px;      /* Vertical gap / Horizontal gap */
+    
+    width: 100%;             /* Ensure it spans the full width */
+    box-sizing: border-box;  /* Prevents padding from causing horizontal scroll */
+}
+
 
 /* Helper for sub-text inside the weather card */
 .weather-label {
