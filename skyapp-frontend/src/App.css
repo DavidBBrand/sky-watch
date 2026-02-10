@@ -60,16 +60,22 @@
 /* Vertical Stack for Telemetry - Isolated to Header */
 .telemetry-info {
   display: flex;
-  flex-direction: row;
-  gap: 12px;
-  margin: 12px 10px;
+  flex-wrap: wrap;
+  justify-content:center;
+  gap: 15px;
+  margin: 15px;
   text-align: center;
   color: var(--text-sub);
   letter-spacing: 1px;
   text-transform: uppercase;
-  font-size: 1rem;
+  font-size: 0.85rem;
   padding: 10px;
 }
+
+.telemetry-info span {
+  white-space: nowrap;
+}
+
 .derp {
   color: var(--accent-color3);
   
@@ -112,16 +118,30 @@
 }
 
 /* 6. Dashboard Grid System (Horizontal Layout) */
+// .dashboard-grid {
+//   display: grid;
+//   grid-template-columns: repeat(3, 1fr);
+//   gap: 25px;
+//   width: 95%;
+//   max-width: 1250px;
+//   padding: 10px;
+//   margin: 0 auto;
+// }
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-  width: 95%;
-  max-width: 1250px;
-  padding: 10px;
+  /* Adjust gap for 'half-screen' vs 'full-screen' */
+  gap: 1.5rem;
+  padding: 1.5rem;
+  
+  /* MIN: 350px (minimum width before a card drops to the next row)
+     MAX: 1fr (stretch to fill remaining space)
+  */
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  
+  width: 100%;
+  max-width: 1600px; /* Prevents cards from becoming ultra-wide on 4K monitors */
   margin: 0 auto;
 }
-
 .grid-span-2 { grid-column: span 2; }
 .grid-full-width { grid-column: 2; width: 600px;}
 
@@ -229,4 +249,22 @@
 .time-display {
   color:var(--accent-color);
   text-shadow: rgba(6, 69, 19, 0.641) 0.5px 0.5px 0.5px;
+}
+
+.iframe-container {
+  position: relative;
+  width: 100%;
+  /* This creates a 16:9 aspect ratio box */
+  aspect-ratio: 16 / 9; 
+  overflow: hidden;
+  border-radius: 8px; /* Matches your dashboard aesthetic */
+}
+
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
 }

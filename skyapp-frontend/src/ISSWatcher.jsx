@@ -156,7 +156,14 @@ const ISSWatcher = ({ lat, lon }) => {
           {parseFloat(issPos.lon).toFixed(2)}
         </p>
 
-        <iframe src="https://isstracker.pl/en/widget/map?disableInfoBox=1&lang=en"></iframe>
+        <div className="iframe-container">
+          {" "}
+          <iframe
+            className="responsive-iframe"
+            src="https://isstracker.pl/en/widget/map?disableInfoBox=1&lang=en"
+          ></iframe>
+        </div>
+
         {isNearby && (
           <div className="proximity-alert">LOW ORBIT PROXIMITY ALERT</div>
         )}
