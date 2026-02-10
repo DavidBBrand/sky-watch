@@ -116,21 +116,7 @@
   background: rgba(255, 255, 255, 0.3);
   box-shadow: 0 0 15px var(--separator-glow);
 }
-// .dashboard-grid {
-//   display: grid;
-//   gap: 20px;
-//   /* Use 1rem or 20px consistently on both sides */
-//   padding: 20px; 
-  
-//   /* The "Secret Sauce" for centering the layout */
-//   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-//   justify-content: center; 
-  
-//   width: 100%;
-//   /* Ensure it doesn't hug the edges of the screen too tightly */
-//   box-sizing: border-box; 
-//   margin: 0 auto;
-// }
+
 .dashboard-grid {
   display: grid;
   gap: 24px;
@@ -265,17 +251,29 @@
   padding: 20px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  
-  /* Flexbox keeps content aligned and ensures cards in a row match height */
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
   height: 100%;
   box-sizing: border-box;
   
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.5s ease;
+}
+/* The base card stays normal */
+
+
+/* The active state adds the tactical red/green pulse to the whole card */
+.glass-card.proximity-alert-active {
+  border-color: rgba(11, 97, 43, 0.8);
+  box-shadow: 0 0 20px rgba(11, 97, 43, 0.4);
+  animation: card-alert-pulse 2s infinite;
+  
 }
 
+@keyframes card-alert-pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(11, 97, 43, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(11, 97, 43, 0.6); }
+}
 .glass-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px var(--separator-glow);

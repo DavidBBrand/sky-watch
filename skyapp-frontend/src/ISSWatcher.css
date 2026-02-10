@@ -1,55 +1,117 @@
-/* 1. Define the animateable angle for the conical sweep */
-@property --angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-
-
-
-/* 2. The Radar Sweep Text Effect */
- .iss-radar-text {   background: conic-gradient(
-    from var(--angle),
-    #19c95a, 
-    var(--text-main, #ffffff7b),     rgba(74, 222, 128, 0.2), 
-    #1cc85b
-   );
+/* 1. Radar Text Styling (The Scanning Mileage) */
+.iss-radar-text {
+  background: linear-gradient(90deg, #0b612b 0%, #4ade80 50%, #0b612b 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
   display: inline-block;
-  animation: radar-spin 3s linear infinite;
   font-weight: 800;
+  /* The 3D Etched Effect */
+  text-shadow:
+    rgba(0, 0, 0, 0.583) 1px 1px 0.25px,
+    -0.5px -0.5px 0px rgba(255, 255, 255, 0.2);
+
+  animation:
+    radar-sweep 2s linear infinite,
+    tactical-flicker 4s ease-in-out infinite;
+
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3));
 }
 
-@keyframes radar-spin {
+@keyframes radar-sweep {
   to {
-    --angle: 360deg;
+    background-position: 200% center;
   }
 }
 
-/* 3. Proximity Alert Styling */
-.iss-card.nearby {
-  border-color: #4ade80;
-  box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+@keyframes tactical-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  52% {
+    opacity: 0.9;
+  }
+  54% {
+    opacity: 0.8;
+  }
 }
 
+/* 2. Proximity Alert Text (The Amber Alert) */
 .proximity-alert {
-  font-size: 0.7rem;
+  font-size: 2rem;
   font-weight: bold;
-  color: #4ade80;
+  color: #ce7b06;
   text-transform: uppercase;
   letter-spacing: 5px;
   margin-top: 10px;
-  animation: alert-blink 1s ease-in-out infinite;
+  display: inline-block; /* Essential for the scale transform to work */
+
+  animation:
+    alert-blink 1s ease-in-out infinite,
+    alert-pulse 2s ease-in-out infinite,
+    alert-shake .1s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+
+  /* Your 3D Etched Shadow */
+  text-shadow:
+    1px 1px 0.25px rgba(0, 0, 0, 0.583),
+    -0.5px -0.5px 0px rgba(255, 255, 255, 0.2);
 }
 
+/* The New Shake/Wiggle Keyframe */
+@keyframes alert-shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0) rotate(-0.5deg);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0) rotate(1deg);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-3px, 0, 0) rotate(-1.5deg);
+  }
+  40%,
+  60% {
+    transform: translate3d(3px, 0, 0) rotate(1.5deg);
+  }
+}
 @keyframes alert-blink {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.98); }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
-/* 4. Connection Ping (Shared with your other components) */
+@keyframes alert-pulse {
+  0%,
+  100% {
+    /* Combined 3D Etched + Initial state */
+    text-shadow:
+      1px 1px 0.25px rgba(0, 0, 0, 0.583),
+      -0.5px -0.5px 0px rgba(255, 255, 255, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    /* 3D Etched + Radiant Glow */
+    text-shadow:
+      1px 1px 0.25px rgba(0, 0, 0, 0.583),
+      -0.5px -0.5px 0px rgba(255, 255, 255, 0.2),
+      0 0 15px rgba(170, 50, 10, 0.925);
+    transform: scale(1.05);
+  }
+}
+
+/* 3. Connection Ping Indicator */
 .ping-indicator {
   width: 12px;
   height: 12px;
@@ -58,43 +120,47 @@
 }
 
 .ping-indicator::after {
-  content: '';
+  content: "";
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background-color: inherit;
   animation: ping-pulse 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 @keyframes ping-pulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  70%, 100% { transform: scale(3.5); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  70%,
+  100% {
+    transform: scale(3.5);
+    opacity: 0;
+  }
 }
 
-// .iss-card:hover {
-//     transform: scale(1.02);
-//     /* Hover glow also uses a variable now */
-//     border: 1px solid var(--text-sub);
-//     box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.2);
-// }
-
-.iss-favicon-small {
-    width: 200px;
-    height: 200px;
-}
+/* 4. Layout & Containers */
 .svg-container {
   display: flex;
-  justify-content: center; /* Centers horizontally */
-  align-items: center;     /* Centers vertically */
-  width: 100%;             /* Ensures it takes up card width */
-  height: 100px;   
-          /* Or whatever height you need */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+}
+
+.iss-favicon-small {
+  width: 200px;
+  height: 200px;
 }
 
 iframe {
-    width: 500px;
-    height: 300px;
-    border-radius: 12px;
+  width: 100%; /* Better for responsiveness than fixed 500px */
+  max-width: 500px;
+  height: 350px;
+  border-radius: 12px;
+  border: none;
 }
-

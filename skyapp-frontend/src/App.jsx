@@ -13,6 +13,7 @@ function App() {
   const [isNight, setIsNight] = useState(true);
   const [skyData, setSkyData] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+  const [issDistance, setIssDistance] = useState(null);
 
   const [location, setLocation] = useState({
     lat: 35.9251,
@@ -67,7 +68,11 @@ function App() {
 
       <header className="header-section">
         <h1 className="rainbow-animated">SKY DASHBOARD</h1>
-        <div className="logo-container" role="img" aria-label="Sky Dashboard Logo" />
+        <div
+          className="logo-container"
+          role="img"
+          aria-label="Sky Dashboard Logo"
+        />
 
         <div className="search-wrapper">
           <LocationSearch onLocationChange={setLocation} />
@@ -107,8 +112,14 @@ function App() {
           />
         </div>
 
-        <div className="glass-card">
-          <ISSWatcher lat={location.lat} lon={location.lon} />
+        <div
+          className={`glass-card ${issDistance < 1000 ? "proximity-alert-active" : ""}`}
+        >
+          <ISSWatcher
+            lat={location.lat}
+            lon={location.lon}
+            onDistanceUpdate={setIssDistance}
+          />
         </div>
 
         <div className="glass-card">

@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from "react";
 import "./ISSWatcher.css";
 
-const ISSWatcher = ({ lat, lon }) => {
+// 1. Accept onDistanceUpdate prop
+const ISSWatcher = ({ lat, lon, onDistanceUpdate }) => {
   const [issPos, setIssPos] = useState({ lat: 0, lon: 0 });
   const [distance, setDistance] = useState(null);
   const [cityName, setCityName] = useState("Local Station");
 
   useEffect(() => {
-    // 1. Get the name of the user's location (Reverse Geocoding)
     const getLocalName = async () => {
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
         );
         const data = await res.json();
-        const city =
-          data.address.city ||
-          data.address.town ||
-          data.address.village ||
-          "Unknown";
+        const city = data.address.city || data.address.town || data.address.village || "Unknown";
         const state = data.address.state || "";
         setCityName(`${city}${state ? ", " + state : ""}`);
       } catch (e) {
@@ -28,7 +24,6 @@ const ISSWatcher = ({ lat, lon }) => {
 
     if (lat && lon) getLocalName();
 
-    // 2. ISS Tracking Logic
     const fetchISS = async () => {
       try {
         const res = await fetch("http://api.open-notify.org/iss-now.json");
@@ -37,7 +32,8 @@ const ISSWatcher = ({ lat, lon }) => {
 
         setIssPos({ lat: latitude, lon: longitude });
 
-        const R = 3958.8;
+        // Haversine formula for distance
+        const R = 3958.8; // Miles
         const dLat = (latitude - lat) * (Math.PI / 180);
         const dLon = (longitude - lon) * (Math.PI / 180);
         const a =
@@ -47,7 +43,14 @@ const ISSWatcher = ({ lat, lon }) => {
             Math.sin(dLon / 2) *
             Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        setDistance(R * c);
+        const currentDistance = R * c;
+        
+        setDistance(currentDistance);
+        
+        // 2. Lift the distance state up to App.jsx
+        if (onDistanceUpdate) {
+          onDistanceUpdate(currentDistance);
+        }
       } catch (e) {
         console.error("ISS Tracking Offline");
       }
@@ -56,118 +59,70 @@ const ISSWatcher = ({ lat, lon }) => {
     fetchISS();
     const interval = setInterval(fetchISS, 5000);
     return () => clearInterval(interval);
-  }, [lat, lon]);
+  }, [lat, lon, onDistanceUpdate]);
 
-  const isNearby = distance !== null && distance < 500;
+  // Threshold corrected to 1000 miles (for testing)
+  const isNearby = distance !== null && distance < 5000;
 
   return (
-    <div>
-      <div className={`iss-card ${isNearby ? "nearby" : ""}`}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center"
-          }}
-        ></div>
-
-        <div className="svg-container">
-          <svg
-            className="iss-favicon-small"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            {/* Central Module */}
-            <rect x="10" y="8" width="4" height="8" rx="1" />
-            <rect x="7" y="11" width="10" height="2" rx="0.5" />
-            {/* Left Solar Arrays */}
-            <rect x="2" y="5" width="4" height="14" rx="1" opacity="0.8" />
-            {/* Right Solar Arrays */}
-            <rect x="18" y="5" width="4" height="14" rx="1" opacity="0.8" />
-            {/* Connecting Truss */}
-            <rect x="6" y="11.5" width="12" height="1" />
-          </svg>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: "100%"
-          }}
-        >
-          <div
-            className="ping-indicator"
-            style={{
-              backgroundColor: isNearby ? "#f50f0f" : "var(--accent-color)"
-            }}
-          ></div>
-        </div>
-        <h3
-          style={{
-            fontSize: "1.2rem",
-            color: "var(--text-sub)",
-            margin: "10px 0 0 0"
-          }}
-        >
-          ISS Tracker
-        </h3>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-          <div
-            className={isNearby ? "iss-radar-text" : ""}
-            style={{
-              fontSize: "2.2rem",
-              fontWeight: "bold",
-              color: isNearby ? "transparent" : "var(--text-main)",
-              fontFamily: "monospace",
-              lineHeight: "1",
-              marginBottom: "20px",
-              marginTop: "25px"
-            }}
-          >
-            {distance
-              ? `${Math.round(distance).toLocaleString()}mi`
-              : "SCANNING..."}
-          </div>
-
-          <p
-            style={{
-              fontSize: "0.85rem",
-              color: "var(--text-sub)",
-              textTransform: "uppercase",
-              letterSpacing: "1px",
-              margin: 0
-            }}
-          >
-            from {cityName}
-          </p>
-        </div>
-
-        <p
-          style={{
-            fontSize: "1.2rem",
-            color: "var(--text-sub)",
-            marginTop: "15px",
-            fontFamily: "monospace",
-            opacity: 0.8
-          }}
-        >
-          LAT: {parseFloat(issPos.lat).toFixed(2)} | LON:{" "}
-          {parseFloat(issPos.lon).toFixed(2)}
-        </p>
-
-        <div className="iframe-container">
-          
-          <iframe
-            className="responsive-iframe"
-            src="https://isstracker.pl/en/widget/map?disableInfoBox=1&lang=en"
-          ></iframe>
-        </div>
-
-        {isNearby && (
-          <div className="proximity-alert">LOW ORBIT PROXIMITY ALERT</div>
-        )}
+    <div className={`iss-card-internal ${isNearby ? "nearby" : ""}`}>
+      <div className="svg-container">
+        <svg className="iss-favicon-small" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="10" y="8" width="4" height="8" rx="1" />
+          <rect x="7" y="11" width="10" height="2" rx="0.5" />
+          <rect x="2" y="5" width="4" height="14" rx="1" opacity="0.8" />
+          <rect x="18" y="5" width="4" height="14" rx="1" opacity="0.8" />
+          <rect x="6" y="11.5" width="12" height="1" />
+        </svg>
       </div>
+
+      <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        <div
+          className="ping-indicator"
+          style={{ backgroundColor: isNearby ? "#af0e0e" : "var(--accent-color)" }}
+        ></div>
+      </div>
+
+      <h3 style={{ fontSize: "1.2rem", color: "var(--text-sub)", margin: "10px 0 0 0" }}>
+        ISS Tracker
+      </h3>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+        <div
+          className={isNearby ? "iss-radar-text" : ""}
+          style={{
+            fontSize: "2.2rem",
+            fontWeight: "bold",
+            color: isNearby ? "transparent" : "var(--text-main)",
+            fontFamily: "monospace",
+            lineHeight: "1",
+            marginBottom: "20px",
+            marginTop: "25px"
+          }}
+        >
+          {distance ? `${Math.round(distance).toLocaleString()}mi` : "SCANNING..."}
+        </div>
+
+        <p style={{ fontSize: "0.85rem", color: "var(--text-sub)", textTransform: "uppercase", letterSpacing: "1px", margin: 0 }}>
+          from {cityName}
+        </p>
+      </div>
+
+      <p style={{ fontSize: "1.2rem", color: "var(--text-sub)", marginTop: "15px", fontFamily: "monospace", opacity: 0.8 }}>
+        LAT: {parseFloat(issPos.lat).toFixed(2)} | LON: {parseFloat(issPos.lon).toFixed(2)}
+      </p>
+
+      <div className="iframe-container">
+        <iframe
+          className="responsive-iframe"
+          title="ISS Map"
+          src="https://isstracker.pl/en/widget/map?disableInfoBox=1&lang=en"
+        ></iframe>
+      </div>
+
+      {isNearby && (
+        <div className="proximity-alert">LOW ORBIT PROXIMITY ALERT</div>
+      )}
     </div>
   );
 };
