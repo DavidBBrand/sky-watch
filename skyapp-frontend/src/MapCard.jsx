@@ -16,8 +16,8 @@ const MapCard = ({ lat, lon, theme, skyData, location }) => {
   const mapUrl = `https://api.mapbox.com/styles/v1/mapbox/${currentStyle}/static/pin-s+ff4444(${lon},${lat})/${lon},${lat},${zoom},0/600x400@2x?access_token=${MAPBOX_TOKEN}`;
 
   return (
-    <div className="card-container">
-      <div className="map-card">
+    
+      <div>
         <h1 className="map-card-title"> {location?.name}</h1>
 
         <SolarCycle sun={skyData?.sun} />
@@ -34,7 +34,7 @@ const MapCard = ({ lat, lon, theme, skyData, location }) => {
           }}
         />
       </div>
-    </div>
+    
   );
 };
 

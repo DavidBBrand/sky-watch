@@ -61,7 +61,7 @@ const ISSWatcher = ({ lat, lon }) => {
   const isNearby = distance !== null && distance < 500;
 
   return (
-    <div className="card-container">
+    <div>
       <div className={`iss-card ${isNearby ? "nearby" : ""}`}>
         <div
           style={{

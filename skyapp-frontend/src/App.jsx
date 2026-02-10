@@ -67,19 +67,7 @@ function App() {
 
       <header className="header-section">
         <h1 className="rainbow-animated">SKY DASHBOARD</h1>
-         {/* <img
-          src="/skyDash2.PNG"
-          alt="Sky Dashboard Preview"
-          style={{
-            width: "100%",
-            maxWidth: "120px",
-            borderRadius: "50%",
-            border: "1px solid var(--card-border)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
-          }} 
-          /> */}
-          <div className="logo-container" role="img" aria-label="Sky Dashboard Logo" />
-        
+        <div className="logo-container" role="img" aria-label="Sky Dashboard Logo" />
 
         <div className="search-wrapper">
           <LocationSearch onLocationChange={setLocation} />
@@ -107,22 +95,27 @@ function App() {
       </header>
 
       <div className="dashboard-grid">
-        <MoonGraphic3 lat={location.lat} lon={location.lon} />
+        <div className="glass-card">
+          <MoonGraphic3 lat={location.lat} lon={location.lon} />
+        </div>
 
-        <Weather
-          lat={location.lat}
-          lon={location.lon}
-          onDataReceived={setWeatherData}
-        />
+        <div className="glass-card">
+          <Weather
+            lat={location.lat}
+            lon={location.lon}
+            onDataReceived={setWeatherData}
+          />
+        </div>
 
-        <ISSWatcher lat={location.lat} lon={location.lon} />
+        <div className="glass-card">
+          <ISSWatcher lat={location.lat} lon={location.lon} />
+        </div>
 
-        <div className="grid-span-1">
+        <div className="glass-card">
           <StarlinkGrid lat={location.lat} lon={location.lon} />
         </div>
 
-        {/* --- MAP CARD GRID PLACEMENT --- */}
-        <div className="grid-span-1">
+        <div className="glass-card">
           <MapCard
             lat={location.lat}
             lon={location.lon}
@@ -132,13 +125,15 @@ function App() {
           />
         </div>
 
-        {skyData ? (
-          <SkyDetails skyData={skyData} />
-        ) : (
-          <div className="sky-details-card loading-card">
-            <p>Synchronizing with {location.name}...</p>
-          </div>
-        )}
+        <div className="glass-card">
+          {skyData ? (
+            <SkyDetails skyData={skyData} />
+          ) : (
+            <div className="loading-card">
+              <p>Synchronizing with {location.name}...</p>
+            </div>
+          )}
+        </div>
       </div>
 
       <p className="copyright">Copyright © 2026 David Brand</p>

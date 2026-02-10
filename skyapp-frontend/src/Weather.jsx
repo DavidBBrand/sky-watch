@@ -88,8 +88,8 @@ const Weather = ({ lat, lon, onDataReceived }) => {
     );
 
   return (
-    <div className="card-container">
-      <div className="weather-card">
+    <div>
+      <div>
         <p
           style={{
             fontSize: "1.0rem",

@@ -54,8 +54,8 @@ const SkyDetails = ({ skyData }) => {
   };
 
   return (
-    <div className="card-container">
-      <div className="sky-details-card">
+    
+      <div >
         <div
           style={{
             display: "flex",
@@ -165,7 +165,7 @@ const SkyDetails = ({ skyData }) => {
           </div>
         </div>
       </div>
-    </div>
+    
   );
 };
 

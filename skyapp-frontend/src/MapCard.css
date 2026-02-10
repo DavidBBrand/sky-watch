@@ -20,40 +20,33 @@
     border-radius: 24px;
     gap:20px;
     
-    /* Interactive shadow - adjusted to be subtle in light, deep in dark */
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); 
+//     /* Interactive shadow - adjusted to be subtle in light, deep in dark */
+//     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); 
     
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+//     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+// }
 
 /* Hover effect for interactivity */
-.map-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--text-sub);
+// .map-card:hover {
+//     transform: scale(1.02);
+//     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+//     border: 1px solid var(--text-sub);
     
-}
+// }
+
 
 // .card-container {
 //     display: flex;
-//     justify-content: center; /* Horizontal centering */
-//     align-items: center;     /* Vertical centering */
-//     min-height: 100vh;       /* Ensure it takes up the full screen height */
-//     padding: 20px;           /* Prevents the card from touching screen edges */
+//     justify-content: center;
+//     align-items: center;
+    
+//     /* Change this: */
+//     min-height: auto;        /* Let the content define the height */
+//     padding: 20px 20px;      /* Vertical gap / Horizontal gap */
+    
+//     width: 100%;             /* Ensure it spans the full width */
+//     box-sizing: border-box;  /* Prevents padding from causing horizontal scroll */
 // }
-
-.card-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    /* Change this: */
-    min-height: auto;        /* Let the content define the height */
-    padding: 20px 20px;      /* Vertical gap / Horizontal gap */
-    
-    width: 100%;             /* Ensure it spans the full width */
-    box-sizing: border-box;  /* Prevents padding from causing horizontal scroll */
-}
 
 /* Mobile Tweak for your Card */
 @media (max-width: 350px) {

@@ -136,8 +136,8 @@ const MoonGraphic3 = ({ lat, lon }) => {
   };
 
   return (
-    <div className="card-container">
-      <div className="moon-card">
+    <div>
+      <div>
         <p
           style={{
             fontSize: "1.2rem",

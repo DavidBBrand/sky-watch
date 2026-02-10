@@ -1,41 +1,33 @@
-.sky-details-card {
-    /* Use Variables for Dynamic Theme */
-    background: var(--card-bg);
-    color: var(--text-main);
-    border: 1px solid var(--card-border);
+// .sky-details-card {
+//     /* Use Variables for Dynamic Theme */
+//     background: var(--card-bg);
+//     color: var(--text-main);
+//     border: 1px solid var(--card-border);
     
-    /* Glass Effect */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+//     /* Glass Effect */
+//     backdrop-filter: blur(15px);
+//     -webkit-backdrop-filter: blur(15px);
     
-    /* Shape & Layout */
-    border-radius: 24px;
-    padding: 25px;
-    min-width: 350px;
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    // min-height: 400px;
+//     /* Shape & Layout */
+//     border-radius: 24px;
+//     padding: 25px;
+//     min-width: 350px;
+//     flex: 2;
+//     display: flex;
+//     flex-direction: column;
+//     // min-height: 400px;
     
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: default;
-}
+//     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+//     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+//     cursor: default;
+// }
 
-.sky-details-card:hover {
-    transform: scale(1.02);
-    border: 1px solid var(--text-sub);
-    box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.2);
-}
-.card-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: auto;        /* Let the content define the height */
-    padding: 20px 20px;      /* Vertical gap / Horizontal gap */
-    width: 100%;             /* Ensure it spans the full width */
-    box-sizing: border-box;  /* Prevents padding from causing horizontal scroll */
-}
+// .sky-details-card:hover {
+//     transform: scale(1.02);
+//     border: 1px solid var(--text-sub);
+//     box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.2);
+// }
+
 
 /* The Grid Container */
 .planet-grid {
