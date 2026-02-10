@@ -98,7 +98,7 @@ const ISSWatcher = ({ lat, lon }) => {
           <div
             className="ping-indicator"
             style={{
-              backgroundColor: isNearby ? "#aade4a" : "#16e782"
+              backgroundColor: isNearby ? "#f50f0f" : "var(--accent-color)"
             }}
           ></div>
         </div>
