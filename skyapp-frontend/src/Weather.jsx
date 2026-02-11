@@ -62,7 +62,7 @@ const Weather = ({ lat, lon, onDataReceived }) => {
           fontSize: "1.2rem",
           textTransform: "uppercase",
           letterSpacing: "3px",
-          color: "var(--text-sub)",
+          color: "var(--text-main)",
           fontWeight: "600",
           margin: "20px 0 10px"
         }}
@@ -82,7 +82,7 @@ const Weather = ({ lat, lon, onDataReceived }) => {
       <p
         style={{
           fontSize: "1.2rem",
-          fontWeight: "400",
+          fontWeight: "500",
           color: "var(--text-sub)",
           margin: "5px 0"
         }}
@@ -92,9 +92,9 @@ const Weather = ({ lat, lon, onDataReceived }) => {
 
       <div
         style={{
-          marginTop: "1rem",
-          fontSize: "1.4rem",
-          color: "var(--text-sub)"
+          marginTop: "1.2rem",
+          fontSize: "1.5rem",
+          color: "var(--text-main)"
         }}
       >
         Wind: {weather ? `${weather.windspeed} mph` : "-- mph"}

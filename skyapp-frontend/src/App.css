@@ -53,7 +53,7 @@
   position: relative;
   z-index: 10;
   font-size: 1.0rem;
-  font-weight: 600;
+  font-weight: 200;
   margin: 20px;
 }
 
@@ -67,7 +67,8 @@
   color: var(--text-sub);
   letter-spacing: 2px; /* Slight bump for that high-tech look */
   text-transform: uppercase;
-  font-size: 1rem; /* Slightly smaller text usually looks "sharper" when etched */
+  font-size: 1rem;
+  font-weight: 200; /* Slightly smaller text usually looks "sharper" when etched */
   padding: 15px;
   margin-top: 20px;
   
@@ -186,9 +187,7 @@
   letter-spacing: 2px;
   text-transform: uppercase;
 }
-.derp {
-  color: var(--accent-color1);
-}
+
 
 .rainbow-animated {
   /* A palette of Solar Gold, Starlight, and Deep Space Blue */

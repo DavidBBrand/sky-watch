@@ -64,7 +64,7 @@ const SkyDetails = ({ skyData }) => {
             fontSize: "1.2rem",
             textTransform: "uppercase",
             letterSpacing: "3px",
-            color: "var(--text-sub)",
+            color: "var(--text-main)",
             marginBottom: "40px",
             textAlign: "center",
             fontWeight: "600"

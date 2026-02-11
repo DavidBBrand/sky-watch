@@ -73,7 +73,7 @@ const ISSWatcher = ({ lat, lon, onDistanceUpdate }) => {
       <h3
         style={{
           fontSize: "1.2rem",
-          color: "var(--text-sub)",
+          color: "var(--text-main)",
           margin: "20px 24px 24px 24px"
         }}
       >

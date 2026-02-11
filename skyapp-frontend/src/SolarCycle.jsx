@@ -31,7 +31,7 @@ const SolarCycle = ({ sun }) => {
           <span style={{ fontSize: "5.0rem" }}>🌅</span>
           <p
             style={{
-              fontSize: "0.8rem",
+              fontSize: "1rem",
               margin: "12px 0 0 0",
               fontWeight: "500",
               color: "var(--text-main)"
@@ -55,7 +55,7 @@ const SolarCycle = ({ sun }) => {
           <span style={{ fontSize: "5.0rem" }}>🌇</span>
           <p
             style={{
-              fontSize: "0.8rem",
+              fontSize: "1rem",
               margin: "12px 0 0 0",
               fontWeight: "500",
               color: "var(--text-main)"

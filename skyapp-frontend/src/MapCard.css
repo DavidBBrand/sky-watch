@@ -11,7 +11,7 @@
 
     
 .map-card-title {
-    color:var(--text-sub);
+    color:var(--text-main);
     font-size: 1.2rem;
     font-weight:600;
     margin-top: 24px;
