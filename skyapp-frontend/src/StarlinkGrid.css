@@ -74,6 +74,8 @@
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+  color:var(--accent-color2);
+  text-shadow:var(--accent-color3) 1px 1px 1px;
 }
 
 .stat-caption {

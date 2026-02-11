@@ -3,7 +3,7 @@
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  
+  font-family:'Orbitron';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -176,10 +176,7 @@
   min-width: 160px;
 }
 
-.accent-text {
-  color: var(--accent-color);
-  font-weight: bold;
-}
+
 
 .copyright {
   font-size: 0.6em;
@@ -188,6 +185,9 @@
   color: var(--text-sub);
   letter-spacing: 2px;
   text-transform: uppercase;
+}
+.derp {
+  color: var(--accent-color1);
 }
 
 .rainbow-animated {
@@ -257,8 +257,8 @@
 }
 
 .time-display {
-  color:var(--accent-color);
-  text-shadow: rgba(6, 69, 19, 0.641) 0.5px 0.5px 0.5px;
+  color:var(--accent-color4);
+  text-shadow: rgba(4, 32, 115, 0.641) 0.5px 0.5px 0.5px;
 }
 
 .iframe-container {

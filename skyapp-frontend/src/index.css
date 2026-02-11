@@ -11,7 +11,8 @@
   --text-sub: color-mix(in srgb, var(--text-main), transparent 30%);
   --accent-color: #008f11;
   --accent-color2: rgb(155, 54, 18);
-  --accent-color3: #be6806;
+  --accent-color3: #be6e06;
+  --accent-color4: #154490c2;
   --star-opacity: 0; 
   --glass-blur: blur(10px);
   --logo-url: url('/SkyDashDay.PNG');
@@ -28,8 +29,9 @@
   --text-main: #ffffff;
   --text-sub: rgba(255, 255, 255, 0.6);
   --accent-color: #00ff2a;
-  --accent-color2: rgb(228, 73, 17);
-  --accent-color3: #FFB703;
+  --accent-color2: rgb(228, 147, 17);
+  --accent-color3: #563f05;
+  --accent-color4: #6792d6d3;
   --star-opacity: 0.6;
   --logo-url: url('/SkyDash2.PNG');
 }
