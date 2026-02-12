@@ -71,7 +71,7 @@ const Weather = ({ lat, lon, onDataReceived }) => {
       </h2>
       <div 
         className={!weather ? "weather-loading-pulse" : ""} 
-        style={{ fontSize: "6rem", lineHeight: "1", margin: "20px 10px 10px 10px" }}
+        style={{ fontSize: "4rem", lineHeight: "1", margin: "20px 10px 10px 10px" }}
       >
         {weather ? getWeatherEmoji(weather.description) : placeholderEmoji}
       </div>
@@ -92,9 +92,10 @@ const Weather = ({ lat, lon, onDataReceived }) => {
 
       <div
         style={{
-          marginTop: "1.2rem",
-          fontSize: "1.5rem",
-          color: "var(--text-main)"
+          marginTop: "1.0rem",
+          fontSize: "1.2rem",
+          color: "var(--text-sub)",
+          fontWeight: "500"
         }}
       >
         Wind: {weather ? `${weather.windspeed} mph` : "-- mph"}

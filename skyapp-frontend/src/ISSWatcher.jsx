@@ -147,9 +147,8 @@ const ISSWatcher = ({ lat, lon, onDistanceUpdate }) => {
         {parseFloat(issPos.lon).toFixed(2)}
       </p>
 
-      <div className="iframe-container">
+      <div>
         <iframe
-          className="responsive-iframe"
           title="ISS Map"
           src="https://isstracker.pl/en/widget/map?disableInfoBox=1&lang=en"
         ></iframe>
