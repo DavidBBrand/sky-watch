@@ -70,27 +70,41 @@ body {
   align-items: center;
 }
 
+
+
 /* 3. Night Mode Stars (Hardware Accelerated) */
+
 body::before {
   content: "";
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
   background-image: 
+    /* Small sharp stars */
+    radial-gradient(1px 1px at 10% 10%, #fff, transparent),
+    radial-gradient(1px 1px at 20% 50%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 30% 90%, #fff, transparent),
+    radial-gradient(1px 1px at 50% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 80%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 90% 40%, #fff, transparent),
+    /* Mid-sized soft stars */
     radial-gradient(2px 2px at 25px 35px, #fff, transparent),
     radial-gradient(2px 2px at 50px 100px, #fff, transparent),
-    radial-gradient(4px 4px at 100px 400px, #ffffff, rgba(255, 255, 255, 0.1) 40%, transparent 100%),
-    radial-gradient(4px 5px at 85% 27%, #ffffff, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-  background-size: 500px 500px;
+    /* Larger "Glow" stars */
+    radial-gradient(3px 3px at 100px 400px, #ffffff, rgba(255, 255, 255, 0.1) 40%, transparent 100%),
+    radial-gradient(3px 4px at 85% 27%, #ffffff, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  
+  /* Shrinking this multiplier creates the 5x density effect */
+  background-size: 200px 200px; 
+  
   opacity: var(--star-opacity);
   will-change: opacity;
   transform: translateZ(0); 
   backface-visibility: hidden;
-  perspective: 1000px; /* Enhance rendering performance */
+  perspective: 1000px;
   transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
   pointer-events: none;
 }
-
 
 
 

@@ -23,7 +23,7 @@ const SolarCycle = ({ sun }) => {
           color: "var(--accent-color4)",         
         }}
       >
-        <i>Solar Cycle</i>
+        Solar Cycle
       </h4>     
       <div style={{ display: "flex", gap: "36px" }}>
         {/* Sunrise Section */}

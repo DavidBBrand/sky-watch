@@ -1,22 +1,23 @@
 /* 1. Radar Text Styling (The Scanning Mileage) */
 .iss-radar-text {
-  background: linear-gradient(90deg, #0b612b 0%, #4ade80 50%, #0b612b 100%);
+  background: linear-gradient(90deg, #aa3506 0%, #de744a 50%, #aa3506 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
   display: inline-block;
+  font-family: 'Michroma';
   font-weight: 800;
   /* The 3D Etched Effect */
   text-shadow:
-    rgba(0, 0, 0, 0.583) 1px 1px 0.25px,
-    -0.5px -0.5px 0px rgba(255, 255, 255, 0.2);
+    rgba(57, 21, 21, 0.479) 1px 1px 0.25px,
+    -0.5px -0.5px 0px rgba(255, 255, 255, 0.235);
 
   animation:
     radar-sweep 2s linear infinite,
     tactical-flicker 4s ease-in-out infinite;
 
-  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3));
+  filter: drop-shadow(0 0 8px rgba(222, 74, 74, 0.3));
 }
 
 @keyframes radar-sweep {

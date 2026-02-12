@@ -108,11 +108,10 @@ const ISSWatcher = ({ lat, lon, onDistanceUpdate }) => {
           className={isNearby ? "iss-radar-text" : ""}
           style={{
             fontSize: "2.2rem",
-            fontWeight: "bold",
-            color: isNearby ? "transparent" : "var(--text-main)",
-            fontFamily: "monospace",
-            lineHeight: "1",
-            marginBottom: "20px",
+            fontWeight: "500",
+            color: isNearby ? "transparent" : "var(--accent-color)",
+            lineHeight: "2",
+            marginBottom: "12px",
             marginTop: "25px"
           }}
         >
@@ -130,7 +129,7 @@ const ISSWatcher = ({ lat, lon, onDistanceUpdate }) => {
             margin: 0
           }}
         >
-          from {cityName}
+          from <i>{cityName}</i>
         </p>
       </div>
 
