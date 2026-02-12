@@ -59,48 +59,39 @@ const LocationSearch = ({ onLocationChange }) => {
     });
   };
 
-  return (
-    <div className="location-container" style={{ 
-      display: 'flex', 
-      gap: '10px', 
-      justifyContent: 'center', 
-      marginBottom: '30px' 
-    }}>
-      <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px' }}>
-        <input
-          type="text"
-          placeholder="Search City..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="theme-toggle-btn" // Reusing your existing glass styles
-          style={{
-            width: '200px',
-            padding: '10px 15px',
-            textAlign: 'left',
-            outline: 'none',
-            fontSize: '0.9rem'
-          }}
-        />
-        <button 
-          type="submit" 
-          className="theme-toggle-btn"
-          disabled={loading}
-          style={{ padding: '10px 20px' }}
-        >
-          {loading ? "..." : "🔍"}
-        </button>
-      </form>
-
-      <button 
-        onClick={useGPS} 
+return (
+  <div className="location-container" style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    width: '100%' 
+  }}>
+    <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px' }}>
+      <input
+        type="text"
+        placeholder="SEARCH CITY..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
         className="theme-toggle-btn"
-        title="Use GPS"
-        style={{ padding: '10px 15px' }}
+        style={{
+          width: '250px',
+          padding: '10px 15px',
+          textAlign: 'center', /* Text starts in the middle */
+          outline: 'none',
+          fontSize: '0.8rem',
+          letterSpacing: '1px'
+        }}
+      />
+      <button 
+        type="submit" 
+        className="theme-toggle-btn"
+        disabled={loading}
+        style={{ padding: '10px 20px' }}
       >
-        📍
+        {loading ? "..." : "SCAN"}
       </button>
-    </div>
-  );
+    </form>
+  </div>
+);
 };
 
 export default LocationSearch;

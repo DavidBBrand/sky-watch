@@ -36,28 +36,21 @@
   --logo-url: url('/SkyDash2.PNG');
 }
 
-.logo-container {
-  width: 120px;
-  height: 120px;
-  background-image: var(--logo-url);
-  background-size: contain;
-  background-repeat: no-repeat;
-  transition: background-image 0.3s ease-in-out; /* Smooth cross-fade */
-  border-radius: 50%;
-  justify-content: center;
+html {
+  scrollbar-gutter: stable;
 }
+
 /* 2. Global Reset & Base Styles */
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  /* Use the modern font stack from your App.css */
   font-family: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace;
-  
+  padding-right: 0 !important;
   /* Background Logic */
   background-color: var(--bg-color);
   background-image: 
-    /* chose brighter orange and blue hues to mimic chromatic abberation */
+    /*  brighter orange and blue hues to mimic chromatic abberation */
     /* Heavy Orange Fringe */
     radial-gradient(at 100% 0%, var(--mesh-1) 0%, transparent 55%),
     /* Heavy Blue Fringe */
@@ -72,8 +65,9 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 
-  /* Ensure body doesn't override grid behavior */
-  display: block; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* 3. Night Mode Stars (Hardware Accelerated) */
@@ -98,19 +92,14 @@ body::before {
 }
 
 
-h1 {
-  font-size: 2.2em;
-  line-height: 1.0;
-  letter-spacing: 4px;
-  transition: color 0.8s ease;
-}
+
 
 button {
   border-radius: 30px;
   border: 1px solid var(--card-border);
   padding: 0.6em 1.2em;
   font-size: 0.9em;
-  font-weight: 600;
+  font-weight: 400;
   background: var(--card-bg);
   color: var(--text-main);
   cursor: pointer;

@@ -67,7 +67,7 @@ function App() {
       </button>
 
       <header className="header-section">
-        <h1 className="rainbow-animated">SKY DASHBOARD</h1>
+        <h1 className="rainbow-animated">SKY DASHBOARDLY</h1>
         <div
           className="logo-container"
           role="img"
