@@ -102,17 +102,17 @@ const ISSWatcher = ({ lat, lon, onDistanceUpdate }) => {
         <div
           className="ping-indicator"
           style={{
-            backgroundColor: isNearby ? "#af0e0e" : "var(--accent-color)"
+            backgroundColor: isNearby ? "#da8d10" : "var(--accent-color)"
           }}
         ></div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
         <div
-          className={isNearby ? "iss-radar-text" : ""}
+          className={isNearby ? "iss-distance-text" : ""}
           style={{
-            fontSize: "2.2rem",
-            fontWeight: "500",
+            fontSize: "2.8rem",
+            fontWeight: "800",
             color: isNearby ? "transparent" : "var(--accent-color)",
             lineHeight: "2",
             marginBottom: "12px",
