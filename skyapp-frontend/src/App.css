@@ -67,9 +67,51 @@
 
 }
 .main-title {
-  font-family: 'Michroma', sans-serif;
-  font-size: 2.2rem;
+  font-family: 'Share Tech Mono', sans-serif;
+  font-size: 3.3rem; /* Slightly larger for the new name */
+  letter-spacing: 10px;
+  text-transform: uppercase;
+  margin: 20px 0;
+  
+  /* 1. Dynamic Color: Adapts to your --text-main variable */
+  color: var(--text-main);
+  opacity: 0.85;
+
+  /* 2. The Glass "Refraction" Effect */
+  /* We use a multi-layered text-shadow: 
+     - A light glow for Night mode 
+     - A subtle dark 'etch' for Day mode to keep it crisp */
+  text-shadow: 
+    0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
+    0 0 15px var(--separator-glow);      /* Theme-based glow */
+  
+  /* 3. Glass Depth */
+  /* This creates a semi-transparent 'cut-through' effect */
+  background: linear-gradient(
+    to bottom, 
+    var(--text-main) 0%, 
+    var(--text-sub) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* 4. Smooth theme transition */
+  transition: all 0.5s ease-in-out;
 }
+
+/* Specific Day Mode Polish */
+[data-theme="day"] .main-title {
+  /* Day mode needs a darker "etched" look to feel like glass */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  opacity: 0.95;
+}
+
+/* Specific Night Mode Polish */
+[data-theme="night"] .main-title {
+  /* Night mode needs a brighter "inner light" glow */
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+} 
+
 .telemetry-info {
   display: flex;
   flex-wrap: wrap;
@@ -295,7 +337,7 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
   position: fixed;
   top: 60px;
   left: 80px; /* Opposite side of the Sun Baby */
-  width: 190px;
+  width: 280px;
   height: auto;
   z-index: -1;
   pointer-events: none;

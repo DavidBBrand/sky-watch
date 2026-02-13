@@ -66,13 +66,13 @@ function App() {
         {isNight ? "🌙 Night Mode" : "☀️ Day Mode"}
       </button>
 
-      <img
+      {/* <img
         src="/WowMindBlown.gif"
         alt="Wow Mindblown"
         className="wow-bg-gif"
-      />
+      /> */}
       <header className="header-section">
-        <h1 className="main-title">SKY DASHBOARDLY</h1>
+        <h1 className="main-title">SKY WATCH</h1>
         <div
           className="logo-container"
           role="img"
