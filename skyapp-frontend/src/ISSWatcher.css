@@ -1,12 +1,11 @@
-/* 1. Radar Text Styling (The Scanning Mileage) */
-.iss-radar-text {
+/* dynamic distance mileage text */
+.iss-distance-text {
   background: linear-gradient(90deg, #aa3506 0%, #de744a 50%, #aa3506 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
-  display: inline-block;
-  font-family: 'Michroma';
+  display: inline-block;;
   font-weight: 800;
   /* The 3D Etched Effect */
   text-shadow:
@@ -58,7 +57,7 @@
 
   animation:
     alert-blink 1s ease-in-out infinite,
-    alert-pulse 2s ease-in-out infinite;
+    alert-pulse 1s ease-in-out infinite;
     // alert-shake .9s cubic-bezier(0.016, 0.018, 0.016, .2) infinite;
 
   /* Your 3D Etched Shadow */
@@ -112,7 +111,7 @@
       1px 1px 0.25px rgba(0, 0, 0, 0.583),
       -0.5px -0.5px 0px rgba(255, 255, 255, 0.2),
       0 0 15px rgba(170, 50, 10, 0.925);
-    transform: scale(1.2);
+    transform: scale(1.09);
   }
 }
 
@@ -122,6 +121,7 @@
   height: 12px;
   border-radius: 50%;
   position: relative;
+  margin-top: 20px;
 }
 
 .ping-indicator::after {
@@ -133,7 +133,7 @@
   height: 100%;
   border-radius: 50%;
   background-color: inherit;
-  animation: ping-pulse 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation: ping-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 @keyframes ping-pulse {
