@@ -14,11 +14,12 @@ const RecenterMap = ({ lat, lon }) => {
 
 const WindMap = ({ lat, lon }) => {
   // Use your OpenWeather API Key here
-  const OPENWEATHER_API_KEY = "e2fc9a415bf4aa887aaa0c93aa255831"; 
+  const OPENWEATHER_API_KEY = import.meta.env.VITE_WIND_MAP_KEY;
 
   const windUrl = `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${OPENWEATHER_API_KEY}`;
   // Replace the darkBaseUrl with this:
-const baseMapUrl = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png";
+  const baseMapUrl =
+    "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png";
 
   return (
     <div className="wind-map-wrapper">
@@ -34,14 +35,11 @@ const baseMapUrl = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels
         <TileLayer url={baseMapUrl} />
 
         {/* Wind Layer - Matches the Blue/Teal accent of a dashboard */}
-        <TileLayer 
-          url={windUrl} 
-          opacity={0.7}
-        />
+        <TileLayer url={windUrl} opacity={0.7} />
 
         {/* Syncs map center when location changes */}
         <RecenterMap lat={lat} lon={lon} />
-        
+
         {/* Custom Radar Scan Effect overlay (CSS handled) */}
         <div className="map-overlay-scan" />
       </MapContainer>
