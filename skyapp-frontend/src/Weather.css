@@ -98,3 +98,79 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+// .wind-map-wrapper {
+//   height: 220px;
+//   width: 100%;
+//   margin-top: 25px;
+//   border-radius: 12px;
+//   overflow: hidden; /* Important for rounding map corners */
+//   border: 1px solid var(--card-border);
+//   position: relative;
+//   /* Digital display aesthetic */
+//   filter: brightness(0.9) contrast(1.1) saturate(0.8);
+// }
+
+/* The "Scanner" line effect */
+.map-overlay-scan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(74, 222, 128, 0.2); /* Faint green scan line */
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+  z-index: 1001;
+  pointer-events: none;
+  animation: map-scan 4s linear infinite;
+}
+
+@keyframes map-scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* Ensure the Leaflet container fills the wrapper */
+.leaflet-container {
+  background: #0b0e14 !important; /* Prevents white flash on load */
+}
+
+.map-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--accent-color);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 1002;
+  pointer-events: none;
+}
+.map-crosshair::before, .map-crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--accent-color);
+}
+.map-crosshair::before { top: 50%; left: -5px; width: 30px; height: 1px; }
+.map-crosshair::after { left: 50%; top: -5px; width: 1px; height: 30px; }
+
+.wind-map-wrapper {
+  height: 220px;
+  width: 100%;
+  margin-top: 25px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: .5px solid var(--text-sub);
+  position: relative;
+  
+  /* THE SECRET SAUCE: Invert the colors of the map tiles */
+  filter: invert(100%) hue-rotate(180deg) brightness(0.95) contrast(1.2);
+  background: #000; 
+}
+
+/* This targets the tiles specifically to make the 'pink stain' look like neon telemetry */
+.leaflet-tile-pane {
+  mix-blend-mode: screen; 
+  opacity: 0.8;
+}

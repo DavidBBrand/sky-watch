@@ -1,5 +1,6 @@
 import "./Weather.css";
 import React, { useState, useEffect, useRef } from "react";
+import WindMap from "./WindMap";
 
 const Weather = ({ lat, lon, sun, onDataReceived }) => {
   const [weather, setWeather] = useState(null);
@@ -80,6 +81,7 @@ const Weather = ({ lat, lon, sun, onDataReceived }) => {
       </p>
       <div className="separator-line" />
       {weather && (
+        <>
         <div className="weather-details-grid">
           <div className="detail-item">
             <span className="label">Humidity</span>
@@ -98,6 +100,11 @@ const Weather = ({ lat, lon, sun, onDataReceived }) => {
             <span className="value">{weather.windspeed} mph</span>
           </div>
         </div>
+        
+        <div className="separator-line" />
+          <WindMap lat={lat} lon={lon} />
+    
+        </>
       )}
     </div>
   );
