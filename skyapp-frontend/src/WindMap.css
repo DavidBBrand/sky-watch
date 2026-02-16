@@ -1,12 +1,12 @@
 // /* Remove all filters from the wrapper itself to prevent inversion */
-// .wind-map-wrapper {
-//   height: 220px;
-//   width: 100%;
-//   border-radius: 12px;
-//   overflow: hidden;
-//   position: relative;
-//   background: #222; /* Fallback background */
-// }
+.wind-map-wrapper {
+  height: 300px;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #222; /* Fallback background */
+}
 
 // /* target the cloud layer specifically */
 // .clouds-layer {

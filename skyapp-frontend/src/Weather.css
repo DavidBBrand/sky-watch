@@ -68,7 +68,7 @@
   font-size: 6rem;
 }
 .detail-item .value {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--text-main);
     font-weight: 400;
     margin-top: 4px;
@@ -156,7 +156,7 @@
 .map-crosshair::after { left: 50%; top: -5px; width: 1px; height: 30px; }
 
 .wind-map-wrapper {
-  height: 220px;
+  height: 200px;
   width: 100%;
   margin-top: 25px;
   border-radius: 12px;

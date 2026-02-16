@@ -18,7 +18,7 @@
 /* 3. The Radar System */
 .radar-container {
   position: relative;
-  width: 100%;
+  width: 80%;
   /* CRITICAL: This keeps the radar a square no matter the width */
   aspect-ratio: 1 / 1; 
   margin: 20px auto;
