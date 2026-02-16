@@ -20,7 +20,7 @@
     background: rgba(0, 0, 0, 0.05); 
     border: 1px solid var(--card-border);
     border-radius: 12px;
-    padding: 12px;
+    padding: 1px;
     text-align: center;
     transition: background 0.3s ease;
 }
@@ -91,4 +91,19 @@
   }
 }
 
+.solar-cycle-container {
+  /* 1. The Core Look */
+  background: rgba(152, 150, 68, 0.333); /* Slight glass effect */
+  backdrop-filter: blur(8px) brightness(1.2);
+  border-radius: 12px;
+  
+  /* 2. The Glow (The Secret Sauce) */
+  /* Border adds the sharp edge, box-shadow adds the soft radiation */
+  border: 1px solid var(--card-border);
+  box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2), 
+              0px 0px 5px rgba(255, 255, 255, 0.118);
 
+  /* 3. Optional: Subtle internal highlight */
+  position: relative;
+  overflow: hidden;
+}

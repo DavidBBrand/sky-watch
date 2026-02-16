@@ -14,6 +14,7 @@ function App() {
   const [skyData, setSkyData] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [issDistance, setIssDistance] = useState(null);
+  const [locationDate, setLocationDate] = useState("");
 
   const [location, setLocation] = useState({
     lat: 35.9251,
@@ -43,6 +44,30 @@ function App() {
     });
   };
 
+useEffect(() => {
+  // Use the timezone from weatherData if available, otherwise default to Chicago/Franklin
+  const targetTimeZone = weatherData?.timezone || "America/Chicago"; 
+
+  try {
+    const dateString = new Date()
+      .toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        timeZone: targetTimeZone
+      })
+      .replace(/(\w+)/, "$1.");
+
+    setLocationDate(dateString);
+  } catch (e) {
+    // Fallback in case the API returns an invalid timezone string
+    console.error("Timezone Error:", e);
+    setLocationDate(new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).replace(/(\w+)/, "$1."));
+  }
+
+  // CORRECTED DEPENDENCIES: Using location object and weatherData for timezone sync
+}, [location.lat, location.lon, weatherData?.timezone]); // Recalculate if location changes
+
   useEffect(() => {
     document.documentElement.setAttribute(
       "data-theme",
@@ -65,7 +90,7 @@ function App() {
       <button onClick={() => setIsNight(!isNight)} className="theme-toggle-btn">
         {isNight ? "🌙 Night Mode" : "☀️ Day Mode"}
       </button>
-      
+
       <header className="header-section">
         <h1 className="main-title">SKY WATCH</h1>
         <div
@@ -101,7 +126,7 @@ function App() {
 
       <div className="dashboard-grid">
         <div className="glass-card">
-          <MoonGraphic3 lat={location.lat} lon={location.lon} />
+          <MoonGraphic3 lat={location.lat} lon={location.lon} date={locationDate} />
         </div>
 
         <div className="glass-card">
@@ -110,6 +135,7 @@ function App() {
             lon={location.lon}
             onDataReceived={setWeatherData}
             sun={skyData?.sun}
+            theme={isNight ? "night" : "day"}
           />
         </div>
 

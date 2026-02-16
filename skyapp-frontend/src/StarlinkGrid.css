@@ -75,11 +75,12 @@
   justify-content: space-between;
   margin-top: 10px;
   color:var(--accent-color2);
-  text-shadow:var(--accent-color3) 1px 1px 1px;
+  font-size: 1.2rem;
+  // text-shadow:var(--accent-color3) 1px 1px 1px;
 }
 
 .stat-caption {
-  font-size: 0.65rem;
+  font-size: 1rem;
   color: var(--text-sub);
   margin: 0;
   text-transform: uppercase;

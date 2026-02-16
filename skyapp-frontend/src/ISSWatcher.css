@@ -164,8 +164,8 @@
 
 iframe {
   width: 100%; /* Better for responsiveness than fixed 500px */
-  max-width: 323.6px;
-  height: 200px;
+  max-width: 370px;
+  height: 300px;
   border-radius: 6px;
   border: none;
 }
