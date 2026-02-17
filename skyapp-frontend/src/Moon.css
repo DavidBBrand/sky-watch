@@ -25,7 +25,7 @@
   -webkit-backdrop-filter: blur(10px) brightness(1.1); /* Safari support */
   
   /* The Glow & Border */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
   box-shadow: 
     0 4px 15px rgba(0, 0, 0, 0.3),            /* Outer depth */
     0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
@@ -55,12 +55,13 @@
   font-size: 1.0rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight:500;
 }
 
 /* Milestone Date Value (e.g., Feb. 16) */
 .milestone-date {
   color: var(--text-main);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 400;
   font-family: monospace;
 }
