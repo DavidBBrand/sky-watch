@@ -93,7 +93,7 @@
 
 .solar-cycle-container {
   /* 1. The Core Look */
-  background: rgba(152, 150, 68, 0.333); /* Slight glass effect */
+  background: rgba(117, 96, 67, 0.162); /* Slight glass effect */
   backdrop-filter: blur(8px) brightness(1.2);
   border-radius: 12px;
   
