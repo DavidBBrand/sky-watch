@@ -30,50 +30,73 @@
     font-family: "Share Tech Mono", monospace;
 }
 
-/* 2. The Clean Separator */
-// .separator-line {
-//     height: 0; /* No height needed since we use a border */
-//     width: 100%;
-//     border-top: 1px solid rgba(255, 255, 255, 0.1); 
-//     /* OR use: border-top: 1px solid var(--card-border); */
-//     margin: 20px 0 15px 0; /* Adjusts the breathing room between graphic and grid */
-// }
+
 
 /* 3. Telemetry Grid Fixes */
+// .weather-details-grid {
+//     display: grid;
+//     grid-template-columns: repeat(2, 1fr);
+//     gap: 15px;
+//     width: 100%;
+//     padding: 10px 0;
+//     border-radius: 8px;
+//     background: rgba(255, 255, 255, 0.03);
+// }
 .weather-details-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    width: 100%;
-    padding: 10px 0;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.03);
-
+  margin-top: 15px;
+  padding: 18px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction:row;
+  gap:18px;
+  
+  /* The Glass Effect */
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px) brightness(1.1);
+  -webkit-backdrop-filter: blur(10px) brightness(1.1); /* Safari support */
+  
+  /* The Glow & Border */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.3),            /* Outer depth */
+    0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
+    inset 0 0 15px rgba(255, 255, 255, 0.03); /* Subtle inner bloom */
     
-
-    /* Removed the borderTop here since we use the .separator-line div */
+  transition: all 0.3s ease-in-out;
 }
 
+.weather-details-grid:hover {
+    background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+
+}
 .detail-item {
     display: flex;
     flex-direction: column;
     align-items: center; /* Centering ensures labels and values don't look crooked */
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .detail-item .label {
-    font-size: 0.9rem; /* Smaller for hierarchy */
+    font-size: 1rem; /* Smaller for hierarchy */
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     color: var(--accent-color2);
     opacity: 0.8;
     font-weight:600;
+
 }
 .weather-icon {
   font-size: 6rem;
 }
 .detail-item .value {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--text-main);
     font-weight: 400;
     margin-top: 4px;

@@ -7,7 +7,7 @@ import GoldenHour from "./GoldenHour.jsx";
 import MapCard from "./MapCard.jsx";
 import ISSWatcher from "./ISSWatcher.jsx";
 import StarlinkGrid from "./StarlinkGrid.jsx";
-import MoonGraphic3 from "./MoonGraphic3.jsx";
+import Moon from "./Moon.jsx";
 
 function App() {
   const [isNight, setIsNight] = useState(true);
@@ -126,7 +126,7 @@ useEffect(() => {
 
       <div className="dashboard-grid">
         <div className="glass-card">
-          <MoonGraphic3 lat={location.lat} lon={location.lon} date={locationDate} />
+          <Moon lat={location.lat} lon={location.lon} date={locationDate} />
         </div>
 
         <div className="glass-card">

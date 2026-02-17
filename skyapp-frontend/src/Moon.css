@@ -1,0 +1,66 @@
+
+.moon-percentage {
+    font-size: 3rem;
+    font-weight: 200;
+    margin: 10px 0;
+    /* Text shadow that adapts slightly */
+    text-shadow: 0 0 15px var(--card-border);
+}
+
+/* You can remove the .dark-glass class now, 
+   as .moon-card handles it automatically! */
+
+   /* Container for the milestones */
+.moon-details {
+  margin-top: 15px;
+  padding: 18px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  
+  /* The Glass Effect */
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px) brightness(1.1);
+  -webkit-backdrop-filter: blur(10px) brightness(1.1); /* Safari support */
+  
+  /* The Glow & Border */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.3),            /* Outer depth */
+    0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
+    inset 0 0 15px rgba(255, 255, 255, 0.03); /* Subtle inner bloom */
+    
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect to make it feel interactive */
+.moon-details:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+/* Individual milestone items */
+.milestone-item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Milestone Phase Label (e.g., FULL MOON) */
+.milestone-phase {
+  color: var(--accent-color2);
+  font-size: 1.0rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Milestone Date Value (e.g., Feb. 16) */
+.milestone-date {
+  color: var(--text-main);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: monospace;
+}
