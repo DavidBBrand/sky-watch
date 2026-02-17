@@ -46,6 +46,11 @@
     gap: 15px;
     width: 100%;
     padding: 10px 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+
+    
+
     /* Removed the borderTop here since we use the .separator-line div */
 }
 
@@ -99,17 +104,6 @@
     100% { transform: rotate(360deg); }
 }
 
-// .wind-map-wrapper {
-//   height: 220px;
-//   width: 100%;
-//   margin-top: 25px;
-//   border-radius: 12px;
-//   overflow: hidden; /* Important for rounding map corners */
-//   border: 1px solid var(--card-border);
-//   position: relative;
-//   /* Digital display aesthetic */
-//   filter: brightness(0.9) contrast(1.1) saturate(0.8);
-// }
 
 /* The "Scanner" line effect */
 .map-overlay-scan {
