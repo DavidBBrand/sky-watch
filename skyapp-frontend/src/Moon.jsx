@@ -106,7 +106,7 @@ const Moon = ({ lat, lon, date }) => {
             {moonData.milestones?.map((m, i) => (
               <div key={i} className="milestone-item">
                 <span className="milestone-phase">{m.phase}</span>
-                <span className="milestone-date">{m.date}</span>
+                <span className="milestone-date glow-sub">{m.date}</span>
               </div>
             ))}
           </div>
