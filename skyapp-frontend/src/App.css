@@ -246,7 +246,7 @@
   margin-right: auto;
   border-radius: 25px;
   border: 1px solid var(--card-border);
-  background: var(--card-bg);
+  background: var(--glow-sub);
   color: var(--text-main);
   font-family: inherit;
   backdrop-filter: blur(10px);
@@ -263,8 +263,8 @@
 
 .search-wrapper input:focus {
   border-color: var(--accent-color);
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 15px var(--separator-glow);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px var(--separator-glow2);
 }
 
 .dashboard-grid {
