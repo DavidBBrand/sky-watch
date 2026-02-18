@@ -87,7 +87,7 @@ useEffect(() => {
 
   return (
     <div className="app-container">
-      <button onClick={() => setIsNight(!isNight)} className="theme-toggle-btn">
+      <button onClick={() => setIsNight(!isNight)} className="theme-toggle-btn ">
         {isNight ? "🌙 Night Mode" : "☀️ Day Mode"}
       </button>
 

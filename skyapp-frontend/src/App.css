@@ -19,6 +19,7 @@
   --text-sub: rgba(62, 51, 35, 0.7);
   --accent-color: #1f4222;
   --separator-glow: rgba(76, 57, 28, 0.1);
+  --separator-glow2: rgba(11, 72, 67, 0.53);
 }
 
 [data-theme="night"] {
@@ -73,15 +74,10 @@
   letter-spacing: 10px;
   text-transform: uppercase;
   margin: 10px 0;
-  
-  /* 1. Dynamic Color: Adapts to your --text-main variable */
+  /* 1. Dynamic Color */
   color: var(--text-main);
   opacity: 0.85;
-
-  /* 2. The Glass "Refraction" Effect */
-  /* We use a multi-layered text-shadow: 
-     - A light glow for Night mode 
-     - A subtle dark 'etch' for Day mode to keep it crisp */
+  /* 2. Glass  Effect */
   text-shadow: 
     0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
     0 0 15px var(--separator-glow);      /* Theme-based glow */
@@ -113,6 +109,79 @@
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
 } 
 
+.card-title {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    font-family: 'Share Tech Mono', monospace;
+    margin: 10px 0 10px;
+    color: var(--text-main);
+    opacity: 0.88;
+    /* 2. Glass  Effect */
+    text-shadow: 
+      0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
+      0 0 15px var(--separator-glow);      /* Theme-based glow */
+    /* 3. Glass Depth */
+    background: linear-gradient(
+      to bottom, 
+      var(--text-main) 0%, 
+      var(--text-sub) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* 4. Smooth theme transition */
+    transition: all 0.5s ease-in-out;
+}
+
+.glow-sub {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+    font-family: 'Share Tech Mono', monospace;
+    margin: 10px 0 10px;
+    color: var(--text-main);
+    opacity: 0.88;
+    /* 2. Glass  Effect */
+    text-shadow: 
+      0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
+      0 0 15px var(--separator-glow);      /* Theme-based glow */
+    /* 3. Glass Depth */
+    background: linear-gradient(
+      to bottom, 
+      var(--text-main) 0%, 
+      var(--text-sub) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* 4. Smooth theme transition */
+    transition: all 0.5s ease-in-out;
+}
+.glow-sub2 {
+    // font-size: 1rem;
+    // text-transform: uppercase;
+    // letter-spacing: 1px;
+    font-weight: 400;
+    font-family: 'Share Tech Mono', monospace;
+    margin: 10px 0 10px;
+    color: var(--text-main);
+    opacity: 0.88;
+    /* 2. Glass  Effect */
+    text-shadow: 
+      0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
+      0 0 15px var(--separator-glow);      /* Theme-based glow */
+    /* 3. Glass Depth */
+    background: linear-gradient(
+      to bottom, 
+      var(--text-main) 0%, 
+      var(--text-sub) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* 4. Smooth theme transition */
+    transition: all 0.5s ease-in-out;
+}
 .telemetry-info {
   display: flex;
   flex-wrap: wrap;

@@ -64,7 +64,7 @@ const Weather = ({ lat, lon, sun, onDataReceived, theme }) => {
 
   return (
     <div className="weather-container">
-      <h2 className="weather-header">
+      <h2 className="card-title">
         {weather ? "Current Weather" : "Live Weather"}
       </h2>
 
@@ -72,11 +72,11 @@ const Weather = ({ lat, lon, sun, onDataReceived, theme }) => {
         {weather ? getWeatherIcon(weather.description) : "☀️"}
       </div>
 
-      <h4 className="weather-temp">
+      <h4 className="weather-temp glow-sub2">
         {weather ? `${Math.round(weather.temp)}°F` : "--°F"}
       </h4>
       
-      <p className="weather-desc">
+      <p className="weather-desc glow-sub">
         {weather ? weather.description : "Synchronizing..."}
       </p>
       <div className="separator-line" />
@@ -85,19 +85,19 @@ const Weather = ({ lat, lon, sun, onDataReceived, theme }) => {
         <div className="weather-details-grid">
           <div className="detail-item">
             <span className="label">Humidity</span>
-            <span className="value">{weather.humidity}%</span>
+            <span className="value glow-sub2">{weather.humidity}%</span>
           </div>
           <div className="detail-item">
             <span className="label">Pressure</span>
-            <span className="value">{weather.pressure} hPa</span>
+            <span className="value glow-sub2">{weather.pressure} hPa</span>
           </div>
           <div className="detail-item">
             <span className="label">Visibility</span>
-            <span className="value">{(weather.visibility / 1000).toFixed(1)} km</span>
+            <span className="value glow-sub2">{(weather.visibility / 1000).toFixed(1)} km</span>
           </div>
           <div className="detail-item">
             <span className="label">Wind</span>
-            <span className="value">{weather.windspeed} mph</span>
+            <span className="value glow-sub2">{weather.windspeed} mph</span>
           </div>
         </div>
         

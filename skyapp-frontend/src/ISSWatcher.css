@@ -1,12 +1,69 @@
-/* dynamic distance mileage text */
+
+/* 1. Base Container & Title */
+.iss-card-internal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--text-main);
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.iss-main-title {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-main);
+  margin-bottom: 40px;
+  font-weight: 500;
+}
+
+/* 2. Dynamic Distance Mileage Text (Radar & Tactical) */
+.distance-value {
+  font-size: 2.8rem;
+  font-weight: 800;
+  // color: var(--text-main);
+  // line-height: 2;
+  margin-bottom: 12px;
+  margin-top: 24px;
+  // text-transform: lowercase;
+  // color: var(--text-sub);
+  // opacity: 0.99;
+  // text-shadow: 
+  //   0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
+  //   0 0 15px var(--separator-glow2);      /* Theme-based glow */
+  color: var(--text-main);
+  opacity: 0.85;
+  /* 2. Glass  Effect */
+  text-shadow: 
+    0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
+    0 0 15px var(--separator-glow);      /* Theme-based glow */
+  
+  /* 3. Glass Depth */
+  /* This creates a semi-transparent 'cut-through' effect */
+  background: linear-gradient(
+    to bottom, 
+    var(--text-main) 0%, 
+    var(--text-sub) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* 4. Smooth theme transition */
+  transition: all 0.5s ease-in-out;
+}
+
+/* Applied when isNearby is true */
 .iss-distance-text {
   background: linear-gradient(90deg, #aa3506 0%, #de744a 50%, #aa3506 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
-  display: inline-block;;
-  font-weight: 800;
+  display: inline-block;
+  font-weight: 600;
+  
   /* The 3D Etched Effect */
   text-shadow:
     rgba(57, 21, 21, 0.479) 1px 1px 0.25px,
@@ -19,33 +76,7 @@
   filter: drop-shadow(0 0 8px rgba(222, 74, 74, 0.3));
 }
 
-@keyframes radar-sweep {
-  to {
-    background-position: 200% center;
-  }
-}
-
-@keyframes tactical-flicker {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  52% {
-    opacity: 0.9;
-  }
-  54% {
-    opacity: 0.8;
-  }
-}
-.iss-card-internal {
-      color:var(--text-main);
-    font-size: 1.2rem;
-    text-transform: uppercase;
-}
-/* 2. Proximity Alert Text (The Amber Alert) */
+/* 3. Proximity Alert Text (The Amber Alert) */
 .proximity-alert {
   font-size: 1rem;
   font-weight: bold;
@@ -53,75 +84,28 @@
   text-transform: uppercase;
   letter-spacing: 5px;
   margin-top: 10px;
-  display: inline-block; /* Essential for the scale transform to work */
+  display: inline-block;
 
   animation:
     alert-blink 1s ease-in-out infinite,
-    alert-pulse 1s ease-in-out infinite;
-    // alert-shake .9s cubic-bezier(0.016, 0.018, 0.016, .2) infinite;
+    alert-pulse 1s ease-in-out infinite,
+    alert-shake 0.9s cubic-bezier(0.016, 0.018, 0.016, 0.2) infinite;
 
-  /* Your 3D Etched Shadow */
   text-shadow:
     1px 1px 0.25px rgba(0, 0, 0, 0.702),
     -0.5px -0.5px 0px rgba(255, 255, 255, 0.419);
 }
 
-/* The New Shake/Wiggle Keyframe */
-@keyframes alert-shake {
-  10%,
-  90% {
-    transform: translate3d(-1px, 0, 0) rotate(-0.5deg);
-  }
-  20%,
-  80% {
-    transform: translate3d(2px, 0, 0) rotate(1deg);
-  }
-  30%,
-  50%,
-  70% {
-    transform: translate3d(-3px, 0, 0) rotate(-1.5deg);
-  }
-  40%,
-  60% {
-    transform: translate3d(3px, 0, 0) rotate(1.5deg);
-  }
-}
-@keyframes alert-blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-@keyframes alert-pulse {
-  0%,
-  100% {
-    /* Combined 3D Etched + Initial state */
-    text-shadow:
-      1px 1px 0.25px rgba(0, 0, 0, 0.583),
-      -0.5px -0.5px 0px rgba(255, 255, 255, 0.2);
-    transform: scale(1.0);
-  }
-  50% {
-    /* 3D Etched + Radiant Glow */
-    text-shadow:
-      1px 1px 0.25px rgba(0, 0, 0, 0.583),
-      -0.5px -0.5px 0px rgba(255, 255, 255, 0.2),
-      0 0 15px rgba(170, 50, 10, 0.925);
-    transform: scale(1.09);
-  }
-}
-
-/* 3. Connection Ping Indicator */
+/* 4. Connection Ping Indicator */
 .ping-indicator {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   position: relative;
-  margin-top: 20px;
+  margin-top: 30px;
+  transition: background-color 0.3s ease;
+  background: var(--separator-glow2);
+  box-shadow: 0 0 8px var(--separator-glow2);
 }
 
 .ping-indicator::after {
@@ -136,19 +120,24 @@
   animation: ping-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-@keyframes ping-pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  70%,
-  100% {
-    transform: scale(3.5);
-    opacity: 0;
-  }
+/* 5. Telemetry & Subtext */
+.location-subtext {
+  font-size: 1rem;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
 }
 
-/* 4. Layout & Containers */
+.telemetry-coords {
+  font-size: 1.1rem;
+  color: var(--accent-color2);
+  font-weight: 500;
+  margin-top: 12px;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* 6. Layout & Iframe */
 .svg-container {
   display: flex;
   justify-content: center;
@@ -158,16 +147,48 @@
 }
 
 .iss-favicon-small {
-  width: 200px;
-  height: 200px;
+  width: 160px; /* Adjusted to keep layout balanced */
+  height: 160px;
 }
 
-iframe {
-  width: 100%; /* Better for responsiveness than fixed 500px */
+.iss-map-frame {
+  width: 100%;
   max-width: 370px;
   height: 200px;
   border-radius: 6px;
   border: none;
   margin-top: 24px;
+  filter: invert(90%) hue-rotate(180deg) brightness(0.8); /* Matches dashboard night mode */
 }
 
+/* --- KEYFRAMES --- */
+@keyframes radar-sweep { to { background-position: 200% center; } }
+
+@keyframes tactical-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+  52% { opacity: 0.9; }
+  54% { opacity: 0.8; }
+}
+
+@keyframes alert-shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0) rotate(-0.5deg); }
+  20%, 80% { transform: translate3d(2px, 0, 0) rotate(1deg); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0) rotate(-1.5deg); }
+  40%, 60% { transform: translate3d(3px, 0, 0) rotate(1.5deg); }
+}
+
+@keyframes alert-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+
+@keyframes alert-pulse {
+  0%, 100% { transform: scale(1.0); }
+  50% { 
+    text-shadow: 1px 1px 0.25px rgba(0,0,0,0.5), 0 0 15px rgba(170, 50, 10, 0.9);
+    transform: scale(1.09); 
+  }
+}
+
+@keyframes ping-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  70%, 100% { transform: scale(3.5); opacity: 0; }
+}

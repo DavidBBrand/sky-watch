@@ -15,7 +15,7 @@ const MapCard = ({ lat, lon, theme, skyData, location }) => {
 
   return (
     <div>
-      <h2 className="map-card-title"> {location?.name || "Initializing..."}</h2>
+      <h2 className="card-title"> {location?.name || "Initializing..."}</h2>
       {/* 1. Reserve the space for SolarCycle */}
       <div
         style={{

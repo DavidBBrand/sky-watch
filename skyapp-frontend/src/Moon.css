@@ -7,9 +7,6 @@
     text-shadow: 0 0 15px var(--card-border);
 }
 
-/* You can remove the .dark-glass class now, 
-   as .moon-card handles it automatically! */
-
    /* Container for the milestones */
 .moon-details {
   margin-top: 15px;
@@ -64,4 +61,115 @@
   font-size: 1rem;
   font-weight: 400;
   font-family: monospace;
+}
+.moon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.moon-header {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-main);
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Visual Section */
+.lunar-visual-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.moon-svg-frame {
+  width: 140px;
+  height: 140px;
+  position: relative;
+}
+
+.moon-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-15deg);
+}
+
+.moon-path-transition {
+  transition: all 0.5s ease-in-out;
+}
+
+.illumination-value {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--text-main);
+}
+
+.illumination-label {
+  color: var(--text-sub);
+  text-transform: uppercase;
+  letter-spacing: 2.0px;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Stats Grid */
+.moon-stats-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 15px 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.stat-label {
+  color: var(--text-sub);
+  font-size: 0.6rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-family: monospace;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Dynamic Altitude Coloring */
+.alt-above { color: #17ae4e; }
+.alt-below { color: var(--accent-color2); }
+
+.azimuth-unit {
+  color: var(--accent-color);
+  margin-left: 5px;
+  font-size: 0.9rem;
+}
+
+/* Loading/Error States */
+.moon-loading-box {
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-text {
+  color: var(--text-main);
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.signal-lost {
+  color: var(--accent-color2);
+  font-size: 0.8rem;
+  text-align: center;
 }

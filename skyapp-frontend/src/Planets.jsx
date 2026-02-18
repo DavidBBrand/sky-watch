@@ -60,15 +60,7 @@ const Planets = ({ skyData }) => {
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           <div>
         <h2
-          style={{
-            fontSize: "1.2rem",
-            textTransform: "uppercase",
-            letterSpacing: "1px",
-            color: "var(--text-main)",
-            marginBottom: "40px",
-            textAlign: "center",
-            fontWeight: "400"
-          }}
+          className="card-title"
         >
           Visible Planets
         </h2>

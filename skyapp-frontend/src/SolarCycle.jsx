@@ -14,21 +14,21 @@ const SolarCycle = ({ sun }) => {
 
   return (
     <div className="solar-cycle-container">
-      <h4 className="solar-title">Solar Cycle</h4> 
+      <h4 className="glow-sub">Solar Cycle</h4> 
       
       <div className="solar-flex">
         {/* Sunrise Section */}
         <div className="planet-item" style={{ flex: 1 }}>
           <span style={{ fontSize: "4.0rem" }}>🌅</span>
           <p className="solar-time">{formatTime(sun.sunrise)}</p>
-          <p className="solar-label">SUNRISE</p>
+          <p className="solar-label glow-sub">SUNRISE</p>
         </div>
 
         {/* Sunset Section */}
         <div className="planet-item" style={{ flex: 1 }}>
           <span style={{ fontSize: "4.0rem" }}>🌇</span>
           <p className="solar-time">{formatTime(sun.sunset)}</p>
-          <p className="solar-label">SUNSET</p>
+          <p className="solar-label glow-sub">SUNSET</p>
         </div>
       </div>
     </div>
