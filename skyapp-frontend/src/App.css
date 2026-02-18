@@ -13,7 +13,7 @@
   --bg-color: #bdb5a9;
   --mesh-2: rgb(208, 195, 177);
   --mesh-1: rgb(166, 196, 223);
-  --card-bg: rgba(255, 255, 255, 0.25);
+  --card-bg: rgba(130, 125, 120, 0.317);
   --card-border: rgba(62, 51, 35, 0.2); 
   --text-main: #3e3323;
   --text-sub: rgba(62, 51, 35, 0.7);
@@ -117,11 +117,11 @@
     font-family: 'Share Tech Mono', monospace;
     margin: 10px 0 10px;
     color: var(--text-main);
-    opacity: 0.88;
+    opacity: 0.92;
     /* 2. Glass  Effect */
     text-shadow: 
       0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
-      0 0 15px var(--separator-glow);      /* Theme-based glow */
+      0 0 12px var(--separator-glow);      /* Theme-based glow */
     /* 3. Glass Depth */
     background: linear-gradient(
       to bottom, 
@@ -196,6 +196,16 @@
   font-weight: 200; 
   padding: 15px;
   margin-top: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px) brightness(1.1);
+  -webkit-backdrop-filter: blur(10px) brightness(1.1); /* Safari support */
+
+  /* The Glow & Border */
+  border: .8px solid var(--card-border);
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.1),            /* Outer depth */
+    0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
+    inset 0 0 15px rgba(255, 255, 255, 0.03);
   
   /* The Secret Sauce: The Etch */
   text-shadow: 
@@ -203,10 +213,10 @@
     -0.5px -0.5px 0px rgba(255, 255, 255, 0.05); /* Top-left: Subtle light catch */
     
   /* Optional: Adds a very subtle container glow to separate the telemetry from the background */
-  background: rgba(255, 255, 255, 0.03);
+  // background: rgba(255, 255, 255, 0.04);
   border-radius: 50px;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  // backdrop-filter: blur(5px);
+  // border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* Individual spans inside the telemetry info */
@@ -364,7 +374,7 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
 /* uniform glass-card for all card components */
 .glass-card {
   background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--separator-glow2);
   border-radius: 16px;
   padding: 12px;
   backdrop-filter: blur(.95px);
@@ -375,6 +385,7 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
   height: 100%;
   box-sizing: border-box;
   transition: all 0.5s ease;
+
 }
 
 /*  active state adds  tactical red pulse to the entire card */

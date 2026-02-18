@@ -1,7 +1,7 @@
 import React from "react";
 import "./SolarCycle.css";
 
-const SolarCycle = ({ sun }) => {
+const SolarCycle = ({ sun, date }) => {
   if (!sun) return null;
 
   const formatTime = (isoString) => {
@@ -14,7 +14,7 @@ const SolarCycle = ({ sun }) => {
 
   return (
     <div className="solar-cycle-container">
-      <h4 className="glow-sub">Solar Cycle</h4> 
+      <h4 className="glow-sub">Solar Cycle for <div className="card-title">{date}</div></h4> 
       
       <div className="solar-flex">
         {/* Sunrise Section */}

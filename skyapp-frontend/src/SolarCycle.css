@@ -1,15 +1,25 @@
 .solar-cycle-container {
-  padding: 20px;
+
+  margin-top: 15px;
+  padding: 12px;
   border-radius: 12px;
-//   background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
   
-  /* The Glass Effect from your Title */
+  /* The Glass Effect */
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(10px) brightness(1.1);
-  -webkit-backdrop-filter: blur(10px) brightness(1.1);
-  
-  /* The Base Border */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.4s ease-in-out;
+  -webkit-backdrop-filter: blur(10px) brightness(1.1); /* Safari support */
+  gap: 24px;
+  /* The Glow & Border */
+  border: .8px solid var(--card-border);
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.1),            /* Outer depth */
+    0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
+    inset 0 0 15px rgba(255, 255, 255, 0.03); /* Subtle inner bloom */
+    
+  transition: all 0.3s ease-in-out;
  
 }
 

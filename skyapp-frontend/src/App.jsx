@@ -160,6 +160,8 @@ useEffect(() => {
             theme={isNight ? "night" : "day"}
             skyData={skyData}
             location={location}
+            date={locationDate}
+            
           />
         </div>
 

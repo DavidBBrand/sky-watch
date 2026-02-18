@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"; // Added hooks
 import "./MapCard.css";
 import SolarCycle from "./SolarCycle";
 
-const MapCard = ({ lat, lon, theme, skyData, location }) => {
+const MapCard = ({ lat, lon, theme, skyData, location, date }) => {
   // console.log("PROPS CHECK:", { location, skyData }); // Debugging line to check received props
   // 1. Pass skyData in as a prop
   const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -26,7 +26,7 @@ const MapCard = ({ lat, lon, theme, skyData, location }) => {
         }}
       >
         {skyData?.sun ? (
-          <SolarCycle sun={skyData.sun} />
+          <SolarCycle sun={skyData.sun} date={date} />
         ) : (
           <div className="solar-loader">
             <div className="scanning-line"></div>
