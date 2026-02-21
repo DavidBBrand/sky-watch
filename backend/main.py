@@ -135,13 +135,17 @@ async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
             # Open-Meteo puts these in the 'current' object now
             current = data.get("current", {})
             
+            #Defensive check: if Open-Meteo sends None, we provide a fallback
+            def safe_get(val, default=0):
+                return val if val is not None else default 
+            
             return {
-                "temp": round(current.get("temperature_2m", 0)),
-                "windspeed": current.get("wind_speed_10m", 0),
-                "humidity": current.get("relative_humidity_2m", 0),
-                "pressure": current.get("surface_pressure", 0),
-                "visibility": current.get("visibility", 0), # Returns in meters
-                "description": get_weather_description(current.get("weather_code", 0)),
+                "temp": round(safe_get(current.get("temperature_2m"))),
+                "windspeed": safe_get(current.get("wind_speed_10m")),
+                "humidity": safe_get(current.get("relative_humidity_2m")),
+                "pressure": safe_get(current.get("surface_pressure")),
+                "visibility": safe_get(current.get("visibility")), # Returns in meters
+                "description": get_weather_description(safe_get(current.get("weather_code"))),
                 "timezone": data.get("timezone", "UTC"),
                 "utc_offset": data.get("utc_offset_seconds", 0),
                 "local_time": current.get("time", "Unknown")
