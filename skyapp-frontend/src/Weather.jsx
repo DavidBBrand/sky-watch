@@ -11,30 +11,43 @@ const Weather = ({ lat, lon, sun, onDataReceived, theme }) => {
     onDataReceivedRef.current = onDataReceived;
   }, [onDataReceived]);
 
-  useEffect(() => {
+useEffect(() => {
     let isMounted = true;
+
+    const fetchWeather = () => {
+      fetch(`http://127.0.0.1:8000/weather?lat=${lat}&lon=${lon}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Server error");
+          return res.json();
+        })
+        .then((weatherData) => {
+          if (!isMounted) return;
+          if (weatherData.error) {
+            setError(true);
+          } else {
+            setWeather(weatherData);
+            setError(false); // Clear error if fetch succeeds
+            if (onDataReceivedRef.current) onDataReceivedRef.current(weatherData);
+          }
+        })
+        .catch((err) => {
+          if (isMounted) setError(true);
+        });
+    };
+
+    // 1. Initial Reset & Fetch
     setWeather(null);
     setError(false);
+    fetchWeather();
 
-    fetch(`http://127.0.0.1:8000/weather?lat=${lat}&lon=${lon}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Server error");
-        return res.json();
-      })
-      .then((weatherData) => {
-        if (!isMounted) return;
-        if (weatherData.error) {
-          setError(true);
-        } else {
-          setWeather(weatherData);
-          if (onDataReceivedRef.current) onDataReceivedRef.current(weatherData);
-        }
-      })
-      .catch((err) => {
-        if (isMounted) setError(true);
-      });
-      
-    return () => { isMounted = false; };
+    // 2. Set Interval (120,000ms = 2 minutes)
+    const weatherInterval = setInterval(fetchWeather, 120000);
+
+    // 3. Cleanup
+    return () => { 
+      isMounted = false; 
+      clearInterval(weatherInterval); 
+    };
   }, [lat, lon]);
 
   const getWeatherIcon = (description) => {
