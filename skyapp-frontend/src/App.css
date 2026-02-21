@@ -23,7 +23,7 @@
 }
 
 [data-theme="night"] {
-  --bg-color: #0b0e14;
+  --bg-color: #36091fde;
   --mesh-1: hsla(220, 40%, 15%, 1);
   --mesh-2: hsla(260, 30%, 10%, 1);
   --card-bg: rgba(15, 20, 30, 0.4);
