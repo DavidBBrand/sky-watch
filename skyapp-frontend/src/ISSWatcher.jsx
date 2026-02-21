@@ -51,7 +51,7 @@ const ISSWatcher = ({ lat, lon, onDistanceUpdate }) => {
     };
 
     fetchISS();
-    const interval = setInterval(fetchISS, 5000);
+    const interval = setInterval(fetchISS, 10000);
     return () => clearInterval(interval);
   }, [lat, lon, onDistanceUpdate]);
 
