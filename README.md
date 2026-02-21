@@ -1,4 +1,4 @@
-# 🌙 Sky Dashboard
+# 🌙 Sky Watch
 
 A high-precision, observatory-style dashboard featuring real-time astronomical tracking and local weather synchronization.
 
