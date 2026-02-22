@@ -1,94 +1,111 @@
-/* 2. Header & Labels */
-.orbital-label {
-  letter-spacing: 2px;
-  font-size: 0.8rem;
-  color: var(--text-sub);
-  margin: 0;
-  font-weight: 600;
-  text-transform: uppercase;
+/* 1. Base Card & Container */
+.starlink-card {
+  padding: 1rem;
 }
 
-/* 3. The Radar System */
 .radar-container {
   position: relative;
   width: 80%;
-  /* CRITICAL: This keeps the radar a square no matter the width */
   aspect-ratio: 1 / 1; 
-  margin: 20px auto;
+  margin: 45px auto;
   background: rgba(0, 255, 42, 0.05);
   border-radius: 50%;
   border: 1px solid var(--accent-color);
-  overflow: hidden; /* Keeps the scanner and nodes inside the circle */
+  /* Do not use overflow: hidden here so labels can breathe */
 }
 
-.radar-ring {
+/* 2. The Spinning Wedge */
+.radar-scanner {
+  position: absolute;
+  width: 50%; height: 50%;
+  top: 0; left: 0;
+  background: linear-gradient(45deg, color-mix(in srgb, var(--accent-color), transparent 50%) 0%, transparent 100%);
+  transform-origin: bottom right; /* Centers pivot point */
+  animation: radar-spin 4s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+  clip-path: circle(100% at bottom right); /* Makes the square a wedge */
+}
+
+@keyframes radar-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 3. Geometry (Rings & Axes) */
+.radar-ring, .radar-axis-h, .radar-axis-v {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   border: 1px solid color-mix(in srgb, var(--accent-color), transparent 85%);
   border-radius: 50%;
+  z-index: 1;
 }
+.radar-ring.r1 { width: 33%; height: 33%; }
+.radar-ring.r2 { width: 66%; height: 66%; }
+.radar-ring.r3 { width: 100%; height: 100%; }
+.radar-axis-h { width: 100%; height: 1px; background: rgba(0, 255, 0, 0.1); }
+.radar-axis-v { width: 1px; height: 100%; background: rgba(0, 255, 0, 0.1); }
 
-.radar-axis-h, .radar-axis-v {
+/* 4. Labels & Directions */
+.radar-label, .radar-direction {
   position: absolute;
-  background: color-mix(in srgb, var(--accent-color), transparent 80%);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-}
-.radar-axis-h { width: 100%; height: 1px; }
-.radar-axis-v { width: 1px; height: 100%; }
-
-.radar-scanner {
-  position: absolute;
-  width: 50%; height: 50%;
-  top: 0; left: 0;
-  background: linear-gradient(45deg, color-mix(in srgb, var(--accent-color), transparent 70%) 0%, transparent 100%);
-  transform-origin: bottom right;
-  animation: scan 4s linear infinite;
+  color: var(--accent-color);
+  font-family: 'Courier New', monospace;
+  text-shadow: 1px 1px 2px #000;
+  z-index: 10;
   pointer-events: none;
-  clip-path: circle(100% at bottom right);
 }
 
-/* 4. The Nodes (The actual Satellites) */
+.radar-label { font-size: 0.65rem; left: 52%; font-weight: bold; }
+.label-center { top: 48%; }
+.label-r1     { top: 34%; }
+.label-r2     { top: 18%; }
+.label-r3     { top: 2%; }
+
+.radar-direction { font-size: 0.9rem; font-weight: 800; }
+.dir-n { top: -35px; left: 50%; transform: translateX(-50%); }
+.dir-s { bottom: -35px; left: 50%; transform: translateX(-50%); }
+.dir-e { right: -35px; top: 50%; transform: translateY(-50%); }
+.dir-w { left: -35px; top: 50%; transform: translateY(-50%); }
+
+/* 5. Nodes & Tooltips */
 .radar-node {
   position: absolute;
-  width: 4px; 
-  height: 4px;
+  width: 6px; height: 6px;
   background: var(--accent-color);
   border-radius: 50%;
   box-shadow: 0 0 8px var(--accent-color);
   transform: translate(-50%, -50%);
-  transition: all 1s linear;
-  z-index: 10;
+  z-index: 20;
 }
 
-/* 5. Stats Layout (Matches your other cards) */
+.node-tooltip {
+  visibility: hidden;
+  position: absolute;
+  bottom: 150%; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.95);
+  color: var(--accent-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  border: 1px solid var(--accent-color);
+  white-space: nowrap;
+  text-align: center;
+  z-index: 100;
+}
+
+.node-tooltip strong { display: block; color: #fff; margin-bottom: 2px; }
+.radar-node:hover .node-tooltip { visibility: visible; }
+
+/* 6. Stats Bottom Row */
 .stats-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
-  color:var(--accent-color2);
-  font-size: 1.2rem;
-  // text-shadow:var(--accent-color3) 1px 1px 1px;
+  margin-top: 15px;
+  border-top: 1px solid rgba(0, 255, 0, 0.1);
+  padding-top: 10px;
 }
-
-.stat-caption {
-  font-size: 1rem;
-  color: var(--text-sub);
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.stat-value {
-  color: var(--text-main);
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin: 2px 0 0 0;
-  font-variant-numeric: tabular-nums;
-}
-
-@keyframes scan {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+.stat-caption { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; margin: 0; }
+.stat-value { color: var(--accent-color); font-size: 1.1rem; font-weight: bold; margin: 0; }

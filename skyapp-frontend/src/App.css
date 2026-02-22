@@ -80,7 +80,7 @@
   /* 2. Glass  Effect */
   text-shadow: 
     0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
-    0 0 15px var(--separator-glow);      /* Theme-based glow */
+    0 0 10px var(--separator-glow);      /* Theme-based glow */
   
   /* 3. Glass Depth */
   /* This creates a semi-transparent 'cut-through' effect */
@@ -146,7 +146,7 @@
     /* 2. Glass  Effect */
     text-shadow: 
       0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
-      0 0 15px var(--separator-glow);      /* Theme-based glow */
+      0 0 8px var(--separator-glow);      /* Theme-based glow */
     /* 3. Glass Depth */
     background: linear-gradient(
       to bottom, 
@@ -168,7 +168,7 @@
     /* 2. Glass  Effect */
     text-shadow: 
       0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
-      0 0 8px var(--separator-glow);      /* Theme-based glow */
+      1px 1px 4px var(--separator-glow);      /* Theme-based glow */
     /* 3. Glass Depth */
     background: linear-gradient(
       to bottom, 
