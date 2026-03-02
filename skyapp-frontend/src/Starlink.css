@@ -100,11 +100,11 @@
   box-shadow: 0 0 2px var(--accent-color);
   transform: translate(-50%, -50%);
   z-index: 20;
-  animation: node-pulse 4s infinite ease-in-out;
+  animation: node-pulse 6s infinite ease-in-out;
 }
 @keyframes node-pulse {
   0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-  50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.5; box-shadow: 0 0 16px var(--accent-color); }
+  50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.8; box-shadow: 0 0 16px var(--accent-color); }
   100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 .node-tooltip {
@@ -113,7 +113,7 @@
   bottom: 150%; left: 50%;
   transform: translateX(-50%);
   background: rgba(31, 21, 73, 0.95);
-  color: var(--accent-color2);
+  color: var(--separator-glow2);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 1rem;
@@ -123,7 +123,9 @@
   text-align: center;
   z-index: 100;
 }
-
+.tooltip-name {
+  color: var(--accent-color2)
+}
 .node-tooltip strong { display: block; color: #fff; margin-bottom: 2px; }
 .radar-node:hover .node-tooltip { visibility: visible; }
 
