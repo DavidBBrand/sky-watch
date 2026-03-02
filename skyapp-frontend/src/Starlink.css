@@ -112,11 +112,12 @@
   position: absolute;
   bottom: 150%; left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(31, 21, 73, 0.95);
   color: var(--accent-color2);
   padding: 4px 8px;
   border-radius: 4px;
-  font-size: 0.85rem;
+  font-size: 1rem;
+  font-weight: 800;
   border: 1px solid var(--accent-color);
   white-space: nowrap;
   text-align: center;
