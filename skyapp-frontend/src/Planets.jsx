@@ -77,7 +77,7 @@ const Planets = memo(({ skyData }) => {
                   </div>
 
                   <span className={`status-tag ${info.is_visible ? "status-visible" : "status-set"}`}>
-                    {info.is_visible ? "Above Horizon" : "Set"}
+                    {info.is_visible ? "Above Horizon" : "Below Horizon"}
                   </span>
 
                   <div 

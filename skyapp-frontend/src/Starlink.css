@@ -130,7 +130,7 @@
 }
 
 .radar-direction {
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: 800;
 }
 .dir-n {
@@ -213,22 +213,45 @@
 /* 6. Stats Bottom Row */
 .stats-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-top: 15px;
   border-top: 1px solid rgba(0, 255, 0, 0.1);
   padding-top: 10px;
 }
+.stat-group {
+  text-align: center !important; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color:var(--accent-color2);
+}
 .stat-caption {
-  font-size: 1.2rem;
-  color: var(--text-sub);
+  font-size: 2rem;
+  color: var(--accent-color2);
   text-transform: uppercase;
   margin: 0;
 }
 .stat-value {
   color: var(--accent-color);
-  font-size: 1.5rem;
   font-weight: bold;
   margin: 0;
+}
+/* Targeted selector to override App.css and any other component */
+.starlink-card .stats-row .stat-value {
+    color: var(--accent-color);
+    font-size: 1.5rem !important; /* Force the size */
+    font-family: 'Archivo Narrow';
+    font-weight: 400;
+    line-height: 1;
+    margin-top: 5px;
+    display: block;
+    letter-spacing: 1px;
+}
+
+.starlink-card .stats-row .stat-caption {
+    font-size: 1.1rem;
+    
+    letter-spacing: 1px;
 }
 
 .radar-container.proximity-alert {

@@ -28,6 +28,8 @@
 .status-visible { 
     background: rgba(74, 222, 128, 0.2); 
     color: #38ba5d; /* Darker green for Day Mode readability */
+    font-family: 'Archivo Narrow';
+    letter-spacing:1px;
 }
 
 /* Night Mode Adjustment for Visibility Text */
@@ -36,14 +38,19 @@
 }
 
 .status-set { 
-    background: rgba(255, 0, 0, 0.229); 
+    background: rgba(169, 3, 3, 0.229); 
     color: var(--text-sub);
     opacity: 0.88;
     font-size: 1rem;
+    font-family: 'Archivo Narrow';
+    letter-spacing: 1px;
 }
 
 .distance {
     color: var(--accent-color2);
     font-size: .8rem;
+    font-family: 'Archivo Narrow';
+    text-transform: uppercase;
+    letter-spacing:1px;
 }
 
