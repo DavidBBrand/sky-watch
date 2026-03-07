@@ -59,22 +59,24 @@ def get_upcoming_moon_phases():
         })
     
     return milestones
-# --- UPDATED ENDPOINTS ---
+
 
 @app.get("/starlink-live")
-@cache_sky_data(ttl_seconds=86400) # Cache for 1 day
-async def get_starlink_tles():
-    # Fetching the active Starlink TLE list from CelesTrak
+@cache_sky_data(ttl_seconds=86400)
+async def get_starlink_tles(lat: float = None, lon: float = None):
     url = "https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=json"
     
-    async with httpx.AsyncClient() as client:
+    # Use follow_redirects=True (CelesTrak often redirects to HTTPS or WWW)
+    async with httpx.AsyncClient(follow_redirects=True) as client:
         try:
-            response = await client.get(url, timeout=10.0)
+            response = await client.get(url, timeout=15.0)
+            response.raise_for_status()
             data = response.json()
-            # We only return a subset (e.g., first 100) to keep the frontend fast
-            return data[:100] 
+            return data[:100]
         except Exception as e:
-            return {"error": f"Failed to fetch Starlink data: {e}"}
+            # Printing to the terminal helps you see the error even if the JSON is empty
+            print(f"CRITICAL FETCH ERROR: {e}")
+            return {"error": str(e)}
 
 @app.get("/sky-summary")
 @cache_sky_data(ttl_seconds=120)  # Cache for 2 minutes
