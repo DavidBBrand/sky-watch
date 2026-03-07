@@ -9,48 +9,36 @@
 }
 
 /* 2. Dynamic Distance Mileage Text (Radar & Tactical) */
+/* Update .distance-value to handle the standard display */
 .distance-value {
-  font-size: 5rem;
+  font-size: 4rem; /* Slightly smaller than 5rem to avoid overflow */
   font-weight: 600;
-
-  margin-bottom: 12px;
-  margin-top: 24px;
-
+  margin: 12px 0;
   color: var(--text-main);
-  opacity: 0.89;
-  /* 2. Glass  Effect */
-  text-shadow: 
-    0 1px 6px rgba(255, 255, 255, 0.3),
-    0 0 6px var(--separator-glow);     
-  background: linear-gradient(
-    to bottom, 
-    var(--text-main) 0%, 
-    var(--text-sub) 100%
-  );
+  opacity: 0.9;
+  /* Use a tighter shadow for Night Mode */
+  text-shadow: 0 0 8px var(--separator-glow);
+  background: linear-gradient(to bottom, var(--text-main) 0%, var(--text-sub) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* 4. Smooth theme transition */
-  transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease;
 }
 
-/* Applied when isNearby is true */
+/* Specific fix for the 'nearby' animation glow */
 .iss-distance-text {
-  color: var(--text-main);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  display: inline-block;
-  font-weight: 400;
-  font-size: 2.5rem;
-  margin-top: 18px;
-  margin-bottom:18px;
-  animation:
-    radar-sweep 2s linear infinite,
-    tactical-flicker 4s ease-in-out infinite;
+  font-family: 'Share Tech Mono', monospace;
+  /* Lower the spread of the drop-shadow for Night Mode */
+  filter: drop-shadow(0 0 3px var(--separator-glow));
+  animation: tactical-flicker 4s ease-in-out infinite;
+  font-size:3rem;
+}
 
-  filter: drop-shadow(0 0 4px rgba(74, 222, 126, 0.3));
+/* 🌙 Night Mode Specific "Dimmer" */
+[data-theme="night"] .distance-value {
+  /* Reduce the glow intensity significantly */
+  text-shadow: 0 0 4px var(--separator-glow);
+  opacity: 0.8;
 }
 
 /* 3. Proximity Alert Text (The Amber Alert) */
@@ -74,14 +62,16 @@
 
 /* 4. Connection Ping Indicator */
 .ping-indicator {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   position: relative;
   margin-top: 30px;
   transition: background-color 0.3s ease;
-  background: var(--separator-glow2);
-  box-shadow: 0 0 8px var(--separator-glow2);
+  background: var(--separator-glow);
+  box-shadow: 0 0 8px var(--separator-glow);
+  margin-bottom: 24px;
+  opacity: 0.99;
 }
 
 .ping-indicator::after {

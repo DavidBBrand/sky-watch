@@ -9,7 +9,7 @@
 .weather-header {
     font-size: 1.2rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     color: var(--text-main);
     font-weight: 500;
     margin: 20px 0 10px;
@@ -64,11 +64,12 @@
 
 .weather-details-grid {
   margin-top: 15px;
-  padding: 18px;
-  border-radius: 12px;
+  padding: 14px;
+  border-radius: 18px;
   display: flex;
   flex-direction:row;
-  gap:10px;
+  gap:12px;
+  margin-bottom: 4px;
   
   /* The Glass Effect */
   background: rgba(255, 255, 255, 0.02);

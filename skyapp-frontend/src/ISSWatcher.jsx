@@ -119,7 +119,7 @@ const ISSWatcher = memo(({ onDistanceUpdate }) => {
       </div>
 
       <div className="distance-display-group">
-        <div className="iss-distance-text card-title">
+        <div className="iss-distance-text">
           {distance
             ? `${Math.round(distance).toLocaleString()} mi`
             : "SCANNING..."}
