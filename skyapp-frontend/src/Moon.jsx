@@ -129,7 +129,7 @@ const Moon = memo(({ date }) => {
             <div className="text-right">
               <p className="stat-label">Azimuth</p>
               <p
-                className="stat-value card-title"
+                className="stat-value glow-sub2"
               >
                 {moonData.azimuth?.toFixed(1)}°
                 <span className="azimuth-unit">
