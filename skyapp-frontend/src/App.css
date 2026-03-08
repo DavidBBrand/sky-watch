@@ -81,7 +81,7 @@
   /* 2. Glass  Effect */
   text-shadow: 
     0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
-    0 0 10px var(--separator-glow);      /* Theme-based glow */
+    0 0 6px var(--separator-glow);      /* Theme-based glow */
   /* semi-transparent 'cut-through' effect */
   background: linear-gradient(
     to bottom, 
@@ -99,7 +99,7 @@
   /* 2. Fix jagged edges on Chrome/Windows */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  filter: drop-shadow(0 0 10px var(--separator-glow));
+  filter: drop-shadow(0 0 6px var(--separator-glow));
 }
 
 .sub-title {
