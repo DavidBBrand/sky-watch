@@ -189,7 +189,7 @@ function App() {
           )}
         </div>
       </div>
-      <p className="copyright glow-sub2">Copyright © 2026 David Brand</p>
+      <p className="copyright glow-sub2"> © 2026 David Brand</p>
     </div>
   );
 }
