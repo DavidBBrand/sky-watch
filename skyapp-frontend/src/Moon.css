@@ -16,6 +16,7 @@
   gap: 12px;
   background: rgba(255, 255, 255, 0.02); 
   border: .8px solid var(--card-border);
+  
 }
 
 .milestone-item {
@@ -35,7 +36,7 @@
 /* Milestone Date Value (e.g., Feb. 16) */
 .milestone-date {
   color: var(--text-main);
-  font-size: 1.2rem;
+  font-size: 1.7rem;
   font-weight: 500;
   font-family: 'Datatype', monospace;
 }
