@@ -101,11 +101,13 @@ const Moon = memo(({ date }) => {
 
   return (
     <div className="moon-container">
-      <div className="moon-header-block">
-        <h2 className="card-title">
-        The Moon from <div className="location-name">{location.name}</div>
-        <div className="date-display">{date}</div>
-        </h2>
+      <div className="moon-container">
+        <div className="moon-header-block">
+          <div className="glow-sub date-display">The Moon from</div>
+          <div className="glow-sub location-name">{location.name}</div>
+          <div className="glow-sub2 date-display">{date}</div>
+        </div>
+        {/* ... rest of the code */}
       </div>
 
       {loading ? (
@@ -122,13 +124,15 @@ const Moon = memo(({ date }) => {
                 Altitude{" "}
                 {trend === "rising" ? "↑" : trend === "setting" ? "↓" : ""}
               </p>
-              <h2 style={{ "fontSize": "1.4rem" }} className={`glow-sub`}>{moonData.altitude?.toFixed(1)}°</h2>
+              <h2 style={{ fontSize: "1.4rem" }} className={`glow-sub`}>
+                {moonData.altitude?.toFixed(1)}°
+              </h2>
             </div>
             <div className="text-right">
               <p className="stat-label">Azimuth</p>
-              <p style={{ "fontSize": "1.4rem" }} className="glow-sub">
+              <p style={{ fontSize: "1.4rem" }} className="glow-sub">
                 {moonData.azimuth?.toFixed(1)}°
-                <span style={{ "fontSize": "1.4rem" }}  className="glow-sub">
+                <span style={{ fontSize: "1.4rem" }} className="glow-sub">
                   ({getCompassDirection(moonData.azimuth)})
                 </span>
               </p>

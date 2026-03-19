@@ -15,19 +15,16 @@
 
 /* 2. Style the "The Moon from" part */
 .moon-header-block .card-title {
-  font-size: 1.5rem; /* Keep this smaller to emphasize the city */
+
   opacity: 0.7;
   text-transform: uppercase;
   margin-bottom: 2px !important;
 }
-
-/* 3. Style the City (Franklin) */
 .moon-header-block .location-name {
-  display: block; /* Force to its own line */
+  display: block;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 2.4rem; /* Big and tactical */
-  font-weight: 600;
-  color: var(--text-main);
+  font-size:3rem;
+  font-weight: 600;;
   letter-spacing: -1px; /* Tighter look */
 }
 
@@ -35,9 +32,9 @@
 .moon-header-block .date-display {
   display: block;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 2rem; /* Date should usually be smaller for hierarchy */
+  font-size: 1.8rem; /* Date should usually be smaller for hierarchy */
   color: var(--text-sub);
-  margin-top: 4px !important; 
+  margin-top: 2px !important; 
 }
 .moon-percentage {
     font-size: 3rem;
@@ -87,14 +84,6 @@
   width: 100%;
 }
 
-.moon-header {
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  color: var(--text-main);
-  margin-bottom: 30px;
-  text-align: center;
-  font-weight: 400;
-}
 
 /* Visual Section */
 .lunar-visual-wrapper {
