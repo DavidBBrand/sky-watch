@@ -67,7 +67,7 @@
     inset 0 0 15px rgba(255, 255, 255, 0.03); /* Subtle inner bloom */
     
   transition: all 0.3s ease-in-out;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Datatype', monospace;
 }
 .weather-details-grid:hover {
   background: rgba(165, 147, 9, 0.066);
@@ -96,10 +96,11 @@
   font-size: 6rem;
 }
 .detail-item .value {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--text-main);
     font-weight: 500;
     margin-top: 4px;
+    font-family: 'Datatype', monospace;
 }
 .weather-loading-pulse {
     animation: pulse 2s infinite ease-in-out;

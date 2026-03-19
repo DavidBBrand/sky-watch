@@ -158,10 +158,10 @@ async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
     if not api_key:
         return {"error": "API Key missing", "details": "Check Render Environment Variables"}
 
-# Notice I moved unitGroup=us to be the very first parameter after the '?'
+# unitGroup=us gives us Fahrenheit, mph, inHg, etc. Adjust as needed for metric.
     url = (
         f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
-        f"{lat},{lon}?unitGroup=us&elements=temp,windspeed,humidity,pressure,visibility,conditions&include=current&key={api_key}&contentType=json"
+        f"{lat},{lon}?unitGroup=us&key={api_key}&include=current"
     )
 
     try:
@@ -178,12 +178,19 @@ async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
             if not current:
                 return {"error": "Data structure mismatch"}
 
-            # Map Visual Crossing fields to your existing Frontend names
+            raw_pressure = current.get("pressure", 0)
+
+            if raw_pressure and raw_pressure > 100:
+                # Calculation: hPa * 0.02953 = inHg
+                display_pressure = round(raw_pressure * 0.02953, 2)
+            else:
+                display_pressure = raw_pressure
+
             return {
                 "temp": round(current.get("temp")),
                 "windspeed": current.get("windspeed"),
                 "humidity": current.get("humidity"),
-                "pressure": current.get("pressure"),
+                "pressure": display_pressure,
                 "visibility": current.get("visibility"),
                 "description": current.get("conditions"),
                 "timezone": data.get("timezone", "UTC")

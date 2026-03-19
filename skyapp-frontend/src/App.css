@@ -71,8 +71,8 @@
 
 }
 .main-title {
-  font-family: 'Share Tech Mono', sans-serif;
-  font-size: 3.2rem; /* Slightly larger for the new name */
+  font-family: 'Datatype', monospace;
+  font-size: 3.8rem; /* Slightly larger for the new name */
   letter-spacing: 1px;
   margin:10px 0;
   text-transform: uppercase;
@@ -104,7 +104,7 @@
 }
 
 .sub-title {
-  font-family: 'Share Tech Mono', sans-serif;
+  font-family: 'Datatype', monospace;
   font-size: 1.4rem; /* Slightly larger for the new name */
   margin: 2px 0;
   letter-spacing: 1px;
@@ -147,9 +147,9 @@
 .card-title {
     font-size: 1.4rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0px;
     font-weight: 400;
-    font-family: 'Share Tech Mono', monospace;
+    font-family: 'Datatype', monospace;
     margin: 10px 0 10px;
     color: var(--text-main);
     opacity: 0.92;
@@ -175,7 +175,7 @@
     font-size: 1rem;
     text-transform: uppercase;
     font-weight: 400;
-    font-family: 'Share Tech Mono', monospace;
+    font-family: 'Datatype', monospace;
     margin: 10px 0 10px;
     color: var(--text-main);
     opacity: 0.88;
@@ -198,7 +198,7 @@
 .glow-sub2 {
 
     font-weight: 400;
-    font-family: 'Share Tech Mono', monospace;
+    font-family: 'Datatype', monospace;
     margin: 10px 0 10px;
     color: var(--text-main);
     opacity: 0.88;
@@ -410,7 +410,7 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
   margin-top: 40px;
   color: var(--text-sub);
   font-weight: 600;
-  font-family:'Courier New', monospace !important;
+  font-family:'Datatype', monospace !important;
 }
 
 

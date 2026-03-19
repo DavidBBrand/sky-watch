@@ -99,11 +99,11 @@
 .radar-direction {
   position: absolute;
   color: var(--accent-color);
-  font-family: "Share Tech Mono";
+  font-family:'Datatype', monospace;
   text-shadow: 0.25px 0.25px 0.5px #000;
   z-index: 10;
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .radar-label {
@@ -235,7 +235,7 @@
 .starlink-card .stats-row .stat-value {
     color: var(--accent-color);
     font-size: 1.5rem !important; /* Force the size */
-    font-family: 'Courier New', monospace; 
+    font-family: 'Datatype', monospace; 
     font-weight: 400;
     line-height: 1;
     display: block;

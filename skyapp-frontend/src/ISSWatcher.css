@@ -27,7 +27,7 @@
 
 /* Specific fix for the 'nearby' animation glow */
 .iss-distance-text {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Datatype', monospace;
   /* Lower the spread of the drop-shadow for Night Mode */
   filter: drop-shadow(0 0 3px var(--separator-glow));
   animation: tactical-flicker 4s ease-in-out infinite;
@@ -100,7 +100,7 @@
   color: var(--accent-color2);
   font-weight: 500;
   margin-top: 12px;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Datatype', monospace;
 }
 
 /* 6. Layout & Iframe */

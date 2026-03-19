@@ -37,7 +37,7 @@
   color: var(--text-main);
   font-size: 1.2rem;
   font-weight: 500;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Datatype', monospace;
 }
 .moon-container {
   display: flex;
@@ -120,7 +120,7 @@
 
 }
 .milestone-date {
-    font-family: 'Archivo Narrow', sans-serif;
+    font-family: 'Datatype', monospace;
     font-size: 1.2rem;
   
 }
