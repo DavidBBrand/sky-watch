@@ -148,24 +148,26 @@ def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86)):
         "planets": planet_data
     }
 
+
 @app.get("/weather")
-@cache_sky_data(ttl_seconds=900) # Cache for 15 mins to stay super safe
+@cache_sky_data(ttl_seconds=300)  # Cache for 15 mins to stay super safe
 async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
     # Best practice: Put this in Render Env Variables as WEATHER_API_KEY
     api_key = os.getenv("WEATHER_API_KEY")
-    
+
     if not api_key:
         return {"error": "API Key missing", "details": "Check Render Environment Variables"}
-    
+
+# Notice I moved unitGroup=us to be the very first parameter after the '?'
     url = (
         f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
-        f"{lat},{lon}?unitGroup=us&key={api_key}&contentType=json&include=current"
+        f"{lat},{lon}?unitGroup=us&elements=temp,windspeed,humidity,pressure,visibility,conditions&include=current&key={api_key}&contentType=json"
     )
 
     try:
         async with httpx.AsyncClient(follow_redirects=True) as client:
             response = await client.get(url, timeout=15.0)
-            
+
             if response.status_code != 200:
                 print(f"Weather Provider Error: {response.status_code}")
                 return {"error": f"API Status {response.status_code}"}
@@ -189,6 +191,7 @@ async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
     except Exception as e:
         print(f"Visual Crossing Connection Error: {e}")
         return {"error": "Connection Timeout"}
+
 
 @app.get("/moon-details")
 @cache_sky_data(ttl_seconds=120)  # Caches for 2 minutes

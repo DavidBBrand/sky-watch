@@ -36,18 +36,33 @@ function App() {
     return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
   };
 
-  const getLiveLocalTime = () => {
-    if (!weatherData || !weatherData.utc_offset) return "--:--";
-    const now = new Date();
-    const utcTimestamp = now.getTime() + now.getTimezoneOffset() * 60000;
-    const remoteTime = new Date(utcTimestamp + weatherData.utc_offset * 1000);
-    return remoteTime.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true
-    });
+  // const getLiveLocalTime = () => {
+  //   if (!weatherData || !weatherData.utc_offset) return "--:--";
+  //   const now = new Date();
+  //   const utcTimestamp = now.getTime() + now.getTimezoneOffset() * 60000;
+  //   const remoteTime = new Date(utcTimestamp + weatherData.utc_offset * 1000);
+  //   return remoteTime.toLocaleTimeString([], {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //     hour12: true
+  //   });
+  // };
+const getLiveLocalTime = () => {
+    // Visual Crossing provides 'timezone' (e.g., "America/New_York")
+    if (!weatherData || !weatherData.timezone) return "--:--";
+    
+    try {
+      return new Date().toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: weatherData.timezone, // This uses the provider's timezone string directly
+      });
+    } catch (e) {
+      console.error("Local Time Error:", e);
+      return "--:--";
+    }
   };
-
   // Sync Date with Timezone
   useEffect(() => {
     const targetTimeZone = weatherData?.timezone || "America/Chicago";
@@ -112,8 +127,7 @@ function App() {
       {/* SYSTEM STATUS OVERLAY */}
       {location.isInitial && (
         <div className="system-status-bar">
-          <span className="blink">●</span> INITIALIZING GLOBAL POSITIONING
-          SYSTEM...
+          <span className="blink">●</span> Initializing...
         </div>
       )}
       <button onClick={() => setIsNight(!isNight)} className="theme-toggle-btn">

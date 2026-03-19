@@ -1,6 +1,6 @@
 import "./Weather.css";
-import React, { useState, useEffect, useRef, memo } from "react"; 
-import { useLocation } from "./LocationContext.jsx"; 
+import React, { useState, useEffect, useRef, memo } from "react";
+import { useLocation } from "./LocationContext.jsx";
 import WeatherMap from "./WeatherMap.jsx";
 
 const Weather = memo(({ sun, onDataReceived, theme }) => {
@@ -113,17 +113,18 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
             </div>
             <div className="detail-item">
               <span className="label">Pressure</span>
-              <span className="value glow-sub2">{weather.pressure} hPa</span>
+              <span className="value glow-sub2">{weather.pressure} inHg</span>
             </div>
             <div className="detail-item">
               <span className="label">Visibility</span>
               <span className="value glow-sub2">
-                {(weather.visibility / 1000).toFixed(1)} km
+                {/* If using US units from Visual Crossing, visibility is already in Miles */}
+                {weather.visibility} mi
               </span>
             </div>
             <div className="detail-item">
               <span className="label">Wind</span>
-              <span className="value glow-sub2">{weather.windspeed} mph</span>
+              <span className="value glow-sub2">{weather.windspeed}mph</span>
             </div>
           </div>
 
