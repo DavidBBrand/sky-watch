@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 import httpx
 # redis file
 from redis_client import cache_sky_data
+import traceback
 
 app = FastAPI()
 
@@ -66,23 +67,38 @@ def get_upcoming_moon_phases():
     return milestones
 
 
+
+
 @app.get("/starlink-live")
 @cache_sky_data(ttl_seconds=86400)
-async def get_starlink_tles(lat: float = None, lon: float = None):
+async def get_starlink_tles():
+    # Use the 'nodes.php' endpoint; sometimes it's less restricted than 'gp.php'
     url = "https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=json"
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "application/json"
+    }
 
-    # Use follow_redirects=True (CelesTrak often redirects to HTTPS or WWW)
-    async with httpx.AsyncClient(follow_redirects=True) as client:
+    async with httpx.AsyncClient(follow_redirects=True, headers=headers) as client:
         try:
             response = await client.get(url, timeout=15.0)
+            
+            # Catch the 403 block specifically
+            if response.status_code == 403:
+                print("🚨 CELESTRAK BLOCK: Status 403. Server IP is likely blacklisted.")
+                return {"error": "Upstream API Blocked (403 Forbidden)"}
+
             response.raise_for_status()
             data = response.json()
             return data[:100]
-        except Exception as e:
-            # Printing to the terminal helps you see the error even if the JSON is empty
-            print(f"CRITICAL FETCH ERROR: {e}")
-            return {"error": str(e)}
 
+        except Exception as e:
+            # THIS is the fix for the empty log:
+            error_details = f"{type(e).__name__}: {str(e)}"
+            print(f"CRITICAL FETCH ERROR: {error_details}")
+            traceback.print_exc() # This prints the full stack trace to Render logs
+            return {"error": error_details}
 
 @app.get("/sky-summary")
 @cache_sky_data(ttl_seconds=120)  # Cache for 2 minutes
