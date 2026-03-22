@@ -10,16 +10,16 @@
 
 :root {
   --bg-color: #f5f3ef;
-  --mesh-2: rgb(208, 195, 177);
+  --mesh-2: rgb(238, 235, 230);
   --mesh-1: rgb(166, 196, 223);
-  --card-bg: rgba(130, 125, 120, 0.117);
+  --card-bg: rgba(60, 87, 168, 0.068);
   --card-border: rgba(62, 51, 35, 0.2); 
   --text-main: #181004;
   --text-sub: rgba(62, 51, 35, 0.7);
   --accent-color: #563c27eb;
   --accent-color2: rgb(106, 42, 18);
   --separator-glow: rgba(73, 51, 18, 0.097);
-  --separator-glow2: rgba(14, 98, 17, 0.698);
+  --separator-glow2: rgba(14, 63, 98, 0.42);
   --separator-glow3: rgba(151, 63, 15, 0.541);
 }
 
@@ -27,7 +27,7 @@
   --bg-color: rgba(15, 0, 21, 0.871);
   --mesh-1: hsla(220, 40%, 15%, 1);
   --mesh-2: hsla(260, 30%, 10%, 1);
-  --card-bg: rgba(15, 20, 30, 0.4);
+  --card-bg: rgba(42, 51, 75, 0.073);
   --card-border: rgba(255, 255, 255, 0.1);
   --text-main: #ffffff;
   --text-sub: rgba(255, 255, 255, 0.682);
@@ -172,9 +172,8 @@
 
 
 .glow-sub {
-    text-transform: uppercase;
     font-weight: 400;
-    font-family: 'Datatype', monospace;
+    font-family: 'Barlow Condensed', sans-serif;
     color: var(--text-main);
     opacity: 0.88;
     /*  Glass  Effect */
@@ -196,7 +195,7 @@
 .glow-sub2 {
 
     font-weight: 400;
-    font-family: 'Datatype', monospace;
+    font-family: 'Barlow Condensed', sans-serif;
     color: var(--text-main);
     opacity: 0.88;
     text-shadow: 
@@ -448,27 +447,80 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
 }
 
 
-
-/* uniform glass-card for all card components */
+/* 1. Base Glass Card Update */
 .glass-card {
+  position: relative; /* REQUIRED: Anchor for the glint */
+  overflow: hidden;    /* REQUIRED: Clips the glint to the border-radius */
   background: var(--card-bg);
   border: 0px solid var(--card-border);
   border-radius: 16px;
   padding: 12px;
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(2px); /* Fixed your "blue" typo here */
   -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blue(2px);
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
   height: 100%;
   box-sizing: border-box;
   transition: all 0.5s ease;
+}
+
+.glass-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%; 
+  width: 40%; /* Narrower beam feels more precise/less flashy */
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.02) 20%,
+    rgba(255, 255, 255, 0.15) 50%, /* Lowered opacity for a subtler look */
+    rgba(255, 255, 255, 0.02) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+  /* SNAP BACK: When the mouse leaves, it resets instantly without a reverse animation */
+  transition: none; 
+  z-index: 1;
+}
+.glass-card:hover {
+    box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.4),            /* Outer drop shadow for lift */
+    inset 0 0 12px 2px var(--separator-glow2); /* The Inset Green Glow */
+  
+  /* Brighten the border to match the inset glow */
+  border: 1px solid var(--separator-glow2); 
+  
+  /* Subtle lift to make the "glint" feel like it's moving in 3D space */
+  transform: translateY(-4px);
+  background: rgba(54, 106, 106, 0.03);
+}
+/* The "Slow & Weighted" Sweep */
+.glass-card:hover::after {
+  left: 150%;
+  /* 1.2s is the 'Goldilocks' zone for luxury UI. 
+     The cubic-bezier creates a slow entry and a lingering exit. */
+  transition: left 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0.1s; /* Short pause before the light "strikes" */
+  /* Combined Shadow: 1. Outer glow/depth, 2. Internal green rim light */
 
 }
 
-/*  active state adds  tactical red pulse to the entire card */
-/* 🚨 The Tactical Alert: Triggers when the internal ISSWatcher says 'nearby' */
+/* 4. Tactical Red Glint (Override for Alert Mode) */
+.glass-card:has(.nearby)::after {
+  background: linear-gradient(
+    to right,
+    rgba(201, 39, 6, 0) 0%,
+    rgba(201, 39, 6, 0.3) 50%, /* Bright red glint center */
+    rgba(201, 39, 6, 0) 100%
+  );
+}
+
+/* ... keep your existing :has(.nearby) and @keyframes below ... */
+
 .glass-card:has(.nearby) {
   border: 1.5px solid #c927067e !important; /* Force the border back on */
   background: rgba(201, 39, 6, 0.05); /* Very subtle red tint to the card */
@@ -486,12 +538,6 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
     box-shadow: 0 0 5px rgba(201, 39, 6, 0.1), inset 0 0 2px rgba(201, 39, 6, 0.05); 
   }
 }
-.glass-card:hover {
-box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.3),            /* Outer depth */
-    inset 0 0 10px var(--separator-glow2);   /* Inner edge lighting */
-  border-color: var(--separator-glow2);
-  background: rgba(54, 106, 66, 0.01);
-}
+
 
 

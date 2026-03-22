@@ -1,19 +1,22 @@
-.solar-title {
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--accent-color4);
-  margin-bottom: 10px;
-}
+.solar-item {
+    background: rgba(19, 82, 57, 0.126); 
+    font-family: 'Barlow Condensed', sans-serif;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    text-align: center;
+    transition: background 0.3s ease;
 
+}
 .solar-flex {
   display: flex;
-  gap: 24px;
+  gap: 32px;
 }
 
 .solar-time {
     font-size: 1.4rem;
-    font-weight: 200;
     color: var(--accent-color2);
+    font-family: 'Barlow Condensed', sans-serif;
 }
 
 .solar-label {

@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 5px; /* Pull the Moon visual up closer */
+  margin-bottom: 2px; /* Pull the Moon visual up closer */
   width: 100%;
 }
 
@@ -15,7 +15,6 @@
 
 /* 2. Style the "The Moon from" part */
 .moon-header-block .card-title {
-
   opacity: 0.7;
   text-transform: uppercase;
   margin-bottom: 2px !important;
@@ -28,6 +27,9 @@
   letter-spacing: -1px; /* Tighter look */
 }
 
+.perc {
+  font-weight: 500;
+}
 /* 4. Style the Date */
 .moon-header-block .date-display {
   display: block;
@@ -37,23 +39,26 @@
   margin-top: 2px !important; 
 }
 .moon-percentage {
-    font-size: 3rem;
+    font-size: 4rem;
     font-weight: 200;
-    margin: 10px 0;
+    margin: 0px 0;
     text-shadow: 0 0 6px var(--card-border);
 }
 
 
 .moon-details {
-  margin-top: 15px;
-  padding: 12px;
+  margin-top: 6px;
+  padding: 6px;
   border-radius: 12px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   background: rgba(255, 255, 255, 0.02); 
-  border: .8px solid var(--card-border);
   
+}
+.illumination-value {
+    font-size: 7.4rem;
+    font-family: 'Barlow Condensed', sans-serif;
 }
 
 

@@ -29,15 +29,17 @@ const SolarCycle = memo(({ sun, timezone }) => {
   return (
     <div className="solar-cycle-container">
       <div className="solar-flex">
-        <div className="planet-item" style={{ flex: 1 }}>
-          <span style={{ fontSize: "6.0rem" }} role="img" aria-label="sunrise">🌅</span>
-          <p className="solar-time">{formatTime(sun.sunrise)}</p>
-          <p className="solar-label glow-sub">SUNRISE</p>
+        <div className="solar-item" style={{ flex: 1 }}>
+          <div className="solar-label glow-sub2">Sunrise</div>
+          <span style={{ fontSize: "5.0rem" }} role="img" aria-label="sunrise">🌅</span>
+          <div className="solar-time">{formatTime(sun.sunrise)}</div>
+          
         </div>      
-        <div className="planet-item" style={{ flex: 1 }}>
-          <span style={{ fontSize: "6.0rem" }} role="img" aria-label="sunset">🌇</span>
-          <p className="solar-time">{formatTime(sun.sunset)}</p>
-          <p className="solar-label glow-sub">SUNSET</p>
+        <div className="solar-item" style={{ flex: 1 }}>
+          <div className="solar-label glow-sub2">Sunset</div>
+          <span style={{ fontSize: "5.0rem" }} role="img" aria-label="sunset">🌇</span>
+          <div className="solar-time">{formatTime(sun.sunset)}</div>
+          
         </div>
       </div>
     </div>

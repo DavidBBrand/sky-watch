@@ -90,10 +90,10 @@ const Moon = memo(({ date }) => {
           </svg>
         </div>
         <div className="text-center">
-          <h2 className="illumination-value glow-sub2">
+          <h2 className="glow-sub2 perc" style={{ fontSize: "3rem", marginTop: "6px", marginBottom: "6px"}}>
             {percentage?.toFixed(1)}%
           </h2>
-          <p className="illumination-label glow-sub">Illumination</p>
+          <p className="glow-sub2" style={{ fontSize: "1.5rem"}}>Illumination</p>
         </div>
       </div>
     );
@@ -120,22 +120,22 @@ const Moon = memo(({ date }) => {
 
           <div className="moon-stats-grid">
             <div className="text-left">
-              <p className="stat-label">
+              <div className="stat-label">
                 Altitude{" "}
                 {trend === "rising" ? "↑" : trend === "setting" ? "↓" : ""}
-              </p>
-              <h2 style={{ fontSize: "1.4rem" }} className={`glow-sub`}>
+              </div>
+              <div style={{ fontSize: "1.7rem" }} className={`glow-sub`}>
                 {moonData.altitude?.toFixed(1)}°
-              </h2>
+              </div>
             </div>
             <div className="text-right">
-              <p className="stat-label">Azimuth</p>
-              <p style={{ fontSize: "1.4rem" }} className="glow-sub">
+              <div className="stat-label">Azimuth</div>
+              <div style={{ fontSize: "1.7rem" }} className="glow-sub">
                 {moonData.azimuth?.toFixed(1)}°
-                <span style={{ fontSize: "1.4rem" }} className="glow-sub">
+                <span style={{ fontSize: "1.7rem" }} className="glow-sub">
                   ({getCompassDirection(moonData.azimuth)})
                 </span>
-              </p>
+              </div>
             </div>
           </div>
 

@@ -70,7 +70,9 @@ const Planets = memo(({ skyData }) => {
                     style={{
                       fontSize: "1.4rem",
                       fontWeight: "400",
-                      color: "var(--text-main)"
+                      color: "var(--text-main)",
+                      fontFamily: "Arial, sans-serif",
+                      marginBottom: "8px"
                     }}
                   >
                     {name}
@@ -95,7 +97,7 @@ const Planets = memo(({ skyData }) => {
                     // className="glow-sub2"
                     style={{
                       fontSize: "1.3rem",
-                      color:  isBelowHorizon ? "#ff4d4d" :"var(--separator-glow2)",
+                      color:  isBelowHorizon ? "#a34631" :"#4a95ae",
                       fontWeight: "800",
                     }}
                   >
@@ -103,7 +105,7 @@ const Planets = memo(({ skyData }) => {
                   </div>
                   <div>
                   <span className="distance">Distance: </span>
-                  <span className="glow-sub2">
+                  <span className="glow-sub2 distance-derple">
                     {info.distance_au} AU
                   </span>
                   </div>

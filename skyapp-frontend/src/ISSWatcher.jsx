@@ -119,12 +119,12 @@ const ISSWatcher = memo(({ onDistanceUpdate }) => {
       </div>
 
       <div className="distance-display-group">
-        <div className="glow-sub iss-distance-text" style={{  fontWeight: "500" }}>
+        <div className="glow-sub iss-distance-text distance-value">
           {distance
-            ? `${Math.round(distance).toLocaleString()} mi`
+            ? `${Math.round(distance).toLocaleString()} miles`
             : "SCANNING..."}
         </div>
-        <p className="location-subtext glow-sub" style={{ textTransform:'none'}}>from {name}</p>
+        <p className="location-subtext glow-sub" >from {name}</p>
       </div>
 
       <p className="telemetry-coords">

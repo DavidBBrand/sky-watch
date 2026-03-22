@@ -5,14 +5,14 @@
   text-align: center;
   color: var(--text-sub);
   font-size: 1.2rem;
-  text-transform: uppercase;
+
 }
 
 /* 2. Dynamic Distance Mileage Text (Radar & Tactical) */
 /* Update .distance-value to handle the standard display */
 .distance-value {
   font-size: 3rem; /* Slightly smaller than 5rem to avoid overflow */
-  font-weight: 600;
+  font-weight: 500;
   margin: 12px 0;
   color: var(--text-main);
   opacity: 0.9;
@@ -22,8 +22,8 @@
 
 /* Specific fix for the 'nearby' animation glow */
 .iss-distance-text {
-  font-family: 'Datatype', monospace;
-  font-size:4rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size:3.3rem;
 }
 
 /* 🌙 Night Mode Specific "Dimmer" */
@@ -78,7 +78,6 @@
 .location-subtext {
   font-size: 1.6rem;
   color: var(--text-sub);
-  text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0;
   font-family: 'Barlow Condensed';
