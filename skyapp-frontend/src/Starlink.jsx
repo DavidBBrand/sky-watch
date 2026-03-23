@@ -63,7 +63,7 @@ const Starlink = memo(() => {
                 // Proximity Alert logic
                 if (slantRangeMiles < 400) closeContact = true;
 
-                // Your existing radial positioning
+        
                 const r = (1 - lookAngles.elevation / (Math.PI / 2)) * 42;
                 const theta = lookAngles.azimuth - Math.PI / 2;
 
@@ -123,7 +123,7 @@ const Starlink = memo(() => {
             <span className="node-tooltip">
               <strong className="tooltip-name">{n.name}</strong>
               <br />
-              {n.distance} mi
+              <span style={{color: "var(--accent-color2)"}}>{n.distance} mi</span>
             </span>
           </div>
         ))}

@@ -3,17 +3,15 @@
   width: 88%;
   aspect-ratio: 1 / 1;
   margin: 30px auto;
-  background: rgba(0, 255, 42, 0.03); /* Slightly transparency tweak */
+  background: rgba(137, 134, 125, 0.03); 
   border-radius: 50%;
 
-  /* The Glow Effect */
+  /*  Glow Effect */
   border: 0.5px solid var(--separator-glow);
   box-shadow:
-    0 0 8px rgba(0, 255, 42, 0.2),
-    /* Soft outer spread */ inset 0 0 12px rgba(0, 255, 42, 0.1); /* Soft inner glow */
-
-  /* This creates the "Neon Tube" look */
-  filter: drop-shadow(0 0 2px var(--accent-color));
+    0 0 8px rgba(255, 213, 0, 0.1),
+    /* Soft outer spread */ inset 0 0 12px rgba(255, 221, 0, 0.1); /* Soft inner glow */
+  filter: drop-shadow(0 0 2px var(--accent-color4));
   animation: border-pulse 6s ease-in-out infinite;
 }
 
@@ -107,7 +105,7 @@
 }
 
 .radar-label {
-  font-size: 0.8rem;
+  font-size: 1rem;
   left: 52%;
   font-weight: bold;
 }
@@ -182,7 +180,7 @@
   bottom: 150%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(31, 21, 73, 0.95);
+  background: rgba(44, 42, 50, 0.95);
   color: var(--separator-glow2);
   padding: 4px 8px;
   border-radius: 4px;
