@@ -48,12 +48,19 @@
 
 .moon-details {
   margin-top: 6px;
-  padding: 6px;
+  padding: 18px;
   border-radius: 12px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 28px;
   background: rgba(255, 255, 255, 0.02); 
+    box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.1),            /* Outer depth */
+    0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
+    inset 0 0 10px var(--separator-glow2); /* Subtle inner bloom */
+    
+  transition: all 0.3s ease-in-out;
+  font-family: 'Barlow Condensed', sans-serif;
   
 }
 .illumination-value {
@@ -80,7 +87,6 @@
 .milestone-date {
   color: var(--text-main);
   font-size: 1.7rem;
-  font-family: 'Datatype', monospace;
 }
 .moon-container {
   display: flex;
@@ -175,9 +181,8 @@
 }
 
 .loading-text {
-  color: var(--text-main);
-  font-size: 0.8rem;
-  opacity: 0.6;
+  font-size: 1.4rem;
+  opacity: 0.9;
 }
 
 .signal-lost {

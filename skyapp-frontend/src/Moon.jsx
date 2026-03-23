@@ -101,18 +101,18 @@ const Moon = memo(({ date }) => {
 
   return (
     <div className="moon-container">
-      <div className="moon-container">
+      
         <div className="moon-header-block">
           <div className="glow-sub date-display">The Moon from</div>
           <div className="glow-sub location-name">{location.name}</div>
           <div className="glow-sub2 date-display">{date}</div>
         </div>
         {/* ... rest of the code */}
-      </div>
+      
 
       {loading ? (
         <div className="moon-loading-box">
-          <p className="loading-text">UPDATING...</p>
+          <p className="loading-text glow-sub">Updating...</p>
         </div>
       ) : moonData ? (
         <>

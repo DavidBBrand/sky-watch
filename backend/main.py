@@ -100,7 +100,7 @@ async def get_starlink_tles():
 
 @app.get("/sky-summary")
 @cache_sky_data(ttl_seconds=120)  # Cache for 2 minutes
-def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86)):
+async def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86)):
     ts = load.timescale()
     t = ts.now()
     # 1. MOON DATA
@@ -148,7 +148,7 @@ def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86)):
             "altitude": round(float(alt.degrees), 1),
             "azimuth": round(float(az.degrees), 1),
             "is_visible": bool(alt.degrees > 0),
-            "distance_au": round(float(distance.au), 3)
+            "distance_au": round(float(distance.au), 2)
         }
 
     return {
@@ -216,7 +216,7 @@ async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
 
 @app.get("/moon-details")
 @cache_sky_data(ttl_seconds=120)  # Caches for 2 minutes
-def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)):
+async def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)):
     ts = load.timescale()
     t = ts.now()
 

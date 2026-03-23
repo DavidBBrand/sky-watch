@@ -42,18 +42,18 @@
 }
 
 .weather-desc {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     margin: 0 auto;
 
 }
 
 .weather-details-grid {
   margin-top: 15px;
-  padding: 14px;
+  padding: 24px;
   border-radius: 18px;
   display: flex;
   flex-direction:row;
-  gap:12px;
+  gap:16px;
   margin-bottom: 8px;
   
   /* The Glass Effect */
@@ -61,15 +61,13 @@
 
 /* Safari support */
   
-  /* The Glow & Border */
-  border: 1px solid var(--card-border);
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.1),            /* Outer depth */
     0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
-    inset 0 0 15px rgba(255, 255, 255, 0.03); /* Subtle inner bloom */
+    inset 0 0 10px var(--separator-glow2); /* Subtle inner bloom */
     
   transition: all 0.3s ease-in-out;
-  font-family: 'Datatype', monospace;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 
 .detail-item {
@@ -92,9 +90,9 @@
 .detail-item .value {
     font-size: 1.4rem;
     color: var(--text-main);
-    font-weight: 500;
+    font-weight: 400;
     margin-top: 4px;
-    font-family: 'Datatype', monospace;
+    font-family: 'Barlow Condensed', sans-serif;
 }
 .weather-loading-pulse {
     animation: pulse 2s infinite ease-in-out;
@@ -166,7 +164,7 @@
   height: 200px;
   width: 100%;
   margin-top: 25px;
-  border-radius: 12px;
+  border-radius: 2rem;
   overflow: hidden;
   border: .5px solid var(--te);
   position: relative;

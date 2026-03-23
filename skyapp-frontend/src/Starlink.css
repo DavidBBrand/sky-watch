@@ -221,8 +221,9 @@
 .stat-caption {
   font-size: 2rem;
   color: var(--accent-color2);
-  text-transform: uppercase;
   margin: 0;
+  letter-spacing: 0px;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 .stat-value {
   color: var(--accent-color);

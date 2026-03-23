@@ -40,7 +40,7 @@ const Planets = memo(({ skyData }) => {
     <div>
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <div>
-          <h2 className="card-title">Planetary Telemetry</h2>
+          
           <div className="planet-grid">
             {Object.entries(planets).map(([name, info]) => {
               // Logic declared here requires { } and 'return' below
@@ -85,7 +85,8 @@ const Planets = memo(({ skyData }) => {
                   <div 
                     className="glow-sub2"
                     style={{
-                      fontSize: "1.3rem",
+                      fontSize: "1.4rem",
+                      fontFamily: "Barlow Condensed",
                       color: "var(--text-sub)",
                       marginTop: "8px",
                     }}
@@ -96,14 +97,15 @@ const Planets = memo(({ skyData }) => {
                   <div
                     // className="glow-sub2"
                     style={{
-                      fontSize: "1.3rem",
+                      fontSize: "1.4rem",
+                      fontFamily: "Barlow Condensed",
                       color:  isBelowHorizon ? "#a34631" :"#4a95ae",
-                      fontWeight: "800",
+                      fontWeight: "600",
                     }}
                   >
                     {info.altitude}° Alt
                   </div>
-                  <div>
+                  <div className="derp">
                   <span className="distance">Distance: </span>
                   <span className="glow-sub2 distance-derple">
                     {info.distance_au} AU

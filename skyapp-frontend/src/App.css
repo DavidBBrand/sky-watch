@@ -3,7 +3,7 @@
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -13,13 +13,13 @@
   --mesh-2: rgb(238, 235, 230);
   --mesh-1: rgb(166, 196, 223);
   --card-bg: rgba(60, 87, 168, 0.068);
-  --card-border: rgba(62, 51, 35, 0.2); 
+  --card-border: rgba(62, 51, 35, 0.2);
   --text-main: #181004;
   --text-sub: rgba(62, 51, 35, 0.7);
   --accent-color: #563c27eb;
   --accent-color2: rgb(106, 42, 18);
   --separator-glow: rgba(73, 51, 18, 0.097);
-  --separator-glow2: rgba(14, 63, 98, 0.42);
+  --separator-glow2: rgba(14, 63, 98, 0.32);
   --separator-glow3: rgba(151, 63, 15, 0.541);
 }
 
@@ -44,7 +44,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;  
+  align-items: center;
 }
 .logo-container {
   width: 72px;
@@ -55,23 +55,22 @@
   transition: background-image 0.3s ease-in-out;
   border-radius: 50%;
   margin: 0 auto;
-  margin-top: 6px; 
-  display: block; 
+  margin-top: 6px;
+  display: block;
 }
 
 .header-section {
   width: 100%;
-  max-width: 1300px; 
-  margin: 0 auto;    
+  max-width: 1300px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
   position: relative;
   z-index: 10;
-
 }
 .main-title {
-  font-family: 'Datatype', monospace;
+  font-family: "Datatype", monospace;
   font-size: 3.6rem; /* Slightly larger for the new name */
   letter-spacing: 2px;
   margin: 0px auto;
@@ -80,13 +79,13 @@
   color: var(--text-main);
   opacity: 0.89;
   /* 2. Glass  Effect */
-  text-shadow: 
-    0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
-    0 0 6px var(--separator-glow);      /* Theme-based glow */
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.3),
+    /* Top highlight */ 0 0 6px var(--separator-glow); /* Theme-based glow */
   /* semi-transparent 'cut-through' effect */
   background: linear-gradient(
-    to bottom, 
-    var(--text-main) 0%, 
+    to bottom,
+    var(--text-main) 0%,
     var(--text-sub) 100%
   );
   -webkit-background-clip: text;
@@ -95,8 +94,8 @@
   /* 4. Smooth theme transition */
   transition: all 0.5s ease-in-out;
   /* 1. Force hardware acceleration for smoother gradients */
-  transform: translateZ(0); 
-  
+  transform: translateZ(0);
+
   /* 2. Fix jagged edges on Chrome/Windows */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -104,7 +103,7 @@
 }
 
 .sub-title {
-  font-family: 'Datatype', monospace;
+  font-family: "Datatype", monospace;
   font-size: 1.4rem; /* Slightly larger for the new name */
   margin: 0px 0;
   letter-spacing: 0px;
@@ -113,14 +112,14 @@
   color: var(--text-main);
   opacity: 0.89;
   /* 2. Glass  Effect */
-  text-shadow: 
-    0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
-    0 0 6px var(--separator-glow);      /* Theme-based glow */
-  
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.3),
+    /* Top highlight */ 0 0 6px var(--separator-glow); /* Theme-based glow */
+
   /* semi-transparent 'cut-through' effect */
   background: linear-gradient(
-    to bottom, 
-    var(--text-main) 0%, 
+    to bottom,
+    var(--text-main) 0%,
     var(--text-sub) 100%
   );
   -webkit-background-clip: text;
@@ -142,78 +141,76 @@
 [data-theme="night"] .main-title {
   /* Night mode needs a brighter "inner light" glow */
   filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
-} 
+}
 
 .card-title {
-    font-size: 2rem;
-    text-transform: capitalize;
-    letter-spacing: -1px;
-    font-weight: 400;
-    font-family: 'Barlow Condensed', sans-serif;
-    margin: 0px 0 12px;
-    color: var(--text-main);
-    opacity: 0.92;
-    /* 2. Glass  Effect */
-    text-shadow: 
-      0 1px 1px rgba(212, 205, 205, 0.3), /* Top highlight */
-      0 0 6px var(--separator-glow);      /* Theme-based glow */
-    /* 3. Glass Depth */
-    background: linear-gradient(
-      to bottom, 
-      var(--text-main) 0%, 
-      var(--text-sub) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /* 4. Smooth theme transition */
-    transition: all 0.5s ease-in-out;
+  font-size: 2rem;
+  text-transform: capitalize;
+  letter-spacing: -1px;
+  font-weight: 400;
+  font-family: "Barlow Condensed", sans-serif;
+  margin: 0px 0 12px;
+  color: var(--text-main);
+  opacity: 0.92;
+  /* 2. Glass  Effect */
+  text-shadow:
+    0 1px 1px rgba(212, 205, 205, 0.3),
+    /* Top highlight */ 0 0 6px var(--separator-glow); /* Theme-based glow */
+  /* 3. Glass Depth */
+  background: linear-gradient(
+    to bottom,
+    var(--text-main) 0%,
+    var(--text-sub) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* 4. Smooth theme transition */
+  transition: all 0.5s ease-in-out;
 }
-
 
 .glow-sub {
-    font-weight: 400;
-    font-family: 'Barlow Condensed', sans-serif;
-    color: var(--text-main);
-    opacity: 0.88;
-    /*  Glass  Effect */
-    text-shadow: 
-      0 1px 1px rgba(255, 255, 255, 0.3), /* Top highlight */
-      0 0 4px var(--separator-glow);      /* Theme-based glow */
-    /*  Glass Depth */
-    background: linear-gradient(
-      to bottom, 
-      var(--text-main) 0%, 
-      var(--text-sub) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /*  Smooth theme transition */
-    transition: all 0.5s ease-in-out;
+  font-weight: 400;
+  font-family: "Barlow Condensed", sans-serif;
+  color: var(--text-main);
+  opacity: 0.88;
+  /*  Glass  Effect */
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.3),
+    /* Top highlight */ 0 0 4px var(--separator-glow); /* Theme-based glow */
+  /*  Glass Depth */
+  background: linear-gradient(
+    to bottom,
+    var(--text-main) 0%,
+    var(--text-sub) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /*  Smooth theme transition */
+  transition: all 0.5s ease-in-out;
 }
 .glow-sub2 {
-
-    font-weight: 400;
-    font-family: 'Barlow Condensed', sans-serif;
-    color: var(--text-main);
-    opacity: 0.88;
-    text-shadow: 
-      0 1px 1px rgba(255, 255, 255, 0.3), 
-      0px 0px 2px var(--separator-glow);      
-    background: linear-gradient(
-      to bottom, 
-      var(--text-main) 0%, 
-      var(--text-sub) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transition: all 0.5s ease-in-out;
-    transform: translateZ(0); 
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-family: "Barlow Condensed", sans-serif;
+  color: var(--text-main);
+  opacity: 0.88;
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.3),
+    0px 0px 2px var(--separator-glow);
+  background: linear-gradient(
+    to bottom,
+    var(--text-main) 0%,
+    var(--text-sub) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.5s ease-in-out;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .telemetry-info {
   display: flex;
@@ -223,52 +220,39 @@
   margin: 5px;
   text-align: center;
   color: var(--text-sub);
-  font-family: 'Datatype', monospace;
+  font-family: "Archivo Narrow", sans-serif;
   text-transform: uppercase;
   font-size: 1rem;
-  font-weight: 200; 
+  font-weight: 200;
   padding: 12px;
   margin-top: 6px;
-  background: rgba(15, 7, 126, 0.068);
-  backdrop-filter: blur(5px) brightness(1.1);
-  -webkit-backdrop-filter: blur(5px) brightness(1.1); /* Safari support */
+  background: rgba(15, 7, 126, 0.008);
+  backdrop-filter: blur(3px) brightness(1.1);
+  -webkit-backdrop-filter: blur(3px) brightness(1.1);
 
   /* The Glow & Border */
-  border: .8px solid var(--card-border);
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.1),            /* Outer depth */
-    0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
-    inset 0 0 15px rgba(255, 255, 255, 0.03);
-  
-  /* The Secret Sauce: The Etch */
-  text-shadow: 
-    0.5px 0.5px 0px rgba(0, 0, 0, 0.07),      /* Bottom-right: Deep cutout shadow */
-    -0.5px -0.5px 0px rgba(255, 255, 255, 0.05); /* Top-left: Subtle light catch */
-  border-radius: 50px;
-
+  border: 0.8px solid var(--card-border);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    /* Outer depth */ 0 0 14px rgba(255, 255, 255, 0.05),
+    /* Ambient outer glow */ inset 0 0 14px var(--separator-glow2);
+  border-radius: 2rem;
+  padding: 18px;
+  margin: 18px auto;
 }
 
-/* Individual spans inside the telemetry info */
 .telemetry-info span {
   font-weight: 400;
   transition: color 0.3s ease;
 }
 
-
-.telemetry-info span:hover {
-  color: var(--text-main);
-  text-shadow: 
-    1px 1px 0px rgba(0, 0, 0, 0.04),
-    0 0 6px rgba(255, 255, 255, 0.06);
-}
-
 .search-wrapper {
   width: 100%;
-  max-width: 600px; 
+  max-width: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 6px auto; 
+  margin: 6px auto;
   box-sizing: border-box;
   text-align: center;
   padding-left: 0;
@@ -277,7 +261,7 @@
 }
 
 /* 1. Consolidate into ONE class to stop the style-fighting */
-.search-wrapper input, 
+.search-wrapper input,
 .search-input-field {
   display: flex !important;
   align-items: center !important;
@@ -286,12 +270,12 @@
   width: 100%;
   max-width: 300px;
   margin: 0 auto;
-  font-size: 16px !important; 
-  line-height: 16px !important; 
-  padding: 0px 20px !important;   
+  font-size: 16px !important;
+  line-height: 16px !important;
+  padding: 0px 20px !important;
   text-transform: none !important;
   font-weight: 500;
-  text-align: center;  
+  text-align: center;
   border-radius: 25px;
   border: 1px solid var(--card-border);
   background: var(--glow-sub);
@@ -301,7 +285,10 @@
   outline: none;
   appearance: none;
   -webkit-appearance: none;
-  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .search-wrapper input::placeholder {
@@ -338,44 +325,70 @@
 .dashboard-grid {
   display: grid;
   gap: 6px;
-  padding: 12px; 
-  
+  padding: 12px;
+
   /* Switching to auto-fill keeps cards from stretching to fill the whole screen */
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  justify-content: center; 
-  
+  justify-content: center;
+
   width: 100%;
   max-width: 1300px; /* Forces cards to stay grouped in the center */
   margin: 0 auto;
   box-sizing: border-box;
 }
 
-.grid-span-2 { grid-column: span 2; }
-.grid-full-width { grid-column: 2; width: 600px;}
-
+.grid-span-2 {
+  grid-column: span 2;
+}
+.grid-full-width {
+  grid-column: 2;
+  width: 600px;
+}
 
 .theme-toggle-btn {
   /* Default Mobile Styles */
-  position: relative; 
+  position: relative;
   top: 0;
   right: 0;
   margin: 10px auto; /* Centered on mobile */
   display: block;
-  
   padding: 8px 16px;
   border-radius: 20px;
   border: 1px solid var(--card-border);
   background: var(--card-bg);
   color: var(--text-main);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(3px);
   font-weight: 600;
-  text-transform: uppercase;
-  font-size: .7rem;
+  font-size: 1rem;
   letter-spacing: 1px;
   transition: all 0.3s ease;
   z-index: 1000;
   width: fit-content;
   min-width: 140px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.4rem;
+  opacity: 0.92;
+  /* 2. Glass  Effect */
+  text-shadow:
+    0 1px 1px rgba(5, 55, 76, 0.16),
+    /* Top highlight */ 0 0 4px var(--separator-glow); /* Theme-based glow */
+  /* 3. Glass Depth */
+  background: linear-gradient(
+    to bottom,
+    var(--text-main) 0%,
+    var(--text-sub) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.2s ease-in-out;
+  word-spacing: .5rem;
+}
+.theme-toggle-btn:hover {
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.2),
+    inset 0 0 10px 12px var(--separator-glow2);
+  border: 1px solid var(--separator-glow2);
 }
 
 @media (max-width: 767px) {
@@ -384,11 +397,9 @@
   }
 }
 
-.theme-toggle-btn:hover {
-  background: var(--separator-glow2);
-  border-color: var(--accent-color);
-}
-img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
+img[src*="marker"],
+.leaflet-marker-icon,
+.mapboxgl-marker {
   display: none !important;
 }
 [data-theme="day"] .theme-toggle-btn {
@@ -397,8 +408,8 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
 
 [data-theme="night"] .theme-toggle-btn {
   box-shadow: 0 0 10px rgba(100, 149, 237, 0.3);
+  color: var(--text-main);
 }
-
 
 .copyright {
   font-size: 1.2rem;
@@ -406,17 +417,20 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
   margin-top: 40px;
   color: var(--text-sub);
   font-weight: 600;
-  font-family:'Datatype', monospace !important;
+  font-family: "Datatype", monospace !important;
 }
-
 
 /* Responsive Breakpoints */
 @media (max-width: 1050px) {
-  .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 700px) {
-  .dashboard-grid { grid-template-columns: 1fr; }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .map-layer {
@@ -442,62 +456,56 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
 }
 
 .time-display {
-  color:var(--accent-color4);
+  color: var(--accent-color4);
   text-shadow: rgba(4, 41, 150, 0.641) 0.5px 0.5px 0.5px;
 }
 
-
 /* 1. Base Glass Card Update */
 .glass-card {
-  position: relative; /* REQUIRED: Anchor for the glint */
-  overflow: hidden;    /* REQUIRED: Clips the glint to the border-radius */
+  position: relative;
+  overflow: hidden;
   background: var(--card-bg);
   border: 0px solid var(--card-border);
-  border-radius: 16px;
+  border-radius: 2rem;
   padding: 12px;
-  backdrop-filter: blur(2px); /* Fixed your "blue" typo here */
+  backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;
   height: 100%;
   box-sizing: border-box;
   transition: all 0.5s ease;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.2),
+    inset 0 0 10px 2px var(--separator-glow2);
+
+  /* Brighten the border to match the inset glow */
+  border: 1px solid var(--separator-glow2);
 }
 
 .glass-card::after {
   content: "";
   position: absolute;
   top: 0;
-  left: -150%; 
-  width: 40%; /* Narrower beam feels more precise/less flashy */
+  left: -150%;
+  width: 60%; /* Narrower beam feels more precise/less flashy */
   height: 100%;
   background: linear-gradient(
     to right,
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255, 0.02) 20%,
-    rgba(255, 255, 255, 0.15) 50%, /* Lowered opacity for a subtler look */
+    rgba(255, 255, 255, 0.15) 50%,
     rgba(255, 255, 255, 0.02) 80%,
     rgba(255, 255, 255, 0) 100%
   );
-  transform: skewX(-20deg);
+  transform: skewX(23deg); /* originally -20deg */
   pointer-events: none;
   /* SNAP BACK: When the mouse leaves, it resets instantly without a reverse animation */
-  transition: none; 
+  transition: none;
   z-index: 1;
 }
-.glass-card:hover {
-    box-shadow: 
-    0 12px 30px rgba(0, 0, 0, 0.4),            /* Outer drop shadow for lift */
-    inset 0 0 12px 2px var(--separator-glow2); /* The Inset Green Glow */
-  
-  /* Brighten the border to match the inset glow */
-  border: 1px solid var(--separator-glow2); 
-  
-  /* Subtle lift to make the "glint" feel like it's moving in 3D space */
-  transform: translateY(-4px);
-  background: rgba(54, 106, 106, 0.03);
-}
+
 /* The "Slow & Weighted" Sweep */
 .glass-card:hover::after {
   left: 150%;
@@ -506,7 +514,6 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
   transition: left 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   transition-delay: 0.1s; /* Short pause before the light "strikes" */
   /* Combined Shadow: 1. Outer glow/depth, 2. Internal green rim light */
-
 }
 
 /* 4. Tactical Red Glint (Override for Alert Mode) */
@@ -514,8 +521,8 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
   background: linear-gradient(
     to right,
     rgba(201, 39, 6, 0) 0%,
-    rgba(201, 39, 6, 0.3) 50%, /* Bright red glint center */
-    rgba(201, 39, 6, 0) 100%
+    rgba(201, 39, 6, 0.3) 50%,
+    /* Bright red glint center */ rgba(201, 39, 6, 0) 100%
   );
 }
 
@@ -529,15 +536,17 @@ img[src*="marker"], .leaflet-marker-icon, .mapboxgl-marker {
 }
 
 @keyframes card-alert-pulse {
-  0%, 100% { 
-    border-color: #c92706; 
-    box-shadow: 0 0 15px rgba(201, 39, 6, 0.6), inset 0 0 10px rgba(201, 39, 6, 0.2); 
+  0%,
+  100% {
+    border-color: #c92706;
+    box-shadow:
+      0 0 15px rgba(201, 39, 6, 0.6),
+      inset 0 0 10px rgba(201, 39, 6, 0.2);
   }
-  50% { 
-    border-color: rgba(201, 39, 6, 0.3); 
-    box-shadow: 0 0 5px rgba(201, 39, 6, 0.1), inset 0 0 2px rgba(201, 39, 6, 0.05); 
+  50% {
+    border-color: rgba(201, 39, 6, 0.3);
+    box-shadow:
+      0 0 5px rgba(201, 39, 6, 0.1),
+      inset 0 0 2px rgba(201, 39, 6, 0.05);
   }
 }
-
-
-

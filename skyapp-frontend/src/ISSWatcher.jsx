@@ -140,7 +140,7 @@ const ISSWatcher = memo(({ onDistanceUpdate }) => {
       ></iframe>
 
       {isNearby && (
-        <div className="proximity-alert">LOW ORBIT PROXIMITY ALERT</div>
+        <div className="proximity-alert">ISS NEARBY</div>
       )}
     </div>
   );

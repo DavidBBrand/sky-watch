@@ -117,8 +117,8 @@ const getLiveLocalTime = () => {
     return (
       <div className="loading-screen card-title">
         <div className="scanner"></div>
-        <h1>SKY WATCH SYSTEM INITIALIZING...</h1>
-        <p>WAITING FOR LOCATION FIX (GPS)...</p>
+          <div>SKY WATCH SYSTEM INITIALIZING...</div>
+          <div>WAITING FOR LOCATION FIX (GPS)...</div>
       </div>
     );
   }
@@ -147,7 +147,7 @@ const getLiveLocalTime = () => {
         </div>
 
         <div className="telemetry-info">
-          <span>{location.name}</span>
+          <span className="glow-sub2">{location.name}</span>
           <span>
             {Math.abs(location.lat).toFixed(2)}°{location.lat >= 0 ? "N" : "S"}{" "}
             / {Math.abs(location.lon).toFixed(2)}°

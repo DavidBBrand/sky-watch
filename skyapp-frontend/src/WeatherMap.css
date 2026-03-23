@@ -1,10 +1,11 @@
 
 .weather-map-wrapper {
-  height: 300px;
+  height: 250px;
   width: 100%;
-  border-radius: 12px;
+  border-radius: 2rem;
   overflow: hidden;
   position: relative;
+  margin:0.5rem auto;
   
   /* 1. Dark background for Night Mode */
   background-color: #0a0a0b;
@@ -67,5 +68,5 @@
   background-size: 100% 4px, 3px 100%;
   pointer-events: none;
   z-index: 1000;
-  opacity: 0.3;
+  opacity: 0.34;
 }

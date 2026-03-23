@@ -1,12 +1,16 @@
 .solar-item {
-    background: rgba(19, 82, 57, 0.126); 
-    font-family: 'Barlow Condensed', sans-serif;
-    border: 1px solid var(--card-border);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    text-align: center;
-    transition: background 0.3s ease;
-
+  background: rgba(19, 82, 57, 0.034);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 2rem;
+  text-align: center;
+  transition: background 0.3s ease;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 0 10px rgba(255, 255, 255, 0.05),
+    inset 0 0 12px var(--separator-glow2);
+  padding: 18px;
 }
 .solar-flex {
   display: flex;
@@ -14,11 +18,12 @@
 }
 
 .solar-time {
-    font-size: 1.4rem;
-    color: var(--accent-color2);
-    font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  color: var(--accent-color2);
+  font-family: "Barlow Condensed", sans-serif;
 }
 
 .solar-label {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
+  color: var(--text-main);
 }

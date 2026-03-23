@@ -37,28 +37,31 @@ const MapCard = memo(({ theme, skyData, date }) => {
               style={{
                 fontSize: "0.9rem",
                 letterSpacing: "3px",
-                color: "var(--text-sub)",
+                color: "var(--separator-glow2)",
                 opacity: 0.5
               }}
             >
-              CALCULATING SOLAR ARC...
+              Calculating Solar Arc...
             </p>
           </div>
         )}
       </div>
+      <div className="map-holder">
 
-      <img
-        src={mapUrl}
-        alt="Regional Telemetry Map"
-        key={currentStyle} 
-        style={{
-          width: "100%",
-          borderRadius: "12px",
-          display: "block",
-          transition: "opacity 0.5s ease",
-          marginTop: "20px",}}
-        // loading="eager"
-      />
+        <img
+          src={mapUrl}
+          alt="Regional Telemetry Map"
+          key={currentStyle} 
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: "12px",
+            display: "block",
+            transition: "opacity 0.5s ease",
+            }}
+          // loading="eager"
+        />
+      </div>
     </div>
   );
 });

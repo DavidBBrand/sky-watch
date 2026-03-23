@@ -1,62 +1,66 @@
 /* The Grid Container */
 .planet-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;  
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
 /* Individual Planet Boxes */
 .planet-item {
-    background: rgba(0, 0, 0, 0.05); 
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    text-align: center;
-    transition: background 0.3s ease;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 2rem;
+  text-align: center;
+  transition: background 0.3s ease;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    /* Outer depth */ 0 0 10px rgba(255, 255, 255, 0.05),
+    /* Ambient outer glow */ inset 0 0 12px var(--separator-glow2); /* Subtle inner bloom */
 
 }
 
 /* Status Tags */
 .status-tag {
-    font-size: 1rem;
-    padding: 2px 8px;
-    border-radius: 4px;
-    text-transform: uppercase;
+  font-size: 1rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
 }
 
-/* Keep the Green for visibility, but soften the background */
-.status-visible { 
-    background: rgba(74, 222, 128, 0.096); 
-    color: #23753acf; /* Darker green for Day Mode readability */
-    font-family: 'Barlow Condensed';
-    border: 1px solid green;
-    opacity: 0.78;
-   
+
+.status-visible {
+  background: rgba(74, 222, 128, 0.096);
+  color: #23753acf; /* Darker green for Day Mode readability */
+  font-family: "Barlow Condensed";
+  border: 1px solid green;
+  opacity: 0.78;
 }
 
-/* Night Mode Adjustment for Visibility Text */
-[data-theme='night'] .status-visible {
-    color: #4ade80; /* Brighter neon green for Night Mode */
+
+[data-theme="night"] .status-visible {
+  color: #4ade80; 
 }
 
-.status-set { 
-    background: rgba(169, 3, 3, 0.128); 
-    color: var(--text-sub);
-    opacity: 0.78;
-    font-size: 1rem;
-    font-family: 'Barlow Condensed';
-    border: 1px solid red;
+.status-set {
+  background: rgba(169, 3, 3, 0.128);
+  color: var(--text-sub);
+  opacity: 0.78;
+  font-size: 1rem;
+  font-family: "Barlow Condensed";
+  border: 1px solid red;
 }
 
 .distance {
-    color: var(--accent-color2);
-    font-size: 1.2rem;
-    font-family: 'Barlow Condensed';
-    text-transform: uppercase;
-    letter-spacing:1px;
+  color: var(--accent-color2);
+  font-size: 1.2rem;
+  font-family: "Barlow Condensed";
+  text-transform: uppercase;
 }
 
 .distance-derple {
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 1.2rem;
-
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.2rem;
+}
+.derp {
+    margin: 6px auto;
 }

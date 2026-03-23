@@ -25,12 +25,12 @@
   font-family: 'Barlow Condensed', sans-serif;
   font-size:3.3rem;
 }
-
 /* 🌙 Night Mode Specific "Dimmer" */
 [data-theme="night"] .distance-value {
   /* Reduce the glow intensity significantly */
   text-shadow: 0 0 4px var(--separator-glow);
-  opacity: 0.8;
+  opacity: 0.88;
+  letter-spacing:2px;
 }
 
 /* 3. Proximity Alert Text */
@@ -78,7 +78,6 @@
 .location-subtext {
   font-size: 1.6rem;
   color: var(--text-sub);
-  letter-spacing: 1px;
   margin: 0;
   font-family: 'Barlow Condensed';
 }
@@ -87,7 +86,7 @@
   font-size: 1.4rem;
   color: var(--accent-color2);
   margin-top: 12px;
-  font-family: 'Datatype', monospace;
+  font-family: 'Barlow Condensed', sans-serif;
   
 }
 
@@ -108,10 +107,11 @@
 .iss-map-frame {
   width: 100%;
   max-width: 370px;
-  height: 200px;
-  border-radius: 6px;
+  height: 242px;
+  border-radius: 2rem;
   border: none;
   margin-top: 24px;
+  margin-bottom: 8px;
   filter: invert(90%) hue-rotate(180deg) brightness(0.8); 
 }
 
