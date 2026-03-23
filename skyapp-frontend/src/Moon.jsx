@@ -93,7 +93,7 @@ const Moon = memo(({ date }) => {
           <h2 className="glow-sub2 perc" style={{ fontSize: "3rem", marginTop: "6px", marginBottom: "6px"}}>
             {percentage?.toFixed(1)}%
           </h2>
-          <p className="glow-sub2" style={{ fontSize: "1.5rem"}}>Illumination</p>
+          <div className="glow-sub2" style={{ fontSize: "1.5rem"}}>Illumination</div>
         </div>
       </div>
     );
