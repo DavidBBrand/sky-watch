@@ -212,33 +212,23 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 .telemetry-info {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px; /* Increased slightly for better visual breathing room */
-  margin: 5px;
+  gap: 12px;
   text-align: center;
-  color: var(--text-sub);
-  font-family: "Archivo Narrow", sans-serif;
-  text-transform: uppercase;
-  font-size: 1rem;
-  font-weight: 200;
-  padding: 12px;
-  margin-top: 6px;
+  width: calc(100% - 24px); 
+  box-sizing: border-box; 
+  padding: 12px; 
+  margin: 10px auto; 
   background: rgba(15, 7, 126, 0.008);
-  backdrop-filter: blur(3px) brightness(1.1);
-  -webkit-backdrop-filter: blur(3px) brightness(1.1);
-
-  /* The Glow & Border */
   border: 0.8px solid var(--card-border);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.1),
-    /* Outer depth */ 0 0 14px rgba(255, 255, 255, 0.05),
-    /* Ambient outer glow */ inset 0 0 14px var(--separator-glow2);
   border-radius: 2rem;
-  padding: 18px;
-  margin: 18px auto;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.1), 
+    inset 0 0 14px var(--separator-glow2);
 }
 
 .telemetry-info span {
@@ -416,8 +406,8 @@ img[src*="marker"],
   opacity: 0.88;
   margin-top: 40px;
   color: var(--text-sub);
-  font-weight: 600;
-  font-family: "Datatype", monospace !important;
+  font-weight: 200;
+  font-family: "Barlow Condensed", sans-serif !important;
 }
 
 /* Responsive Breakpoints */
@@ -456,8 +446,9 @@ img[src*="marker"],
 }
 
 .time-display {
-  color: var(--accent-color4);
+  color: var(--accent-color2);
   text-shadow: rgba(4, 41, 150, 0.641) 0.5px 0.5px 0.5px;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 
 /* 1. Base Glass Card Update */
@@ -465,7 +456,6 @@ img[src*="marker"],
   position: relative;
   overflow: hidden;
   background: var(--card-bg);
-  border: 0px solid var(--card-border);
   border-radius: 2rem;
   padding: 12px;
   backdrop-filter: blur(2px);
@@ -481,7 +471,7 @@ img[src*="marker"],
     inset 0 0 10px 2px var(--separator-glow2);
 
   /* Brighten the border to match the inset glow */
-  border: 1px solid var(--separator-glow2);
+  border: 0px solid var(--separator-glow2);
 }
 
 .glass-card::after {

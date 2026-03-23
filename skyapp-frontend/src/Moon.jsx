@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, memo } from "react";
-import { useLocation } from "./LocationContext.jsx"; // 1. Use Context
+import { useLocation } from "./LocationContext.jsx"; 
 import "./Moon.css";
 
 //  Wrap in memo to prevent unmounting when App theme changes

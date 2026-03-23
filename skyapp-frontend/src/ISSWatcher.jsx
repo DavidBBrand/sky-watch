@@ -124,13 +124,13 @@ const ISSWatcher = memo(({ onDistanceUpdate }) => {
             ? `${Math.round(distance).toLocaleString()} miles`
             : "SCANNING..."}
         </div>
-        <p className="location-subtext glow-sub" >from {name}</p>
+        <div className="location-subtext glow-sub" >from {name}</div>
       </div>
 
-      <p className="telemetry-coords">
-        LAT: {parseFloat(issPos.lat).toFixed(2)}  |  LON:{" "}
-        {parseFloat(issPos.lon).toFixed(2)}
-      </p>
+      <div className="telemetry-coords">
+        LAT: <span className="glow-sub2"> {parseFloat(issPos.lat).toFixed(2)} </span> |  LON:{" "}
+        <span className="glow-sub2">{parseFloat(issPos.lon).toFixed(2)}</span>
+      </div>
 
       <iframe
         className="iss-map-frame"

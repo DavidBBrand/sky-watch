@@ -14,7 +14,7 @@
 }
 .solar-flex {
   display: flex;
-  gap: 32px;
+  gap: 20px;
 }
 
 .solar-time {
@@ -25,5 +25,6 @@
 
 .solar-label {
   font-size: 1.8rem;
+  font-weight: 500;
   color: var(--text-main);
 }

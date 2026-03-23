@@ -147,8 +147,8 @@ const getLiveLocalTime = () => {
         </div>
 
         <div className="telemetry-info">
-          <span className="glow-sub2">{location.name}</span>
-          <span>
+          <span className="glow-sub">{location.name}</span>
+          <span className="glow-sub">
             {Math.abs(location.lat).toFixed(2)}°{location.lat >= 0 ? "N" : "S"}{" "}
             / {Math.abs(location.lon).toFixed(2)}°
             {location.lon >= 0 ? "E" : "W"}
@@ -156,12 +156,12 @@ const getLiveLocalTime = () => {
           <span className="time-display">
             Solar Time: {getLocalSolarTime()}
           </span>
-          <span>
-            UTC OFFSET: {location.lon >= 0 ? "+" : ""}
+          <span className="glow-sub">
+            UTC Offset: {location.lon >= 0 ? "+" : ""}
             {(location.lon / 15).toFixed(1)} HRS
           </span>
           <span className="time-display">
-            LOCAL TIME: {weatherData ? getLiveLocalTime() : "--:--"}
+            Local Time: {weatherData ? getLiveLocalTime() : "--:--"}
           </span>
           {skyData?.sun?.phase && <GoldenHour sunData={skyData.sun} />}
         </div>
