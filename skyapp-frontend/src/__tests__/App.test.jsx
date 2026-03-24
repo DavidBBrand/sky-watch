@@ -25,7 +25,7 @@ test('renders Sky Watch title and toggles theme', () => {
   expect(titleElement).toBeInTheDocument();
 
   // 2. Check Theme Toggle
-  const toggleBtn = screen.getByRole('button', { name: /Night Mode|Day Mode/i });
+  const toggleBtn = screen.getByRole('button', { name: /🌙 Night Mode|☀️ Day Mode/i });
   fireEvent.click(toggleBtn);
   
   // Verify if data-theme attribute changes on the document
