@@ -2,6 +2,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { expect, test } from 'vitest';
 import App from '../App';
 import { LocationProvider } from '../LocationContext';
+import { vi } from 'vitest';
+
+// This "mocks" Leaflet so it doesn't try to render real map graphics during tests
+vi.mock('react-leaflet', () => ({
+  MapContainer: ({ children }) => <div data-testid="map">{children}</div>,
+  TileLayer: () => null,
+  Marker: () => null,
+  Popup: () => null,
+}));
 
 test('renders Sky Watch title and toggles theme', () => {
   render(
