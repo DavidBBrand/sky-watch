@@ -38,14 +38,12 @@ const baseTileUrl = isNight
         attributionControl={false}
         style={{ height: "100%", width: "100%" }}      
       >
-        {/* Layer 1: The Land */}
-        <TileLayer url={baseTileUrl} />
-        
-        {/* Layer 2: The Clouds */}
+        {/* Land */}
+        <TileLayer url={baseTileUrl} />        
+        {/* Clouds */}
         <TileLayer 
           url={cloudsUrl} 
         />
-
         <RecenterMap lat={lat} lon={lon} />
       </MapContainer>
       <div className="map-overlay-scan" />

@@ -36,19 +36,8 @@ function App() {
     return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
   };
 
-  // const getLiveLocalTime = () => {
-  //   if (!weatherData || !weatherData.utc_offset) return "--:--";
-  //   const now = new Date();
-  //   const utcTimestamp = now.getTime() + now.getTimezoneOffset() * 60000;
-  //   const remoteTime = new Date(utcTimestamp + weatherData.utc_offset * 1000);
-  //   return remoteTime.toLocaleTimeString([], {
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //     hour12: true
-  //   });
-  // };
 const getLiveLocalTime = () => {
-    // Visual Crossing provides 'timezone' (e.g., "America/New_York")
+    // Visual Crossing 
     if (!weatherData || !weatherData.timezone) return "--:--";
     
     try {
@@ -56,7 +45,7 @@ const getLiveLocalTime = () => {
         hour: "2-digit",
         minute: "2-digit",
         hour12: true,
-        timeZone: weatherData.timezone, // This uses the provider's timezone string directly
+        timeZone: weatherData.timezone, 
       });
     } catch (e) {
       console.error("Local Time Error:", e);
@@ -91,7 +80,7 @@ const getLiveLocalTime = () => {
 
   // Global Sky Data Fetch
   useEffect(() => {
-    // 1. ADD THIS GUARD: If we don't have coordinates, don't fetch anything
+   
     if (location.lat === null) return;
 
     const controller = new AbortController();
@@ -112,7 +101,7 @@ const getLiveLocalTime = () => {
 
     fetchSkyData();
     return () => controller.abort();
-  }, [location.lat, location.lon]); // This only fires once lat changes from null
+  }, [location.lat, location.lon]); // fires once lat changes from null
   if (location.lat === null) {
     return (
       <div className="loading-screen card-title">
