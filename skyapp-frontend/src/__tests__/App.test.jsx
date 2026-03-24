@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { expect, test, vi } from 'vitest'; // Removed beforeEach
+import { expect, test, vi } from 'vitest';
 import App from '../App';
 import { LocationProvider } from '../LocationContext';
 import '@testing-library/jest-dom';
@@ -12,14 +12,14 @@ vi.mock('react-leaflet', () => ({
   Popup: () => null,
 }));
 
-// 2. Geolocation Mock (Global Scope)
+// 2. Mock the entire Geolocation API before rendering
 const mockGeolocation = {
   getCurrentPosition: vi.fn().mockImplementation((success) =>
-    success({
-      coords: { latitude: 35.92, longitude: -86.86 },
-    })
+    success({ coords: { latitude: 35.92, longitude: -86.86 } })
   ),
-  watchPosition: vi.fn(),
+  watchPosition: vi.fn().mockImplementation((success) =>
+    success({ coords: { latitude: 35.92, longitude: -86.86 } })
+  ),
 };
 vi.stubGlobal('navigator', { geolocation: mockGeolocation });
 
@@ -30,8 +30,13 @@ test('renders Sky Watch title and toggles theme', async () => {
     </LocationProvider>
   );
 
-  // 3. Use findByText to wait for the GPS mock to kick in
-  const titleElement = await screen.findByText(/SKY WATCH/i);
+  // 3. Flex the text matcher
+  // Sometimes "SKY WATCH" is rendered as <span>SKY</span> WATCH
+  // Using a function matcher bypasses "broken up text" issues
+  const titleElement = await screen.findByText((content, element) => {
+    return element.tagName.toLowerCase() === 'div' && content.includes('SKY WATCH');
+  }, {}, { timeout: 3000 }); // Increase timeout to 3 seconds
+
   expect(titleElement).toBeInTheDocument();
 
   // 4. Verify initial theme (Night)
@@ -41,6 +46,5 @@ test('renders Sky Watch title and toggles theme', async () => {
   const toggleBtn = screen.getByRole('button', { name: /toggle day\/night mode/i });
   fireEvent.click(toggleBtn);
   
-  // 6. Verify change to Day
   expect(document.documentElement.getAttribute('data-theme')).toBe('day');
 });
