@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { expect, test, vi } from 'vitest';
 import App from '../App';
-import { LocationProvider } from '../LocationContext';
 import '@testing-library/jest-dom';
 
 // 1. Mock Leaflet
@@ -12,31 +11,23 @@ vi.mock('react-leaflet', () => ({
   Popup: () => null,
 }));
 
-// 2. Mock the entire Geolocation API before rendering
-const mockGeolocation = {
-  getCurrentPosition: vi.fn().mockImplementation((success) =>
-    success({ coords: { latitude: 35.92, longitude: -86.86 } })
-  ),
-  watchPosition: vi.fn().mockImplementation((success) =>
-    success({ coords: { latitude: 35.92, longitude: -86.86 } })
-  ),
-};
-vi.stubGlobal('navigator', { geolocation: mockGeolocation });
+// 2. MOCK THE LOCATION CONTEXT DIRECTLY
+// This stops the fetch() calls that are crashing with "Access Denied"
+vi.mock('../LocationContext', () => ({
+  LocationProvider: ({ children }) => <div>{children}</div>,
+  useLocation: () => ({
+    location: { latitude: 35.92, longitude: -86.86 },
+    loading: false, // Force loading to false immediately
+    error: null,
+    address: 'Franklin, TN'
+  }),
+}));
 
 test('renders Sky Watch title and toggles theme', async () => {
-  render(
-    <LocationProvider>
-      <App />
-    </LocationProvider>
-  );
+  render(<App />); // No Provider needed because we mocked the whole module
 
-  // 3. Flex the text matcher
-  // Sometimes "SKY WATCH" is rendered as <span>SKY</span> WATCH
-  // Using a function matcher bypasses "broken up text" issues
-  const titleElement = await screen.findByText((content, element) => {
-    return element.tagName.toLowerCase() === 'div' && content.includes('SKY WATCH');
-  }, {}, { timeout: 3000 }); // Increase timeout to 3 seconds
-
+  // 3. Simple matcher is fine now because loading is forced to false
+  const titleElement = await screen.findByText(/SKY WATCH/i);
   expect(titleElement).toBeInTheDocument();
 
   // 4. Verify initial theme (Night)
@@ -46,5 +37,6 @@ test('renders Sky Watch title and toggles theme', async () => {
   const toggleBtn = screen.getByRole('button', { name: /toggle day\/night mode/i });
   fireEvent.click(toggleBtn);
   
+  // 6. Verify change to Day
   expect(document.documentElement.getAttribute('data-theme')).toBe('day');
 });
