@@ -40,3 +40,34 @@ pip install -r requirements.txt
 
 uvicorn main:app --reload
 
+## 🛰️ System Architecture
+
+```mermaid
+graph TD
+    subgraph Frontend [React Frontend - Vite]
+        UI[App.jsx / Dashboard UI]
+        LC[LocationContext - GPS/Address]
+        TC[ThemeContext - Night/Day Mode]
+        Map[Leaflet - Star/ISS Map]
+    end
+
+    subgraph Backend [FastAPI - Python]
+        API[Main API Endpoints]
+        SF[Skyfield - Ephemeris Engine]
+        Redis[(Redis Cache)]
+    end
+
+    subgraph External [External Data]
+        NASA[NASA JPL/DE421 Data]
+        ReverseGeo[Reverse Geocoding API]
+    end
+
+    %% Interactions
+    LC -->|Lat/Lon| UI
+    UI -->|GET /sky-summary| API
+    API -->|Check Cache| Redis
+    Redis -->|Miss| SF
+    SF -->|Orbital Math| NASA
+    SF -->|Result| API
+    API -->|JSON Data| UI
+    UI -->|Render Planets/Moon| Map
