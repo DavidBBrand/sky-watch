@@ -30,13 +30,13 @@ const SolarCycle = memo(({ sun, timezone }) => {
     <div className="solar-cycle-container">
       <div className="solar-flex">
         <div className="solar-item" style={{ flex: 1 }}>
-          <div className=" card-title">Sunrise</div>
+          <div className=" card-title mini-card">Sunrise</div>
           <span style={{ fontSize: "5.0rem" }} role="img" aria-label="sunrise">🌅</span>
           <div className="solar-time">{formatTime(sun.sunrise)}</div>
           
         </div>      
         <div className="solar-item" style={{ flex: 1 }}>
-          <div className="card-title">Sunset</div>
+          <div className="card-title mini-card">Sunset</div>
           <span style={{ fontSize: "5.0rem" }} role="img" aria-label="sunset">🌇</span>
           <div className="solar-time">{formatTime(sun.sunset)}</div>
           

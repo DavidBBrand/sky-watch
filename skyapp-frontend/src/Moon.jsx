@@ -93,7 +93,7 @@ const Moon = memo(({ date }) => {
           <h2 className="card-title perc" style={{ fontSize: "4rem", marginTop: "6px", marginBottom: "6px"}}>
             {percentage?.toFixed(1)}%
           </h2>
-          <div className="card-title" style={{ fontSize: "2.5rem"}}>Illumination</div>
+          <div className="card-title" style={{ fontSize: "2.2rem"}}>Illumination</div>
         </div>
       </div>
     );

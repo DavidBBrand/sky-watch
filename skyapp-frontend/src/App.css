@@ -27,14 +27,14 @@
   --bg-color: rgba(5, 1, 21, 0.871);
   --mesh-1: rgb(2, 18, 28);
   --mesh-2: rgb(10, 4, 42);
-  --card-bg: rgba(42, 51, 75, 0.073);
+  --card-bg: rgba(95, 108, 96, 0.114);
   --card-border: rgba(255, 255, 255, 0.1);
   --text-main: #ffffff;
   --text-sub: rgba(255, 255, 255, 0.682);
   --accent-color: #1ca42e;
   --accent-color2: rgb(245, 151, 1);
   --separator-glow: rgba(36, 197, 63, 0.948);
-  --separator-glow2: rgba(62, 222, 86, 0.572);
+  --separator-glow2: rgba(62, 222, 86, 0.365);
   --separator-glow3: rgba(14, 100, 6, 0.675);
 }
 
@@ -222,7 +222,7 @@
   box-sizing: border-box; 
   padding: 12px; 
   margin: 10px auto; 
-  background: rgba(169, 167, 181, 0.18);
+  background: rgba(169, 167, 181, 0.08);
   border: 0.8px solid var(--card-border);
   border-radius: 2rem;
   box-shadow: 
@@ -472,7 +472,7 @@ img[src*="marker"],
     inset 0 0 10px 2px var(--separator-glow2);
 
   /* Brighten the border to match the inset glow */
-  border: 0px solid var(--separator-glow2);
+  border: 1px solid var(--separator-glow2);
 }
 
 .glass-card::after {
