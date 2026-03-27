@@ -96,12 +96,12 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
         {weather ? getWeatherIcon(weather.description) : "☀️"}
       </div>
 
-      <h4 className="weather-temp glow-sub">
+      <h4 className="weather-temp card-title">
         {weather ? `${Math.round(weather.temp)}°F` : "--°F"}
       </h4>
 
-      <p className="weather-desc glow-sub">
-        {weather ? weather.description : "Synchronizing..."}
+      <p className="weather-desc card-title">
+        {weather ? weather.description : "Fetching Weather..."}
       </p>
       <div className="separator-line" />
       {weather && (

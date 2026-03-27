@@ -22,16 +22,9 @@
 
 /* Specific fix for the 'nearby' animation glow */
 .iss-distance-text {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size:3.3rem;
+  font-size:3.5rem;
 }
-/* 🌙 Night Mode Specific "Dimmer" */
-[data-theme="night"] .distance-value {
-  /* Reduce the glow intensity significantly */
-  text-shadow: 0 0 5px var(--separator-glow);
-  opacity: 0.88;
-  letter-spacing:2px;
-}
+
 
 /* 3. Proximity Alert Text */
 .proximity-alert {

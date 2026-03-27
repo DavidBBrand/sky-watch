@@ -74,7 +74,7 @@ const LocationSearch = memo(({ onLocationChange }) => {
         let detectedName = "Current Location";
 
         try {
-          // 2. We wait for the "Reverse Geocode" fetch to finish
+          //  wait for the "Reverse Geocode" fetch to finish
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
             {
@@ -94,7 +94,7 @@ const LocationSearch = memo(({ onLocationChange }) => {
         } catch (err) {
           console.error("Geocoding failed, using fallback.", err);
         } finally {
-          // 3. IMPORTANT: Only call the update ONCE everything above is done
+          // Only call the update ONCE everything above is done
           onLocationChange({
             lat: latitude,
             lon: longitude,
@@ -108,7 +108,7 @@ const LocationSearch = memo(({ onLocationChange }) => {
         console.error(error);
       },
       { enableHighAccuracy: true, timeout: 5000 }
-    ); // Added accuracy/timeout options
+    ); 
   };
   return (
     <div className="search-wrapper">
@@ -128,7 +128,9 @@ const LocationSearch = memo(({ onLocationChange }) => {
           inputMode="search"
           style={{
             cursor: loading ? "wait" : "text",
-            opacity: loading ? 0.7 : 1
+            opacity: loading ? 0.7 : 1,
+            fontFamily: 'Roboto Condensed', 
+            
           }}
         />
 

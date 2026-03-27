@@ -23,26 +23,27 @@ const MapCard = memo(({ theme, skyData, date }) => {
       <div
         style={{
           minHeight: "120px",
-          display: "flex",
+          display: "grid",
           alignItems: "center",
           justifyContent: "center"
         }}
       >
+        <div className="card-title">Solar Arc</div>
         {skyData?.sun ? (
           <SolarCycle sun={skyData.sun} date={date} timezone={location.timezone} />
         ) : (
           <div className="solar-loader">
             <div className="scanning-line"></div>
-            <p
+            <div
               style={{
-                fontSize: "0.9rem",
+                fontSize: "1.5rem",
                 letterSpacing: "3px",
-                color: "var(--separator-glow2)",
+                color: "var(--separator-glow)",
                 opacity: 0.5
               }}
             >
               Calculating Solar Arc...
-            </p>
+            </div>
           </div>
         )}
       </div>

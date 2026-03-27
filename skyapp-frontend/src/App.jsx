@@ -186,8 +186,8 @@ const getLiveLocalTime = () => {
           {skyData ? (
             <Planets skyData={skyData} />
           ) : (
-            <div className="loading-card">
-              <p>Synchronizing with {location.name}...</p>
+            <div className="loading-card glow-sub2">
+              <div>Synchronizing with {location.name}...</div>
             </div>
           )}
         </div>

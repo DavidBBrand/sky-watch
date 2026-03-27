@@ -10,7 +10,7 @@
     0 1px 3px rgba(0, 0, 0, 0.1),
     0 0 10px rgba(255, 255, 255, 0.05),
     inset 0 0 12px var(--separator-glow2);
-  padding: 18px;
+  padding: 12px;
 }
 .solar-flex {
   display: flex;
@@ -20,11 +20,15 @@
 .solar-time {
   font-size: 1.4rem;
   color: var(--accent-color2);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 .solar-label {
   font-size: 1.8rem;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--text-main);
+}
+
+.mini-card {
+  font-size: 2rem;
 }

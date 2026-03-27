@@ -90,10 +90,10 @@ const Moon = memo(({ date }) => {
           </svg>
         </div>
         <div className="text-center">
-          <h2 className="glow-sub2 perc" style={{ fontSize: "3rem", marginTop: "6px", marginBottom: "6px"}}>
+          <h2 className="card-title perc" style={{ fontSize: "4rem", marginTop: "6px", marginBottom: "6px"}}>
             {percentage?.toFixed(1)}%
           </h2>
-          <div className="glow-sub2" style={{ fontSize: "1.5rem"}}>Illumination</div>
+          <div className="card-title" style={{ fontSize: "2.2rem"}}>Illumination</div>
         </div>
       </div>
     );
@@ -103,16 +103,16 @@ const Moon = memo(({ date }) => {
     <div className="moon-container">
       
         <div className="moon-header-block">
-          <div className="glow-sub date-display">The Moon from</div>
+          <div className="glow-sub date-display">The Moon</div>
           <div className="glow-sub location-name">{location.name}</div>
           <div className="glow-sub date-display">{date}</div>
         </div>
-        {/* ... rest of the code */}
+        
       
 
       {loading ? (
         <div className="moon-loading-box">
-          <p className="loading-text glow-sub">Updating...</p>
+          <p className="loading-text glow-sub">Fetching Lunar Data...</p>
         </div>
       ) : moonData ? (
         <>
@@ -124,15 +124,16 @@ const Moon = memo(({ date }) => {
                 Altitude{" "}
                 {trend === "rising" ? "↑" : trend === "setting" ? "↓" : ""}
               </div>
-              <div style={{ fontSize: "1.7rem" }} className={`glow-sub`}>
+              <div style={{ fontSize: "1.7rem", fontfamily: "Roboto Condensed" }} className={`glow-sub`}>
                 {moonData.altitude?.toFixed(1)}°
               </div>
             </div>
             <div className="text-right">
               <div className="stat-label">Azimuth</div>
-              <div style={{ fontSize: "1.7rem" }} className="glow-sub">
+              <div style={{ fontSize: "1.7rem", fontFamily: "Roboto Condensed"
+               }} className="glow-sub">
                 {moonData.azimuth?.toFixed(1)}°
-                <span style={{ fontSize: "1.7rem" }} className="glow-sub">
+                <span style={{ fontSize: "1.7rem", fontFamily: "Roboto Condensed" }} className="glow-sub">
                   ({getCompassDirection(moonData.azimuth)})
                 </span>
               </div>

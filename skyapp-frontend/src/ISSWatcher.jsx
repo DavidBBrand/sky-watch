@@ -119,7 +119,7 @@ const ISSWatcher = memo(({ onDistanceUpdate }) => {
       </div>
 
       <div className="distance-display-group">
-        <div className="glow-sub iss-distance-text distance-value">
+        <div className="card-title iss-distance-text distance-value">
           {distance
             ? `${Math.round(distance).toLocaleString()} miles`
             : "Scanning..."}
@@ -128,8 +128,8 @@ const ISSWatcher = memo(({ onDistanceUpdate }) => {
       </div>
 
       <div className="telemetry-coords">
-        LAT: <span className="glow-sub2"> {parseFloat(issPos.lat).toFixed(2)} </span> |  LON:{" "}
-        <span className="glow-sub2">{parseFloat(issPos.lon).toFixed(2)}</span>
+        <div style={{letterSpacing: "1.2px"}}>Latitude: <span className="glow-sub2"> {parseFloat(issPos.lat).toFixed(2)} </span></div> <div>  Longitude:{" "}
+        <span className="glow-sub2">{parseFloat(issPos.lon).toFixed(2)}</span></div>
       </div>
 
       <iframe

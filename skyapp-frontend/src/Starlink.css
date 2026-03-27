@@ -1,6 +1,6 @@
 .radar-container {
   position: relative;
-  width: 88%;
+  width: 78%;
   aspect-ratio: 1 / 1;
   margin: 30px auto;
   background: rgba(137, 134, 125, 0.03); 
@@ -97,11 +97,12 @@
 .radar-direction {
   position: absolute;
   color: var(--accent-color);
-  font-family:'Datatype', monospace;
+  font-family:'Roboto Condensed', sans-serif;
   text-shadow: 0.25px 0.25px 0.5px #000;
   z-index: 10;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 0.4;
+
 }
 
 .radar-label {
@@ -207,8 +208,6 @@
 .stats-row {
   display: flex;
   justify-content: space-around;
-  margin-top: 15px;
-  border-top: 1px solid rgba(0, 255, 0, 0.1);
   padding-top: 10px;
 }
 .stat-group {
@@ -234,7 +233,7 @@
 .starlink-card .stats-row .stat-value {
     color: var(--accent-color);
     font-size: 1.5rem !important; /* Force the size */
-    font-family: 'Datatype', monospace; 
+    font-family: 'Roboto Condensed', sans-serif; 
     font-weight: 400;
     line-height: 1;
     display: block;
@@ -242,7 +241,6 @@
 
 .starlink-card .stats-row .stat-caption {
     font-size: 1.1rem;
-    
     letter-spacing: 1px;
 }
 
@@ -251,4 +249,8 @@
   box-shadow:
     0 0 20px rgba(172, 14, 3, 0.4),
     inset 0 0 15px rgba(255, 152, 0, 0.1) !important;
+}
+
+.radar-status {
+  font-size: 2rem;
 }

@@ -127,7 +127,7 @@ const Starlink = memo(() => {
             </span>
           </div>
         ))}
-        {loading && <div className="radar-status">LINKING...</div>}
+        {loading && <div className="radar-status glow-sub">Loading...</div>}
       </div>
 
       <div className="stats-row">
@@ -136,7 +136,7 @@ const Starlink = memo(() => {
           <p className="stat-value glow-sub">{nodes.length}</p>
         </div>
         <div className="stat-group" style={{ textAlign: "right" }}>
-          <p className="stat-caption">Observer ({location.name})</p>
+          <p className="stat-caption">Observer </p>
           <p className="stat-value glow-sub">
             {parseFloat(lat).toFixed(1)}°N{" "}
             {Math.abs(parseFloat(lon)).toFixed(1)}°W
