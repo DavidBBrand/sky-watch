@@ -97,12 +97,11 @@
 .radar-direction {
   position: absolute;
   color: var(--accent-color);
-  font-family:'Roboto Condensed', sans-serif;
+  font-family:'Share Tech', sans-serif;
   text-shadow: 0.25px 0.25px 0.5px #000;
   z-index: 10;
   pointer-events: none;
   opacity: 0.4;
-
 }
 
 .radar-label {
@@ -227,7 +226,7 @@
 .stat-value {
   color: var(--accent-color);
   font-weight: bold;
-  margin: 0;
+  margin-top: 8px;
 }
 /* Targeted selector to override App.css and any other component */
 .starlink-card .stats-row .stat-value {

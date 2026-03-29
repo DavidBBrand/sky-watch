@@ -51,5 +51,5 @@
       /* Ambient outer glow */ inset 0 0 14px var(--separator-glow2);
       border-radius: 2rem;
       padding:10px;
-      margin: 18px auto;
+      margin: 8px auto;
 }

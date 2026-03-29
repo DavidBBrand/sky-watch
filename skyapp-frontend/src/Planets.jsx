@@ -71,7 +71,7 @@ const Planets = memo(({ skyData }) => {
                       fontSize: "1.4rem",
                       fontWeight: "600",
                       color: "var(--text-main)",
-                      fontFamily: "Arial, sans-serif",
+                      fontFamily: "Share Tech, sans-serif",
                       marginBottom: "8px"
                     }}
                   >

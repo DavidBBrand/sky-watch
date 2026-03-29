@@ -106,8 +106,8 @@ const getLiveLocalTime = () => {
     return (
       <div className="loading-screen card-title">
         <div className="scanner"></div>
-          <div>SYSTEM INITIALIZING...</div>
-          <div>WAITING FOR LOCATION FIX (GPS)...</div>
+          <div>System Initializing...</div>
+          <div>Please click <strong>'Allow'</strong> to synchronize local telemetry</div>
       </div>
     );
   }
