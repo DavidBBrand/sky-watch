@@ -103,18 +103,18 @@ async def get_starlink_tles():
 async def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86)):
     ts = load.timescale()
     t = ts.now()
-    # 1. MOON DATA
+    # MOON DATA
     sun_obj, moon = eph['sun'], eph['moon']
     # Define location dynamically
     user_location = Topos(latitude_degrees=lat, longitude_degrees=lon)
     observer = earth + user_location
 
-    # 1. Get Sun's current Altitude
+    # Get Sun's current Altitude
     sun_astrometric = observer.at(t).observe(sun_obj)
     sun_alt, sun_az, _ = sun_astrometric.apparent().altaz()
     current_sun_alt = float(sun_alt.degrees)
 
-    # 2. Determine "Light Phase"
+    # Determine "Light Phase"
     # Golden Hour is roughly -4 to +6 degrees
     is_golden_hour = -4 <= current_sun_alt <= 6
 
@@ -124,13 +124,13 @@ async def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86))
     m = observer.at(t).observe(moon).apparent()
     illumination = m.fraction_illuminated(sun_obj)
 
-    # 2. SUNRISE/SUNSET (Dynamic Location)
+    # SUNRISE/SUNSET (Dynamic Location)
     t0 = ts.utc(t.utc_datetime().year,
                 t.utc_datetime().month, t.utc_datetime().day)
     t1 = ts.utc(t0.utc_datetime() + timedelta(days=1))
     times, events = almanac.find_discrete(
         t0, t1, almanac.sunrise_sunset(eph, user_location))
-    # 3. PLANET VISIBILITY
+    # PLANET VISIBILITY
     target_planets = {
         "Venus": eph['venus'],
         "Mars": eph['mars'],
@@ -220,18 +220,18 @@ async def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)
     ts = load.timescale()
     t = ts.now()
 
-    # Create the observer based on user input
+    # Create the observer based on user location input
     user_location = Topos(latitude_degrees=lat, longitude_degrees=lon)
     observer = earth + user_location
 
-    # 1. Calculate illumination
+    # Calculate illumination
     sun_obj, moon = eph['sun'], eph['moon']
     astrometric = observer.at(t).observe(moon)
     apparent = astrometric.apparent()
 
     illumination = apparent.fraction_illuminated(sun_obj)
 
-    # 2. NEW: Calculate Altitude and Azimuth
+    # Calculate Altitude and Azimuth
     alt, az, distance = apparent.altaz()
     # Get the 4 major upcoming phases
     milestones = get_upcoming_moon_phases()
