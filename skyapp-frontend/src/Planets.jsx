@@ -85,10 +85,11 @@ const Planets = memo(({ skyData }) => {
                   <div 
                     className="glow-sub2"
                     style={{
-                      fontSize: "1.4rem",
+                      fontSize: "1.2rem",
                       fontFamily: "Roboto Condensed",
                       color: "var(--text-sub)",
                       marginTop: "8px",
+                      letterSpacing: "-1.5px"
                     }}
                   >
                     {getCompassDirection(info.azimuth)} at {info.azimuth}° Az
@@ -96,10 +97,11 @@ const Planets = memo(({ skyData }) => {
                   
                   <div
                     style={{
-                      fontSize: "1.4rem",
+                      fontSize: "1.2rem",
                       fontFamily: "Roboto Condensed",
                       color:  isBelowHorizon ? "#a34631" :"#4a95ae",
                       fontWeight: "600",
+                      letterSpacing: "-1px"
                     }}
                   >
                     {info.altitude}° Alt
