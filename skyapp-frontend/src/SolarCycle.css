@@ -20,7 +20,8 @@
 .solar-time {
   font-size: 1.4rem;
   color: var(--accent-color2);
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Share tech", sans-serif;
+  letter-spacing: -1px;
 }
 
 .solar-label {

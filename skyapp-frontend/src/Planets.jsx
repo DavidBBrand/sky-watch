@@ -68,7 +68,7 @@ const Planets = memo(({ skyData }) => {
                   <div
                     className="glow-sub2"
                     style={{
-                      fontSize: "1.4rem",
+                      fontSize: "1.8rem",
                       fontWeight: "600",
                       color: "var(--text-main)",
                       fontFamily: "Share Tech, sans-serif",
