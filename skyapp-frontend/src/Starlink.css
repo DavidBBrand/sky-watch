@@ -2,17 +2,17 @@
   position: relative;
   width: 78%;
   aspect-ratio: 1 / 1;
-  margin: 30px auto;
-  background: rgba(137, 134, 125, 0.03); 
+  margin: 50px auto;
+  background: rgba(147, 186, 195, 0.10); 
   border-radius: 50%;
 
   /*  Glow Effect */
-  border: 0.5px solid var(--separator-glow);
+  border: 0.5px solid var(--accent-color);
   box-shadow:
     0 0 8px rgba(255, 213, 0, 0.1),
-    /* Soft outer spread */ inset 0 0 12px rgba(255, 221, 0, 0.1); /* Soft inner glow */
-  filter: drop-shadow(0 0 2px var(--accent-color4));
-  animation: border-pulse 6s ease-in-out infinite;
+    /* Soft outer spread */ inset 0 0 1px rgba(255, 221, 0, 0.1); 
+    /* Soft inner glow */
+  filter: drop-shadow(0 0 2px var(--accent-color));
 }
 
 .radar-scanner {
@@ -21,9 +21,6 @@
   height: 50%;
   top: 0;
   left: 0;
-
-  /* UPDATED: Conic gradient for a radar scanner trail */
-  /* solid color at 90deg (the leading edge) and fade back to 0deg */
   background: conic-gradient(
     from 270deg at 100% 100%,
     transparent 0%,
@@ -43,19 +40,8 @@
   }
   to {
     transform: rotate(360deg);
-  }
-}
-@keyframes border-pulse {
-  0% {
-    box-shadow: 0 0 12px rgba(0, 255, 42, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(0, 255, 42, 0.4);
-  }
-  100% {
-    box-shadow: 0 0 12px rgba(0, 255, 42, 0.2);
-  }
-}
+  } }
+
 
 /* 3. Geometry (Rings & Axes) */
 .radar-ring,
@@ -101,7 +87,7 @@
   text-shadow: 0.25px 0.25px 0.5px #000;
   z-index: 10;
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.77;
 }
 
 .radar-label {
@@ -123,7 +109,7 @@
 }
 
 .radar-direction {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 800;
 }
 .dir-n {
@@ -196,7 +182,7 @@
 }
 .node-tooltip strong {
   display: block;
-  color: #fff;
+  color: #b2aaaa;
   margin-bottom: 2px;
 }
 .radar-node:hover .node-tooltip {
@@ -217,39 +203,19 @@
   color:var(--accent-color2);
 }
 .stat-caption {
-  font-size: 2rem;
+  font-size: 1.6rem;
   color: var(--accent-color2);
   margin: 0;
-  letter-spacing: 0px;
-  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: -1pxpx;
+  font-family: 'Share Tech', sans-serif;
 }
 .stat-value {
   color: var(--accent-color);
-  font-weight: bold;
   margin-top: 8px;
-}
-/* Targeted selector to override App.css and any other component */
-.starlink-card .stats-row .stat-value {
-    color: var(--accent-color);
-    font-size: 1.5rem !important; /* Force the size */
-    font-family: 'Roboto Condensed', sans-serif; 
-    font-weight: 400;
-    line-height: 1;
-    display: block;
-}
-
-.starlink-card .stats-row .stat-caption {
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-}
-
-.radar-container.proximity-alert {
-  border-color: var(--text-sub) !important;
-  box-shadow:
-    0 0 20px rgba(172, 14, 3, 0.4),
-    inset 0 0 15px rgba(255, 152, 0, 0.1) !important;
+  font-size:1.6rem;
 }
 
 .radar-status {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
+  font-family: 'Share Tech', sans-serif;
 }

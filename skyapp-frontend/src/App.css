@@ -505,6 +505,8 @@ img[src*="marker"],
 
 .loading-card {
   color: var(--separator-glow2);
+  font-size:1.8rem;
+  font-family: 'Share tech', sans-serif;
 }
 
 .loading-screen {
