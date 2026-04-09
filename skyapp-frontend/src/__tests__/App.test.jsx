@@ -39,8 +39,13 @@ vi.stubGlobal('fetch', vi.fn(() =>
     json: () => Promise.resolve({ 
       sun: { 
         sunrise: "2026-04-09T06:22:00Z", 
-        sunset: "2026-04-09T19:15:00Z" 
-      } 
+        sunset: "2026-04-09T19:15:00Z",
+        phase: "Full Moon" // Added to satisfy GoldenHour check
+      },
+      planets: {
+        Mars: { altitude: "15.5", azimuth: "120.2" },
+        Venus: { altitude: "-5.0", azimuth: "250.1" }
+      }
     }),
   })
 ));
