@@ -3,15 +3,24 @@ import { expect, test, vi } from 'vitest';
 import App from '../App';
 import '@testing-library/jest-dom';
 
-// 1. Mock Leaflet
+
+// Mock react-leaflet entirely so it doesn't try to run map logic
 vi.mock('react-leaflet', () => ({
-  MapContainer: ({ children }) => <div data-testid="map">{children}</div>,
+  MapContainer: ({ children }) => <div data-testid="map-container">{children}</div>,
   TileLayer: () => null,
   Marker: () => null,
   Popup: () => null,
+  useMap: () => ({
+    setView: vi.fn(),
+  }),
 }));
 
-// 2. MOCK THE LOCATION CONTEXT DIRECTLY
+// Mock the Esri plugin if you're using it
+vi.mock('esri-leaflet', () => ({
+  basemapLayer: () => ({ addTo: vi.fn() }),
+}));
+
+//  MOCK THE LOCATION CONTEXT DIRECTLY
 // This stops the fetch() calls that are crashing with "Access Denied"
 vi.mock('../LocationContext', () => ({
   LocationProvider: ({ children }) => <div>{children}</div>,
@@ -24,14 +33,17 @@ vi.mock('../LocationContext', () => ({
 }));
 
 // Mock fetch before your tests
-global.fetch = vi.fn(() =>
+vi.stubGlobal('fetch', vi.fn(() =>
   Promise.resolve({
     ok: true,
     json: () => Promise.resolve({ 
-      sun: { sunrise: "2026-04-09T06:00:00Z", sunset: "2026-04-09T19:00:00Z" } 
+      sun: { 
+        sunrise: "2026-04-09T06:22:00Z", 
+        sunset: "2026-04-09T19:15:00Z" 
+      } 
     }),
   })
-);
+));
 
 test('renders Sky Watch title and toggles theme', async () => {
   render(<App />); // No Provider needed because we mocked the whole module
