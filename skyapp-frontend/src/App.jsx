@@ -68,29 +68,26 @@ function App() {
     }
   }, [location.lat, location.lon, weatherData?.timezone]);
   // theme sync
+
+  // App.jsx
   useEffect(() => {
-    if (skyData?.sun?.sunrise && skyData?.sun?.sunset) {
+    if (location.isInitial && skyData?.sun?.sunrise && skyData?.sun?.sunset) {
       const now = new Date();
       const sunrise = new Date(skyData.sun.sunrise);
       const sunset = new Date(skyData.sun.sunset);
 
-      // Convert everything to "minutes since midnight" for a clean numeric comparison
       const nowMins = now.getHours() * 60 + now.getMinutes();
       const sunriseMins = sunrise.getHours() * 60 + sunrise.getMinutes();
       const sunsetMins = sunset.getHours() * 60 + sunset.getMinutes();
 
       const shouldBeNight = nowMins < sunriseMins || nowMins > sunsetMins;
-
-      console.log(" FINAL THEME SYNC:", {
-        isNight: shouldBeNight,
-        nowMins,
-        sunriseMins,
-        sunsetMins
-      });
-
       setIsNight(shouldBeNight);
+
+      // Switch off isInitial so the user can manually toggle the theme
+      updateLocation({ ...location, isInitial: false });
     }
-  }, [skyData]);
+    // Add the missing dependencies here:
+  }, [skyData, location, updateLocation]);
 
   // This ensures the attribute is set even if skyData fails to load
   useEffect(() => {
