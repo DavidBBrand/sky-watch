@@ -23,6 +23,16 @@ vi.mock('../LocationContext', () => ({
   }),
 }));
 
+// Mock fetch before your tests
+global.fetch = vi.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve({ 
+      sun: { sunrise: "2026-04-09T06:00:00Z", sunset: "2026-04-09T19:00:00Z" } 
+    }),
+  })
+);
+
 test('renders Sky Watch title and toggles theme', async () => {
   render(<App />); // No Provider needed because we mocked the whole module
 

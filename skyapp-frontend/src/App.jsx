@@ -91,6 +91,14 @@ function App() {
       setIsNight(shouldBeNight);
     }
   }, [skyData]);
+
+  // This ensures the attribute is set even if skyData fails to load
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      isNight ? "night" : "day"
+    );
+  }, [isNight]);
   // Global Sky Data Fetch
   useEffect(() => {
     if (location.lat === null) return;
