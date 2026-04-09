@@ -3,6 +3,8 @@ import { expect, test, vi } from 'vitest';
 import App from '../App';
 import '@testing-library/jest-dom';
 
+//  Mock the system time to 12:00 PM
+vi.setSystemTime(new Date('2026-04-09T12:00:00Z'));
 
 // Mock react-leaflet entirely so it doesn't try to run map logic
 vi.mock('react-leaflet', () => ({
@@ -51,19 +53,20 @@ vi.stubGlobal('fetch', vi.fn(() =>
 ));
 
 test('renders Sky Watch title and toggles theme', async () => {
-  render(<App />); // No Provider needed because we mocked the whole module
+  render(<App />); 
 
-  // Simple matcher is fine now because loading is forced to false
+  // 1. Wait for the app to initialize and clear the loading screen
   const titleElement = await screen.findByText(/SKY WATCH/i);
   expect(titleElement).toBeInTheDocument();
 
-  // Verify initial theme (Night)
-  expect(document.documentElement.getAttribute('data-theme')).toBe('night');
+  // 2. Verify initial theme is DAY (because it is 12:00 PM in our mock)
+  // This proves your new solar-sync logic is working in the test!
+  expect(document.documentElement.getAttribute('data-theme')).toBe('day');
 
-  // Toggle Theme
-  const toggleBtn = screen.getByRole('button', { name: /toggle day\/night mode/i });
+  // 3. Toggle Theme to NIGHT
+  const toggleBtn = screen.getByRole('button', { name: /☀️ Day Mode/i });
   fireEvent.click(toggleBtn);
   
-  // Verify change to Day
-  expect(document.documentElement.getAttribute('data-theme')).toBe('day');
+  // 4. Verify it changed to NIGHT
+  expect(document.documentElement.getAttribute('data-theme')).toBe('night');
 });
