@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  telemetry-api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app  # Hot reload for dev
+    environment:
+      # This matches the variable name in your redis_client.py
+      - REDIS_URL=redis://cache:6379
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+    depends_on:
+      - cache
+
+  cache:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+      

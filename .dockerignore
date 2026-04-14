@@ -1,0 +1,8 @@
+# Ignore heavy local dev folders so they don't bloat the image
+backend/venv/
+backend/__pycache__/
+skyapp-frontend/node_modules/
+skyapp-frontend/dist/
+
+# DO NOT ignore .bsp files here, because Docker needs them to run!
+# (Keep them in .gitignore, but keep them OUT of .dockerignore)
