@@ -243,3 +243,10 @@ async def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)
         "azimuth": round(float(az.degrees), 2),
         "milestones": milestones
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    print("Initializing Sky Watch Telemetry Dashboard...")
+    # This allows you to run the server by typing 'python main.py'
+    uvicorn.run(app, host="0.0.0.0", port=8000)
