@@ -8,7 +8,6 @@ from skyfield.api import load, Topos
 from skyfield import almanac
 from datetime import datetime, timedelta
 import httpx
-# redis file
 from redis_client import cache_sky_data
 import traceback
 
@@ -94,9 +93,10 @@ async def get_starlink_tles():
             if backup_path.exists():
                 with open(backup_path, "r") as f:
                     data = json.load(f)
+                    # return only the last 100 entries to keep it consistent with the live fetch
                     return data[:100]
             
-            return {"error": "Satellite link offline. No backup available."}
+            return {"error": "Satellite link offline."}
 
 @app.get("/sky-summary")
 @cache_sky_data(ttl_seconds=120)  # Cache for 2 minutes
@@ -172,7 +172,7 @@ async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
     if not api_key:
         return {"error": "API Key missing", "details": "Check Render Environment Variables"}
 
-# unitGroup=us gives us Fahrenheit, mph, inHg, etc. Adjust as needed for metric.
+    # unitGroup=us gives us Fahrenheit, mph, inHg, etc. Adjust as needed for metric.
     url = (
         f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
         f"{lat},{lon}?unitGroup=us&key={api_key}&include=current"
@@ -236,7 +236,7 @@ async def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)
     # Get the 4 major upcoming phases
     milestones = get_upcoming_moon_phases()
 
-    # Return exactly what MoonTracker.jsx is looking for
+    # Return Moon details for Moon.jsx:
     return {
         "illumination": round(float(illumination * 100), 2),
         "altitude": round(float(alt.degrees), 2),
@@ -248,5 +248,5 @@ async def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)
 if __name__ == "__main__":
     import uvicorn
     print("Initializing Sky Watch Telemetry Dashboard...")
-    # This allows you to run the server by typing 'python main.py'
+    # allows you to run the server by typing 'python main.py'
     uvicorn.run(app, host="0.0.0.0", port=8000)

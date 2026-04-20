@@ -22,7 +22,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 6. Copy the rest of your project files
-# This includes main.py, redis_client.py, and your de421.bsp ephemeris file
+# This includes main.py, redis_client.py, and de421.bsp ephemeris file
 COPY . .
 
 # 7. Tell Docker that the container listens on port 8000
