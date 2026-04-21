@@ -71,8 +71,8 @@
 }
 
 .sub-title {
-  font-family: "Datatype", monospace;
-  font-size: 1.4rem; /* Slightly larger for the new name */
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 1.6rem; /* Slightly larger for the new name */
   margin: 0px 0;
   letter-spacing: 0px;
 

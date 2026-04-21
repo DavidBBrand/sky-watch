@@ -125,7 +125,7 @@ function App() {
         <div className="scanner"></div>
         <div>System Initializing...</div>
         <div>
-          Please click <strong>'Allow'</strong> to synchronize local telemetry
+          Location access required for observer coordinates. Please click <strong>'Allow'</strong>.
         </div>
       </div>
     );
