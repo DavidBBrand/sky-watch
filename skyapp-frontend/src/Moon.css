@@ -222,6 +222,6 @@
 
 .signal-lost {
   color: var(--accent-color2);
-  font-size: 0.8rem;
+  font-size: 2rem;
   text-align: center;
 }

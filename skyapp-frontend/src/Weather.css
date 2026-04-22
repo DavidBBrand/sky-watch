@@ -181,3 +181,7 @@
   mix-blend-mode: screen; 
   opacity: 0.81;
 }
+
+.error-msg {
+  font-size: 1.6rem;
+}

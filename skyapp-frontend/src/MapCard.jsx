@@ -32,14 +32,13 @@ const MapCard = memo(({ theme, skyData, date }) => {
         {skyData?.sun ? (
           <SolarCycle sun={skyData.sun} date={date} timezone={location.timezone} />
         ) : (
-          <div className="solar-loader">
+          <div className="solar-loader glow-sub2 ">
             <div className="scanning-line"></div>
             <div
               style={{
-                fontSize: "1.5rem",
-                letterSpacing: "3px",
-                color: "var(--separator-glow)",
-                opacity: 0.5
+                fontSize: "1.6rem",
+                letterSpacing: "1px",
+                opacity: 0.88
               }}
             >
               Calculating Solar Arc...

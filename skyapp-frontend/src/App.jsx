@@ -67,9 +67,8 @@ function App() {
       console.error("Timezone Error:", e);
     }
   }, [location.lat, location.lon, weatherData?.timezone]);
-  // theme sync
 
-  // App.jsx
+
   useEffect(() => {
     if (location.isInitial && skyData?.sun?.sunrise && skyData?.sun?.sunset) {
       const now = new Date();
@@ -210,7 +209,7 @@ function App() {
             <Planets skyData={skyData} />
           ) : (
             <div className="loading-card glow-sub2">
-              <div>Synchronizing with {location.name}...</div>
+              <div>Syncing with {location.name}...</div>
             </div>
           )}
         </div>
