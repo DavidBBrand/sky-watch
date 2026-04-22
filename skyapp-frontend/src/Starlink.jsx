@@ -79,7 +79,7 @@ const Starlink = memo(() => {
           }
         }
       } catch (e) {
-        /* skip */
+        console.log("An error has occured in Starlink satellite logic:", e);
       }
     });
 

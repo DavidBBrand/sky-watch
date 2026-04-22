@@ -1,10 +1,13 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useId } from "react";
 
 // Using memo so typing in the search box doesn't get interrupted
 // by other dashboard updates
 const LocationSearch = memo(({ onLocationChange }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // generates a unique ID for the input field to improve accessibility
+  const inputId = useId();
 
   // Inside LocationSearch.jsx
   const handleSearch = async (e) => {
@@ -116,7 +119,13 @@ const LocationSearch = memo(({ onLocationChange }) => {
         onSubmit={handleSearch}
         style={{ display: "flex", alignItems: "center", gap: "10px" }}
       >
+        {/* Added Label for Accessibility */}
+        <label htmlFor={inputId} className="sr-only" style={{ display: 'none' }}>
+          Search Location
+        </label>
         <input
+          id={inputId}
+          name="location-search"
           type="text"
           placeholder={loading ? "LOCATING..." : "Search location..."}
           value={query}
@@ -133,16 +142,6 @@ const LocationSearch = memo(({ onLocationChange }) => {
             
           }}
         />
-
-        {/* <button
-          type="button"
-          onClick={useGPS}
-          className="gps-action-btn" 
-          disabled={loading}
-          title="Use My Location"
-        >
-          <span style={{ fontSize: "1.1rem" }}>📍</span>
-        </button> */}
       </form>
     </div>
   );

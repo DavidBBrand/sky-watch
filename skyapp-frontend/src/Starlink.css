@@ -1,18 +1,18 @@
 .radar-container {
   position: relative;
-  width: 78%;
+  width: 82%;
   aspect-ratio: 1 / 1;
   margin: 50px auto;
-  background: rgba(147, 186, 195, 0.10); 
+  background: rgba(147, 186, 195, 0.088); 
   border-radius: 50%;
 
   /*  Glow Effect */
-  border: 0.5px solid var(--accent-color4);
+  border: 1px solid var(--accent-color);
   box-shadow:
-    0 0 8px rgba(255, 213, 0, 0.1),
-    /* Soft outer spread */ inset 0 0 1px rgba(255, 221, 0, 0.1); 
+    0 0 8px rgba(255, 213, 0, 0.144),
+    /* Soft outer spread */ inset 0 0 12px var(--separator-glow2); 
     /* Soft inner glow */
-  filter: drop-shadow(0 0 2px var(--accent-color3));
+  filter: drop-shadow(0 0 6px var(--separator-glow2));
 }
 
 .radar-scanner {
@@ -29,7 +29,7 @@
   );
 
   transform-origin: bottom right;
-  animation: radar-spin 4.6s linear infinite;
+  animation: radar-spin 3.4s linear infinite;
   z-index: 1;
   pointer-events: none;
   clip-path: circle(100% at bottom right);
@@ -85,10 +85,10 @@
   color: var(--accent-color2);
   font-family:'Share Tech', sans-serif;
   letter-spacing: -1px;
-  text-shadow: 0.25px 0.25px 0.5px #000;
+  text-shadow: 0.15px 0.15px 0.2px #000;
   z-index: 10;
   pointer-events: none;
-  opacity: 0.77;
+  opacity: 0.88;
 }
 
 .radar-center-anchor {
@@ -166,14 +166,15 @@
 /* 5. Nodes & Tooltips */
 .radar-node {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   background: var(--accent-color);
   border-radius: 50%;
   box-shadow: 0 0 2px var(--accent-color);
   transform: translate(-50%, -50%);
   z-index: 20;
-  animation: node-pulse 6s infinite ease-in-out;
+  // animation: node-pulse 1s infinite ease-in-out;
+  animation: blip-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 @keyframes node-pulse {
   0% {
@@ -181,13 +182,27 @@
     opacity: 1;
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.2);
-    opacity: 0.6;
-    box-shadow: 0 0 8px var(--accent-color);
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.8;
+    box-shadow: 0 0 3px var(--accent-color);
   }
   100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
+  }
+}
+@keyframes blip-ping {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(1.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
   }
 }
 .node-tooltip {
