@@ -3,13 +3,6 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 const LocationContext = createContext();
 
 export const LocationProvider = ({ children }) => {
-  // const [location, setLocation] = useState({
-  //   lat: 35.9251,
-  //   lon: -86.8689,
-  //   name: "Franklin, TN",
-  //   timezone: "America/Chicago",
-  //   isInitial: true // Flag for the "Acquiring GPS" message
-  // });
   const [location, setLocation] = useState({
     lat: null,
     lon: null,
