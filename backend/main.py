@@ -266,3 +266,4 @@ if __name__ == "__main__":
     print("Initializing Sky Watch Telemetry Dashboard...")
     # allows you to run the server by typing 'python main.py'
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
