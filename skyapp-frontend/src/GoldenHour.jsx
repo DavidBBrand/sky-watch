@@ -10,16 +10,16 @@ const GoldenHour = ({ sunData }) => {
 
   // Component-specific styles to ensure it doesn't "mess up" the header
   const badgeStyle = {
-    backgroundColor: isGolden ? "#e29e3e9c" : "#5b63b7",
-    color: "#fff",
+    backgroundColor: isGolden ? "#e49d39a4" : "#3a44b7",
+    color: "#ffffffeb",
     padding: "6px 16px",
-    borderRadius: "20px",
+    borderRadius: "2rem",
     fontSize: "0.75rem",
     fontWeight: "bold",
-    marginTop: "10px",
+    marginTop: "4px",
     display: "inline-flex",
     alignItems: "center",
-    gap: "8px",
+    gap: "6px",
     boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
     transition: "all 0.3s ease",
   };
@@ -27,8 +27,8 @@ const GoldenHour = ({ sunData }) => {
   return (
     <div className="status-badge-container" style={{ textAlign: "center", width: "100%" }}>
       <div className="status-badge" style={badgeStyle}>
-        <span style={{ fontSize: "1rem" }}>{isGolden ? "🌅" : "🌌"}</span>
-        <span>{sunData.phase.toUpperCase()} ACTIVE</span>
+        <span style={{ fontSize: "2.2rem" }}>{isGolden ? "🌅" : "🌌"}</span>
+        <span style={{ fontSize: "1rem", fontFamily: "Fredericka The Great"}}>{sunData.phase.toUpperCase()} ACTIVE</span>
       </div>
     </div>
   );
