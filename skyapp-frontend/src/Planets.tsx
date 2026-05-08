@@ -1,12 +1,35 @@
 import React, { memo } from "react"; 
 import "./Planets.css";
 
-const Planets = memo(({ skyData }) => { 
+// 1. Define telemetry shape for individual planets
+interface PlanetTelemetry {
+  altitude: string | number;
+  azimuth: string | number;
+  distance_au: string | number;
+  is_visible: boolean;
+}
+
+// 2. Define the global SkyData interface
+interface SkyData {
+  sun: {
+    phase: string;
+    [key: string]: any; // Flex for additional sun telemetry
+  };
+  planets: {
+    [key: string]: PlanetTelemetry;
+  };
+}
+
+interface PlanetsProps {
+  skyData: SkyData;
+}
+
+const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => { 
   if (!skyData) return null;
 
-  const { sun, planets } = skyData;
+  const { planets } = skyData;
 
-  const planetIcons = {
+  const planetIcons: Record<string, string> = {
     Mercury: "🌑",
     Venus: "🌕",
     Mars: "🔴",
@@ -16,8 +39,8 @@ const Planets = memo(({ skyData }) => {
     Neptune: "🔵"
   };
 
-  const getPlanetSymbol = (name) => {
-    const symbols = {
+  const getPlanetSymbol = (name: string): string => {
+    const symbols: Record<string, string> = {
       Venus: "♀",
       Mars: "♂",
       Jupiter: "♃",
@@ -29,8 +52,8 @@ const Planets = memo(({ skyData }) => {
     return symbols[name] || "•";
   };
 
-  const getCompassDirection = (az) => {
-    const azimuth = parseFloat(az);
+  const getCompassDirection = (az: string | number): string => {
+    const azimuth = typeof az === 'string' ? parseFloat(az) : az;
     const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     const index = Math.round(azimuth / 45) % 8;
     return directions[index];
@@ -44,7 +67,8 @@ const Planets = memo(({ skyData }) => {
           
           <div className="planet-grid">
             {Object.entries(planets).map(([name, info]) => {
-              const isBelowHorizon = parseFloat(info.altitude) < 0;
+              const alt = typeof info.altitude === 'string' ? parseFloat(info.altitude) : info.altitude;
+              const isBelowHorizon = alt < 0;
 
               return (
                 <div key={name} className="planet-item">
@@ -99,7 +123,7 @@ const Planets = memo(({ skyData }) => {
                     style={{
                       fontSize: "1.2rem",
                       fontFamily: "Roboto Condensed",
-                      color:  isBelowHorizon ? "#a34631" :"#4a95ae",
+                      color: isBelowHorizon ? "#a34631" : "#4a95ae",
                       fontWeight: "600",
                       letterSpacing: "-1px"
                     }}
@@ -107,10 +131,10 @@ const Planets = memo(({ skyData }) => {
                     {info.altitude}° Alt
                   </div>
                   <div className="derp">
-                  <span className="distance">Distance: </span>
-                  <span className="glow-sub2 distance-derple">
-                    {info.distance_au} AU
-                  </span>
+                    <span className="distance">Distance: </span>
+                    <span className="glow-sub2 distance-derple">
+                      {info.distance_au} AU
+                    </span>
                   </div>
                 </div>
               );
