@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "./LocationContext.jsx";
 import "./App.css";
-import Weather from "./Weather.jsx";
-import Planets from "./Planets.jsx";
+import Weather from "./Weather";
+import Planets from "./Planets";
 import LocationSearch from "./LocationSearch.jsx";
-import GoldenHour from "./GoldenHour.jsx";
-import MapCard from "./MapCard.tsx";
+import GoldenHour from "./GoldenHour";
+import MapCard from "./MapCard";
 import ISSWatcher from "./ISSWatcher.jsx";
 import Starlink from "./Starlink.jsx";
 import Moon from "./Moon.jsx";

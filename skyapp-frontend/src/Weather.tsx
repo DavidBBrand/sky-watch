@@ -1,16 +1,37 @@
 import "./Weather.css";
 import React, { useState, useEffect, useRef, memo } from "react";
-import { useLocation } from "./LocationContext.jsx";
-import WeatherMap from "./WeatherMap.jsx";
+import { useLocation } from "./LocationContext"; 
+import WeatherMap from "./WeatherMap";
 
-const Weather = memo(({ sun, onDataReceived, theme }) => {
-  // 1. Grab location from Context
+// 1. Define the shape of the Weather data from your API
+interface WeatherData {
+  temp: number;
+  description: string;
+  humidity: number;
+  pressure: number;
+  visibility: number;
+  windspeed: number;
+  timezone?: string;
+  error?: boolean;
+}
+
+// 2. Define the Component Props
+interface WeatherProps {
+  sun: any; // You can refine this to SunData if you've exported that interface
+  onDataReceived: (data: WeatherData) => void;
+  theme: "day" | "night";
+}
+
+const Weather: React.FC<WeatherProps> = memo(({ sun, onDataReceived, theme }) => {
   const { location } = useLocation();
   const { lat, lon } = location;
 
-  const [weather, setWeather] = useState(null);
-  const [error, setError] = useState(false);
-  const onDataReceivedRef = useRef(onDataReceived);
+  // 3. State is now strictly typed
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [error, setError] = useState<boolean>(false);
+  
+  // Type the ref to match the onDataReceived function signature
+  const onDataReceivedRef = useRef<(data: WeatherData) => void>(onDataReceived);
 
   useEffect(() => {
     onDataReceivedRef.current = onDataReceived;
@@ -20,15 +41,14 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
     let isMounted = true;
 
     const fetchWeather = () => {
-      const API_BASE_URL =
-        import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+      const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || "http://127.0.0.1:8000";
 
       fetch(`${API_BASE_URL}/weather?lat=${lat}&lon=${lon}`)
         .then((res) => {
           if (!res.ok) throw new Error("Server error");
           return res.json();
         })
-        .then((weatherData) => {
+        .then((weatherData: WeatherData) => {
           if (!isMounted) return;
           if (weatherData.error) {
             setError(true);
@@ -39,7 +59,7 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
               onDataReceivedRef.current(weatherData);
           }
         })
-        .catch((err) => {
+        .catch(() => {
           if (isMounted) setError(true);
         });
     };
@@ -48,7 +68,7 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
     setError(false);
     fetchWeather();
 
-    const weatherInterval = setInterval(fetchWeather, 120000);
+    const weatherInterval = setInterval(fetchWeather, 120000); // 2-minute polling
 
     return () => {
       isMounted = false;
@@ -56,31 +76,18 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
     };
   }, [lat, lon]);
 
-  const getWeatherIcon = (description) => {
-    // console.log(
-    //   "Current Theme in Weather:",
-    //   theme,
-    //   "isDaylight:",
-    //   theme === "day"
-    // );
+  const getWeatherIcon = (description: string): string => {
     if (!description) return "🌡️";
     const desc = description.toLowerCase();
-    // Inside Weather.jsx, update this line:
+    
     const isDaylight =
       theme === "day" ||
       (new Date().getHours() >= 6 && new Date().getHours() < 19);
 
-    // Debugging: This will tell you EXACTLY what text the API sent
-    // console.log(
-    //   `Weather: "${desc}" | Theme: ${theme} | Daylight: ${isDaylight}`
-    // );
-
-    // 1. CLEAR & SUNNY
     if (desc.includes("clear") || desc.includes("sunny")) {
       return isDaylight ? "☀️" : "🌙";
     }
 
-    // 2. CLOUDY
     if (
       desc.includes("clouds") ||
       desc.includes("partly") ||
@@ -97,24 +104,19 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
       return "☁️";
     }
 
-    // 3. STORMS
     if (desc.includes("thunderstorm") || desc.includes("storm")) return "⛈️";
-
-    // 4. PRECIPITATION
     if (desc.includes("drizzle") || desc.includes("rain")) return "🌧️";
     if (desc.includes("snow")) return "❄️";
 
-    // 5. MIST / FOG
     if (desc.includes("mist") || desc.includes("fog") || desc.includes("haze"))
       return "🌫️";
 
-    // 6. FINAL FALLBACK: If we don't know what it is, show a Sun in day and Moon at night
     return isDaylight ? "☀️" : "🌙";
   };
 
   if (error)
     return (
-      <div className=" glow-sub2 error-msg">Weather currently unavailable</div>
+      <div className="glow-sub2 error-msg">Weather currently unavailable</div>
     );
 
   return (
@@ -136,7 +138,9 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
       <p className="weather-desc card-title">
         {weather ? weather.description : "Fetching Weather..."}
       </p>
+      
       <div className="separator-line" />
+      
       {weather && (
         <>
           <div className="weather-details-grid">
@@ -151,7 +155,6 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
             <div className="detail-item">
               <span className="label">Visibility</span>
               <span className="value glow-sub2">
-                {/* If using US units from Visual Crossing, visibility is already in Miles */}
                 {weather.visibility} mi
               </span>
             </div>
@@ -162,7 +165,6 @@ const Weather = memo(({ sun, onDataReceived, theme }) => {
           </div>
 
           <div className="separator-line" />
-          {/* Note: WeatherMap still needs coords and theme to redraw properly */}
           <WeatherMap lat={lat} lon={lon} theme={theme} />
         </>
       )}
