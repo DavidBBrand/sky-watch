@@ -86,29 +86,46 @@ const Starlink: React.FC = memo(() => {
 
               if (slantRangeKm) {
                 const slantRangeMiles = Math.round(slantRangeKm * 0.621371);
+                const MAX_RANGE = 500; // The absolute edge of your radar screen in miles
 
-                if (slantRangeMiles < 400) closeContact = true;
+                // 1. Hard cutoff: Ignore anything outside our local bubble
+                if (slantRangeMiles <= MAX_RANGE) {
 
-                const r = (1 - lookAngles.elevation / (Math.PI / 2)) * 42;
-                const theta = lookAngles.azimuth - Math.PI / 2;
+                  // Trigger alert if they get within 150 miles
+                  if (slantRangeMiles < 150) closeContact = true;
 
-                
-                const rawId = sat.OBJECT_ID || sat.NORAD_CAT_ID || Math.random();
-                const rawName = sat.OBJECT_NAME || "STARLINK";
+                  // 2. Linear Distance Scaling:
+                  // If distance is 500mi, r = 48% (outer edge of the CSS circle).
+                  // If distance is 250mi, r = 24% (middle ring).
+                  const r = (slantRangeMiles / MAX_RANGE) * 48;
+                  const theta = lookAngles.azimuth - Math.PI / 2;
 
-                visiblePoints.push({
-                  x: 50 + r * Math.cos(theta),
-                  y: 50 + r * Math.sin(theta),
-                  id: String(rawId),
-                  name: String(rawName),
-                  distance: slantRangeMiles
-                });
+                  // if (slantRangeKm) {
+                  //   const slantRangeMiles = Math.round(slantRangeKm * 0.621371);
+
+                  // if (slantRangeMiles < 400) closeContact = true;
+
+                  // const r = (1 - lookAngles.elevation / (Math.PI / 2)) * 42;
+                  // const theta = lookAngles.azimuth - Math.PI / 2;
+
+
+                  const rawId = sat.OBJECT_ID || sat.NORAD_CAT_ID || Math.random();
+                  const rawName = sat.OBJECT_NAME || "STARLINK";
+
+                  visiblePoints.push({
+                    x: 50 + r * Math.cos(theta),
+                    y: 50 + r * Math.sin(theta),
+                    id: String(rawId),
+                    name: String(rawName),
+                    distance: slantRangeMiles
+                  });
+                }
               }
             }
           }
         }
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     });
 
@@ -141,9 +158,9 @@ const Starlink: React.FC = memo(() => {
         <div className="radar-center-anchor">
           <span className="radar-label label-center">{location.name}</span>
         </div>
-        <span className="radar-label label-r1">400mi</span>
-        <span className="radar-label label-r2">700mi</span>
-        <span className="radar-label label-r3">1800mi</span>
+        <span className="radar-label label-r1">150mi</span>
+        <span className="radar-label label-r2">300mi</span>
+        <span className="radar-label label-r3">500mi</span>
 
         {nodes.map((n) => (
           <div
