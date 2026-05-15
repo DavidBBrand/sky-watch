@@ -24,7 +24,7 @@
 
 /* 4. Match the Day Mode colors */
 .mode-day .weather-map-wrapper {
-  background-color: #f0f2f5;
+  background-color: #f5f6f8;
   background-image: 
     linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
@@ -32,7 +32,7 @@
 /* Base Map Layer (The Land) */
 .mode-night .leaflet-tile-pane .leaflet-layer:nth-child(1) {
   /*  turns a bright map into a deep navy/charcoal 'Night' map */
-  filter: brightness(0.6) contrast(1.2) saturate(0.5) hue-rotate(180deg) invert(10%);
+  filter: brightness(3) contrast(1.2) saturate(0.5) hue-rotate(180deg) invert(10%);
 }
 
 /* Cloud Layer (The Weather) */
@@ -40,15 +40,20 @@
   /* 'screen' makes dark pixels transparent and light pixels glow */
   mix-blend-mode: screen !important;
   /* Boost brightness so the grey clouds become white 'wisps' */
-  filter: brightness(2.5) contrast(1.5) saturate(0) !important;
+  filter: brightness(1.5) contrast(1.5) saturate(0) !important;
   opacity: 0.1 !important; /* Higher opacity works now because blend-mode handles the 'darkness' */
 }
 
 /* Day Mode: Clean and Simple */
 .mode-day .clouds-layer {
   mix-blend-mode: multiply !important; /* Clouds darken the land slightly */
-  filter: brightness(1) contrast(1);
-  opacity: 0.1 !important;
+  filter: brightness(0.7) contrast(1.5);
+  opacity: 0.9 !important;
+}
+/* Dim the Day Mode Base Map so clouds pop */
+.mode-day .leaflet-tile-pane .leaflet-layer:nth-child(1) {
+  /* Drops brightness by 15%, slightly fades the harsh map colors, and boosts contrast */
+  filter: brightness(0.85) saturate(4) contrast(1);
 }
 /* --- NIGHT MODE: Lighter, ethereal clouds --- */
 
@@ -68,5 +73,5 @@
   background-size: 100% 4px, 3px 100%;
   pointer-events: none;
   z-index: 1000;
-  opacity: 0.34;
+  opacity: 0.48;
 }
