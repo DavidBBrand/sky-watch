@@ -26,9 +26,9 @@
 
 [data-theme="night"] {
   --bg-color: rgba(17, 17, 78, 0.95);
-  --mesh-1: rgb(2, 18, 28);
-  --mesh-2: rgb(16, 10, 51);
-  --mesh-3: rgb(13, 2, 59);
+  --mesh-1: rgb(1, 12, 19);
+  --mesh-2: rgb(13, 6, 50);
+  --mesh-3: rgb(12, 3, 48);
 
   --card-bg: rgba(42, 51, 75, 0.15); /* Slightly darker for better contrast */
   --card-border: rgba(255, 255, 255, 0.1);
@@ -45,7 +45,7 @@
   --separator-glow2: rgba(62, 222, 86, 0.536);
   --separator-glow3: rgba(14, 100, 6, 0.675);
   
-  --star-opacity: 0.6;
+  --star-opacity: 0.88;
 }
 
 html {
@@ -100,11 +100,11 @@ body::before {
     radial-gradient(2px 2px at 25px 35px, #fff, transparent),
     radial-gradient(2px 2px at 50px 100px, #fff, transparent),
     /* Larger "Glow" stars */
-    radial-gradient(3px 3px at 100px 400px, #ffffff, rgba(255, 255, 255, 0.1) 40%, transparent 100%),
-    radial-gradient(3px 4px at 85% 27%, #ffffff, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    radial-gradient(6px 6px at 100px 400px, #ffffff, rgba(255, 255, 255, 0.1) 40%, transparent 100%),
+    radial-gradient(6px 6px at 85% 27%, #ffffff, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   
   /* Shrinking this multiplier creates the 5x density effect */
-  background-size: 400px 400px; 
+  background-size: 270px 360px; 
   
   opacity: var(--star-opacity);
   will-change: opacity;

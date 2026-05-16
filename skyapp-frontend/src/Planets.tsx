@@ -72,7 +72,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
 
               return (
                 <div key={name} className="planet-item">
-                  <div style={{ fontSize: "2.4rem", marginBottom: "2px" }}>
+                  <div style={{ fontSize: "2.4rem", marginBottom: "0px" }}>
                     {planetIcons[name] || "✨"}
                   </div>
 
@@ -96,7 +96,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       fontWeight: "600",
                       color: "var(--text-main)",
                       fontFamily: "Share Tech, sans-serif",
-                      marginBottom: "8px"
+                      marginBottom: "2px"
                     }}
                   >
                     {name}
@@ -112,8 +112,8 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       fontSize: "1.2rem",
                       fontFamily: "Roboto Condensed",
                       color: "var(--text-sub)",
-                      marginTop: "8px",
-                      letterSpacing: "-1.5px"
+                      marginTop: "4px",
+                      letterSpacing: "-1px"
                     }}
                   >
                     {getCompassDirection(info.azimuth)} at {info.azimuth}° Az
@@ -125,14 +125,15 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       fontFamily: "Roboto Condensed",
                       color: isBelowHorizon ? "#a34631" : "#4a95ae",
                       fontWeight: "600",
-                      letterSpacing: "-1px"
+                      letterSpacing: "-1px",
+                      
                     }}
                   >
                     {info.altitude}° Alt
                   </div>
-                  <div className="derp">
+                  <div>
                     <span className="distance">Distance: </span>
-                    <span className="glow-sub2 distance-derple">
+                    <span className="glow-sub2">
                       {info.distance_au} AU
                     </span>
                   </div>

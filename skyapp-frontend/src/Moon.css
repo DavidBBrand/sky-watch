@@ -84,7 +84,7 @@
 .moon-details {
   margin-top: 6px;
   padding: 18px;
-  border-radius: 2rem;
+  border-radius: 1.4rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
@@ -96,7 +96,7 @@
     
   transition: all 0.3s ease-in-out;
   font-family: 'Barlow Condensed', sans-serif;
-  border: 1px solid var(--separator-glow2);
+  border: 0px solid var(--separator-glow2);
   
 }
 .illumination-value {

@@ -63,7 +63,6 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
         <RecenterMap lat={lat} lon={lon} />
       </MapContainer>
       
-      {/* The scanning overlay with that z-index: 1001 we discussed */}
       <div className="map-overlay-scan" />
     </div>
   );

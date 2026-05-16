@@ -3,16 +3,17 @@
   width: 82%;
   aspect-ratio: 1 / 1;
   margin: 50px auto;
-  background: rgba(147, 186, 195, 0.088); 
+  background: rgba(124, 145, 150, 0.188); 
   border-radius: 50%;
 
   /*  Glow Effect */
   border: 1px solid var(--accent-color);
   box-shadow:
     0 0 8px rgba(255, 213, 0, 0.144),
-    /* Soft outer spread */ inset 0 0 12px var(--separator-glow2); 
+    /* Soft outer spread */ inset 0 0 1px var(--separator-glow2); 
     /* Soft inner glow */
-  filter: drop-shadow(0 0 6px var(--separator-glow2));
+  filter: drop-shadow(0px 0px 12px var(--separator-glow2));
+
 }
 
 .radar-scanner {
@@ -165,8 +166,8 @@
 /* 5. Nodes & Tooltips */
 .radar-node {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   background: var(--accent-color);
   border-radius: 50%;
   box-shadow: 0 0 2px var(--accent-color);

@@ -72,7 +72,7 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone, date }) => 
         
         {/* MIDDLE: Live Altitude & Zenith Time */}
         <div className="solar-item" style={{ flex: 1 }}>
-          <div className="sub-title">Altitude</div>
+          <div className="sub-title">Current Altitude</div>
           <SolarCompass sunData={sun} />
 
           <div className="zenith-container" style={{ marginTop: "10px" }}>

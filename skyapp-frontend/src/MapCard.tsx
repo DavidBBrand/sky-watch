@@ -76,7 +76,7 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
             borderRadius: "2rem",
             display: "block",
             transition: "opacity 0.5s ease",
-            border: "1.5px solid var(--separator-glow2)",
+            border: "0px solid var(--separator-glow2)",
             }}
           // loading="eager"
         />

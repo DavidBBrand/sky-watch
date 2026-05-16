@@ -58,5 +58,5 @@
       padding:8px;
       padding-right: 10px;
       margin: 14px auto;
-      border: 1px solid var(--separator-glow2);
+      border: 0px solid var(--separator-glow2);
 }

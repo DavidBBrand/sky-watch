@@ -11,11 +11,11 @@ interface CompassProps {
 }
 
 const SolarCompass: React.FC<CompassProps> = ({ sunData }) => {
-  // 1. Use optional chaining and nullish coalescing to prevent undefined
+  //  Use optional chaining and nullish coalescing to prevent undefined
   const current_altitude = sunData?.current_altitude ?? 0;
   const phase = sunData?.phase ?? "Standard";
   
-  // 2. Logic: Now current_altitude is guaranteed to be a number (even if 0)
+  //  Now current_altitude is guaranteed to be a number (even if 0)
   const verticalPosition = 50 - (current_altitude / 90) * 45;
 
   const getSunColor = () => {

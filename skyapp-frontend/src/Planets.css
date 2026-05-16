@@ -16,14 +16,14 @@
     0 1px 3px rgba(0, 0, 0, 0.1),
     /* Outer depth */ 0 0 10px rgba(255, 255, 255, 0.05),
     /* Ambient outer glow */ inset 0 0 12px var(--separator-glow2); 
-    border: 1px solid var(--separator-glow2);/* Subtle inner bloom */
+    border: 0px solid var(--separator-glow2);/* Subtle inner bloom */
 
 }
 
 /* Status Tags */
 .status-tag {
   font-size: 1rem;
-  padding: 2px 8px;
+  padding: 2px 4px;
   border-radius: 4px;
   text-transform: uppercase;
 }
@@ -55,13 +55,8 @@
   color: var(--accent-color2);
   font-size: 1.2rem;
   font-family: "Barlow Condensed";
-  text-transform: uppercase;
+  
 }
 
-.distance-derple {
-  font-family: "Barlow Condensed", sans-serif;
-  font-size: 1.2rem;
-}
-.derp {
-    margin: 6px auto;
-}
+
+
