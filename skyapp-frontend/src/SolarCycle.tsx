@@ -53,7 +53,7 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone, date }) => 
     <div className="solar-cycle-container">
       <div className="solar-flex">
         <div className="solar-item" style={{ flex: 1 }}>
-          <div className="sub-title">Sunrise</div>
+          <div className="solar sub-title">Sunrise</div>
           <span style={{ fontSize: "3.0rem" }} role="img" aria-label="sunrise">
             🌅
           </span>
@@ -62,7 +62,7 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone, date }) => 
         
         {/* MIDDLE: Live Altitude & Zenith Time */}
         <div className="solar-item" style={{ flex: 1 }}>
-          <div className="sub-title">Current Altitude</div>
+          <div className="solar2 sub-title">Current Altitude</div>
           <SolarCompass sunData={sun} />
 
           <div className="zenith-container" style={{ marginTop: "10px" }}>
@@ -98,7 +98,7 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone, date }) => 
           </div>
         </div>
         <div className="solar-item" style={{ flex: 1 }}>
-          <div className="sub-title">Sunset</div>
+          <div className="solar sub-title">Sunset</div>
           <span style={{ fontSize: "3.0rem" }} role="img" aria-label="sunset">
             🌇
           </span>

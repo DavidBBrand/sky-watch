@@ -17,7 +17,15 @@
     0 0 10px rgba(255, 255, 255, 0.05),
     inset 0 0 12px var(--separator-glow2);
   padding: 6px;
-  flex: 1; /* Ensures equal width distribution */
+  flex: 1; 
+  /* Ensures equal width distribution */
+}
+.solar {
+  margin-top: 52px;
+}
+
+.solar2 {
+  margin-top: 12px;
 }
 
 .solar-time {
