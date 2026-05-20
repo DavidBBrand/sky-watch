@@ -41,7 +41,7 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
   return (
     <div className={`weather-map-wrapper ${isNight ? "mode-night" : "mode-day"}`}>
       <MapContainer
-        key={`${theme}-${lat}-${lon}`} 
+        // key={`${theme}-${lat}-${lon}`} 
         center={[lat, lon]}
         zoom={4}
         dragging={false}

@@ -99,9 +99,9 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({ children }) 
         (error) => {
           console.warn("Geolocation denied. Reverting to Default Telemetry.");
           setLocation({
-            lat: 35.9251,
-            lon: -86.8689,
-            name: "Franklin, TN",
+            lat: 36.1555,
+            lon: -86.7778,
+            name: "Nashville, TN",
             timezone: "America/Chicago",
             isInitial: true, 
           });

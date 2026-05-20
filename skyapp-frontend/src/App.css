@@ -39,9 +39,9 @@
   z-index: 10;
 }
 .main-title {
-  font-family: "Fredericka The Great";
-  font-size: 3rem; /* Slightly larger for the new name */
-  letter-spacing: 2px;
+  font-family: 'Roboto';
+  font-size: 3rem; 
+  letter-spacing: -2px;
   margin: 0px auto;
   text-transform: uppercase;
   color: var(--text-main);
@@ -50,7 +50,7 @@
   text-shadow:
     0 1px 1px rgba(255, 255, 255, 0.3),
     /* Top highlight */ 0 0 6px var(--separator-glow); 
-  /* semi-transparent 'cut-through' effect */
+  /* semi-transparent effect */
   background: linear-gradient(
     to bottom,
     var(--text-main) 0%,
@@ -68,7 +68,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   filter: drop-shadow(0 0 6px var(--separator-glow));
-  word-spacing: 8px;
+  word-spacing: 2px;
 }
 
 .sub-title {
@@ -369,12 +369,12 @@ img[src*="marker"],
 }
 
 .copyright {
-  font-size: 1.4rem;
+  font-size: 1rem;
   opacity: 0.76;
   margin-top: 40px;
   color: var(--text-sub);
   font-weight: 300;
-  font-family: "Barlow Condensed", sans-serif !important;
+  font-family: "Roboto", sans-serif !important;
 }
 
 /* Responsive Breakpoints */
