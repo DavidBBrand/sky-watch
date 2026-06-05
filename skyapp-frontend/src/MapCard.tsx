@@ -6,16 +6,16 @@ import SolarCycle from "./SolarCycle";
 interface MapCardProps {
   theme: "day" | "night";
   skyData: {
-    sun: {
-      sunrise: string;
-      sunset: string;
-      zenith: string;
-      zenith_alt: number | string;
-      zenith_az: number | string;
-      current_altitude: number;
-      phase: string;
+    sun?: {
+      sunrise?: string;
+      sunset?: string;
+      zenith?: string;
+      zenith_alt?: number | string;
+      zenith_az?: number | string;
+      current_altitude?: number;
+      phase?: string | number;
     };
-    timezone: string;
+    timezone?: string;
   } | null;
   date: string;
 }
@@ -24,7 +24,7 @@ interface MapCardProps {
 const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
   // Pull location from Context
   const { location } = useLocation();
-  const { lat, lon, name } = location;
+  const { lat, lon } = location;
 
   const MAPBOX_TOKEN = (import.meta.env.VITE_MAPBOX_TOKEN as string) || "";
 
@@ -48,7 +48,7 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
       >
         <div className="card-title">Solar Arc {date}</div>
         {skyData?.sun ? (
-          <SolarCycle sun={skyData.sun} date={date} timezone={location.timezone} />
+          <SolarCycle sun={skyData.sun} timezone={location.timezone} />
         ) : (
           <div className="solar-loader">
             <div className="scanning-line"></div>

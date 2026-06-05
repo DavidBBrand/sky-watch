@@ -11,6 +11,7 @@ interface TLEData {
   TLE_LINE0: string;
   TLE_LINE1: string;
   TLE_LINE2: string;
+  error?: string;
 }
 
 //  Define the Radar Node (The processed visual point)
@@ -48,22 +49,22 @@ const Starlink: React.FC = memo(() => {
   }, [lat, lon]);
 
   const updateRadar = useCallback(() => {
-    if (!tles.length || !lat || !lon) return;
+    if (!tles.length || lat === null || lon === null) return;
 
     const now = new Date();
     const gmst = satellite.gstime(now);
 
     // Observer position (Geodetic)
     const observerGd = {
-      latitude: satellite.degreesToRadians(parseFloat(lat as unknown as string)),
-      longitude: satellite.degreesToRadians(parseFloat(lon as unknown as string)),
+      latitude: satellite.degreesToRadians(lat),
+      longitude: satellite.degreesToRadians(lon),
       height: 0.122 // Ground altitude in km
     };
 
     const visiblePoints: RadarNode[] = [];
     let closeContact = false;
 
-    tles.forEach((sat: any) => {
+    tles.forEach((sat) => {
       try {
         if (!sat || sat.error) return;
 
@@ -99,15 +100,6 @@ const Starlink: React.FC = memo(() => {
                   // If distance is 250mi, r = 24% (middle ring).
                   const r = (slantRangeMiles / MAX_RANGE) * 48;
                   const theta = lookAngles.azimuth - Math.PI / 2;
-
-                  // if (slantRangeKm) {
-                  //   const slantRangeMiles = Math.round(slantRangeKm * 0.621371);
-
-                  // if (slantRangeMiles < 400) closeContact = true;
-
-                  // const r = (1 - lookAngles.elevation / (Math.PI / 2)) * 42;
-                  // const theta = lookAngles.azimuth - Math.PI / 2;
-
 
                   const rawId = sat.OBJECT_ID || sat.NORAD_CAT_ID || Math.random();
                   const rawName = sat.OBJECT_NAME || "STARLINK";
@@ -186,8 +178,8 @@ const Starlink: React.FC = memo(() => {
         <div className="stat-group" style={{ textAlign: "right" }}>
           <p className="stat-caption">Observer </p>
           <p className="stat-value glow-sub">
-            {parseFloat(lat as unknown as string).toFixed(1)}°N{" "} /
-            {Math.abs(parseFloat(lon as unknown as string)).toFixed(1)}°W
+            {lat !== null ? lat.toFixed(1) : "--"}°N{" "} /
+            {lon !== null ? Math.abs(lon).toFixed(1) : "--"}°W
           </p>
         </div>
       </div>

@@ -22,6 +22,8 @@ export interface SunData {
 
 export interface SkyData {
   sun?: SunData;
+  timezone?: string;
+  planets?: Record<string, unknown>;
   [key: string]: any; // Allows Planets/MapCard to access other fields safely
 }
 
@@ -215,7 +217,6 @@ const App: React.FC = () => {
         <div className="glass-card">
           <Weather
             onDataReceived={setWeatherData}
-            sun={skyData?.sun}
             theme={isNight ? "night" : "day"}
           />
         </div>

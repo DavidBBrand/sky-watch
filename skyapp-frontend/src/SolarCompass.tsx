@@ -1,16 +1,16 @@
-import React from 'react';
+import type { FC } from 'react';
 import "./SolarCompass.css";
 
 interface SolarTelemetry {
-  current_altitude: number;
-  phase: string;
+  current_altitude?: number;
+  phase?: string | number;
 }
 
 interface CompassProps {
   sunData: SolarTelemetry;
 }
 
-const SolarCompass: React.FC<CompassProps> = ({ sunData }) => {
+const SolarCompass: FC<CompassProps> = ({ sunData }) => {
   //  Use optional chaining and nullish coalescing to prevent undefined
   const current_altitude = sunData?.current_altitude ?? 0;
   const phase = sunData?.phase ?? "Standard";

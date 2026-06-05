@@ -16,8 +16,6 @@ interface ISSPosition {
 const ISSWatcher: React.FC<ISSWatcherProps> = memo(({ onDistanceUpdate }) => {
   const [issPos, setIssPos] = useState<ISSPosition>({ lat: 0, lon: 0 });
   const [distance, setDistance] = useState<number | null>(null);
-  // Optional: Keeping cityName for future expansion of the Nominatim logic
-  const [, setCityName] = useState<string>("Local Station");
 
   const { location } = useLocation();
   const { lat, lon, name } = location;
@@ -25,36 +23,6 @@ const ISSWatcher: React.FC<ISSWatcherProps> = memo(({ onDistanceUpdate }) => {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-
-    // Type-safe Geocoding (if you decide to re-enable)
-    const getLocalName = async (issLat: number, issLon: number) => {
-      try {
-        const email = import.meta.env.VITE_NOMINATIM_EMAIL as string || "anonymous";
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${issLat}&lon=${issLon}`,
-          {
-            signal,
-            headers: {
-              "User-Agent": `SkyWatch/1.0 (${email})`
-            }
-          }
-        );
-
-        if (response.status === 429 || response.status === 425) return;
-
-        const data = await response.json();
-        if (data.address) {
-          const city =
-            data.address.city ||
-            data.address.town ||
-            data.address.village ||
-            "Unknown Waters";
-          setCityName(city);
-        }
-      } catch (err: any) {
-        if (err.name !== "AbortError") console.error("Nominatim error:", err);
-      }
-    };
 
     const fetchISS = async () => {
       try {
@@ -70,6 +38,7 @@ const ISSWatcher: React.FC<ISSWatcherProps> = memo(({ onDistanceUpdate }) => {
         setIssPos({ lat: issLat, lon: issLon });
 
         // 3. Haversine Formula for Distance Tracking
+        if (lat === null || lon === null) return;
         const R = 3958.8; // Earth's radius in miles
         const dLat = (issLat - lat) * (Math.PI / 180);
         const dLon = (issLon - lon) * (Math.PI / 180);
@@ -87,9 +56,8 @@ const ISSWatcher: React.FC<ISSWatcherProps> = memo(({ onDistanceUpdate }) => {
         setDistance(currentDistance);
         if (onDistanceUpdate) onDistanceUpdate(currentDistance);
 
-        // getLocalName(issLat, issLon); // Call if needed
-      } catch (e: any) {
-        if (e.name !== "AbortError") console.error("ISS Tracking Offline");
+      } catch (e: unknown) {
+        if (e instanceof Error && e.name !== "AbortError") console.error("ISS Tracking Offline");
       }
     };
 

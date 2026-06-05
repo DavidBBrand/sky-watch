@@ -11,11 +11,11 @@ interface PlanetTelemetry {
 
 // 2. Define the global SkyData interface
 interface SkyData {
-  sun: {
-    phase: string;
-    [key: string]: any; // Flex for additional sun telemetry
+  sun?: {
+    phase?: string | number;
+    [key: string]: any;
   };
-  planets: {
+  planets?: {
     [key: string]: PlanetTelemetry;
   };
 }
@@ -24,10 +24,11 @@ interface PlanetsProps {
   skyData: SkyData;
 }
 
-const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => { 
+const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
   if (!skyData) return null;
 
   const { planets } = skyData;
+  if (!planets) return null;
 
   const planetIcons: Record<string, string> = {
     Mercury: "🌑",

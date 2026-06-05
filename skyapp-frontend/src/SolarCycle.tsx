@@ -4,23 +4,22 @@ import SolarCompass from "./SolarCompass";
 
 //  define shape of the Sun telemetry data
 interface SunData {
-  sunrise: string;
-  sunset: string;
-  zenith: string;
-  zenith_alt: number | string;
-  zenith_az: number | string;
-  current_altitude: number; // required by SolarCompass
-  phase: string; // required by Solar Compass
+  sunrise?: string;
+  sunset?: string;
+  zenith?: string;
+  zenith_alt?: number | string;
+  zenith_az?: number | string;
+  current_altitude?: number;
+  phase?: string | number;
 }
 
 
 interface SolarCycleProps {
   sun: SunData;
   timezone: string | null;
-  date: string;
 }
 
-const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone, date }) => {
+const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
   const formatTime = (isoString: string): string => {
     if (!isoString || !sun) return "--:--";
     // handle polar edge cases (e.g., "Polar Day", "Polar Night")

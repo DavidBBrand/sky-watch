@@ -14,7 +14,6 @@ import traceback
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173",
     "https://sky-watch-chi.vercel.app",
     "https://skywatchdash.com",
     "https://www.skywatchdash.com",
@@ -23,8 +22,8 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    # Regex to allow any subdomain of sky-watch-*.vercel.app
-    allow_origin_regex=r"https://sky-watch-.*\.vercel\.app",
+    # Regex to allow any localhost port (dev) and sky-watch-*.vercel.app
+    allow_origin_regex=r"http://localhost:\d+|https://sky-watch-.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

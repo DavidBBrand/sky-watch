@@ -1,4 +1,4 @@
-import React, { useState, memo, useId, FormEvent } from "react";
+import { useState, memo, useId, FormEvent } from "react";
 
 // 1. Define the props expected by the component
 interface LocationSearchProps {
@@ -10,15 +10,6 @@ interface NominatimSearchResult {
   lat: string;
   lon: string;
   display_name: string;
-}
-
-interface NominatimReverseResult {
-  address: {
-    city?: string;
-    town?: string;
-    village?: string;
-    suburb?: string;
-  };
 }
 
 // 3. Apply the Props interface to the memoized component
@@ -76,56 +67,6 @@ const LocationSearch = memo<LocationSearchProps>(({ onLocationChange }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const useGPS = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
-      return;
-    }
-
-    setLoading(true);
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-        let detectedName = "Current Location";
-
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
-            {
-              headers: {
-                "User-Agent": `SkyWatch/1.0 (${import.meta.env.VITE_NOMINATIM_EMAIL || "anonymous"})`
-              }
-            }
-          );
-
-          if (response.ok) {
-            // Tell TypeScript what shape the reverse geocode JSON is
-            const data: NominatimReverseResult = await response.json();
-            const a = data.address;
-            
-            detectedName =
-              a.city || a.town || a.village || a.suburb || "Current Location";
-          }
-        } catch (err) {
-          console.error("Geocoding failed, using fallback.", err);
-        } finally {
-          onLocationChange({
-            lat: latitude,
-            lon: longitude,
-            name: detectedName
-          });
-          setLoading(false);
-        }
-      },
-      (error) => {
-        setLoading(false);
-        console.error(error);
-      },
-      { enableHighAccuracy: true, timeout: 5000 }
-    );
   };
 
   return (

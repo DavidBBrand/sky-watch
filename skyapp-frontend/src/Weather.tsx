@@ -17,12 +17,11 @@ interface WeatherData {
 
 // 2. Define the Component Props
 interface WeatherProps {
-  sun: any; // You can refine this to SunData if you've exported that interface
   onDataReceived: (data: WeatherData) => void;
   theme: "day" | "night";
 }
 
-const Weather: React.FC<WeatherProps> = memo(({ sun, onDataReceived, theme }) => {
+const Weather: React.FC<WeatherProps> = memo(({ onDataReceived, theme }) => {
   const { location } = useLocation();
   const { lat, lon } = location;
 
@@ -165,7 +164,9 @@ const Weather: React.FC<WeatherProps> = memo(({ sun, onDataReceived, theme }) =>
           </div>
 
           <div className="separator-line" />
-          <WeatherMap lat={lat} lon={lon} theme={theme} />
+          {lat !== null && lon !== null && (
+            <WeatherMap lat={lat} lon={lon} theme={theme} />
+          )}
         </>
       )}
     </div>

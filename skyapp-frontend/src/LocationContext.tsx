@@ -96,7 +96,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({ children }) 
             setLocation((prev) => ({ ...prev, isInitial: false })); 
           }
         },
-        (error) => {
+        (_error) => {
           console.warn("Geolocation denied. Reverting to Default Telemetry.");
           setLocation({
             lat: 36.1555,

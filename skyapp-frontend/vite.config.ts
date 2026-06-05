@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    port: 5173,
+  },
   test: {
     globals: true,
     environment: 'jsdom', // simulates the browser window so we dont get a reference error
