@@ -41,7 +41,6 @@
 .main-title {
   font-family: 'Roboto';
   font-size: 3rem; 
-  letter-spacing: -2px;
   margin: 0px auto;
   text-transform: uppercase;
   color: var(--text-main);
