@@ -167,7 +167,7 @@ const App: React.FC = () => {
     <div className="app-container">
       {location.isInitial && (
         <div className="system-status-bar">
-          <span className="blink">●</span> Initializing...
+          <span className="blink">●</span> loading...
         </div>
       )}
       <button
