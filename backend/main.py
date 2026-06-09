@@ -172,7 +172,7 @@ async def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86))
     m = observer.at(t).observe(moon).apparent()
     illumination = m.fraction_illuminated(sun_obj)
 
-    # 5. RESTORED: PLANET VISIBILITY LOGIC
+    # 5. PLANET VISIBILITY LOGIC
     target_planets = {
         "Venus": eph['venus'],
         "Mars": eph['mars'],
