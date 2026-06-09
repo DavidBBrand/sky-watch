@@ -152,9 +152,9 @@ const App: React.FC = () => {
     return (
       <div className="loading-screen card-title">
         <div className="scanner"></div>
-        <div>System Initializing...</div>
+        <div>Loading...</div>
         <div>
-          Location access required for observer coordinates. Please click <strong>'Allow'</strong>.
+          Please click <strong>'Allow'</strong> for location access
         </div>
       </div>
     );
@@ -167,7 +167,7 @@ const App: React.FC = () => {
     <div className="app-container">
       {location.isInitial && (
         <div className="system-status-bar">
-          <span className="blink">●</span> loading...
+          <span className="blink">●</span> Loading...
         </div>
       )}
       <button
