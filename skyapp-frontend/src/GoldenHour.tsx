@@ -50,7 +50,7 @@ const GoldenHour: React.FC<GoldenHourProps> = ({ sunData }) => {
     <div className="status-badge-container" style={{ textAlign: "center", width: "100%" }}>
       <div className="status-badge" style={badgeStyle}>
         <span style={{ fontSize: "2.2rem" }}>{isGolden ? "🌅" : "🌌"}</span>
-        <span style={{ fontSize: "1rem", fontFamily: "Fredericka The Great" }}>
+        <span style={{ fontSize: "1rem", fontFamily: "Roboto Condensed, sans-serif", fontWeight: 600 }}>
           {sunData.phase.toUpperCase()} ACTIVE
         </span>
       </div>
