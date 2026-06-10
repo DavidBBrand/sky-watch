@@ -32,7 +32,7 @@ const GoldenHour: React.FC<GoldenHourProps> = ({ sunData }) => {
 
   // 3. React.CSSProperties ensures the style object keys are valid CSS properties
   const badgeStyle: React.CSSProperties = {
-    backgroundColor: isGolden ? "#e49d39a4" : "#3a44b7",
+    backgroundColor: isGolden ? "#FFC107cc" : "#3a44b7",
     color: "#ffffffeb",
     padding: "6px 16px",
     borderRadius: "2rem",
