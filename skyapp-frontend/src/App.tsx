@@ -191,7 +191,7 @@ const App: React.FC = () => {
         </div>
 
         <div className="telemetry-info">
-          <span className="glow-sub">{location.name}  {locationDate}</span>
+          <span className="glow-sub"><span style={{ fontWeight: 600 }}>{location.name}</span>&nbsp;&nbsp;&nbsp;{locationDate}</span>
           <span className="glow-sub">
             {Math.abs(location.lat).toFixed(2)}°{location.lat >= 0 ? "N" : "S"} /{" "}
             {Math.abs(location.lon).toFixed(2)}°{location.lon >= 0 ? "E" : "W"}

@@ -201,6 +201,7 @@
 }
 
 .telemetry-info span {
+  font-family: 'Roboto Condensed', sans-serif;
   font-weight: 400;
   transition: color 0.3s ease;
 }
@@ -415,6 +416,8 @@ img[src*="marker"],
   color: var(--accent-color2);
   text-shadow: rgba(4, 41, 150, 0.641) 0.5px 0.5px 0.5px;
   font-family: 'Barlow Condensed', sans-serif;
+  margin: 0px;
+  vertical-align: middle;
 }
 
 .glass-card {
