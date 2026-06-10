@@ -1,9 +1,11 @@
 import os
 import json
+import asyncio
 from pathlib import Path
 import requests
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from skyfield.api import load, Topos
 from skyfield import almanac
 from datetime import datetime, timedelta
@@ -11,7 +13,27 @@ import httpx
 from redis_client import cache_sky_data
 import traceback
 
-app = FastAPI()
+
+async def keepalive_loop():
+    """Ping /health every 10 minutes to keep the Render free-tier container warm."""
+    await asyncio.sleep(60)  # brief delay on startup before first ping
+    while True:
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.get("https://sky-watch-backend.onrender.com/health", timeout=10.0)
+        except Exception:
+            pass  # silently ignore; Render will restart if truly down
+        await asyncio.sleep(600)  # 10 minutes
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(keepalive_loop())
+    yield
+    task.cancel()
+
+
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "https://sky-watch-chi.vercel.app",
