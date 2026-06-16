@@ -96,57 +96,63 @@ async def health():
 @app.get("/starlink-live")
 @cache_sky_data(ttl_seconds=86400)
 async def get_starlink_tles():
-    url = "https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle"
     backup_path = Path(__file__).parent / "starlink_backup.json"
 
-    # 1. Disguise the API call as a standard Chrome browser to bypass the 403 block
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Accept": "text/plain, */*; q=0.01",
-        "Accept-Language": "en-US,en;q=0.9"
-    }
+    username = os.getenv("SPACETRACK_USER")
+    password = os.getenv("SPACETRACK_PASS")
 
-    async with httpx.AsyncClient(follow_redirects=True, headers=headers) as client:
+    if not username or not password:
+        print("SPACETRACK credentials not set. Switching to local backup.")
+    else:
+        login_url = "https://www.space-track.org/ajaxauth/login"
+        tle_url = (
+            "https://www.space-track.org/basicspacedata/query/class/gp"
+            "/OBJECT_NAME/STARLINK~~~/orderby/NORAD_CAT_ID/format/tle/limit/1500"
+        )
         try:
-            # Increased timeout to 15s to accommodate the large text file
-            response = await client.get(url, timeout=15.0)
-            response.raise_for_status()
+            async with httpx.AsyncClient(follow_redirects=True) as client:
+                # Authenticate
+                login_resp = await client.post(
+                    login_url,
+                    data={"identity": username, "password": password},
+                    timeout=15.0
+                )
+                login_resp.raise_for_status()
 
-            raw_lines = [line.strip()
-                         for line in response.text.splitlines() if line.strip()]
+                # Fetch TLEs
+                tle_resp = await client.get(tle_url, timeout=30.0)
+                tle_resp.raise_for_status()
 
-            structured_sats = []
-            for i in range(0, len(raw_lines), 3):
-                if i + 2 < len(raw_lines):
-                    name = raw_lines[i]
-                    line1 = raw_lines[i+1]
-                    line2 = raw_lines[i+2]
+                raw_lines = [line.strip() for line in tle_resp.text.splitlines() if line.strip()]
 
-                    if line1.startswith("1 ") and line2.startswith("2 "):
-                        norad_id = line1[2:7].strip()
-                        structured_sats.append({
-                            "OBJECT_NAME": name,
-                            "OBJECT_ID": norad_id,
-                            "TLE_LINE1": line1,
-                            "TLE_LINE2": line2
-                        })
+                structured_sats = []
+                for i in range(0, len(raw_lines), 3):
+                    if i + 2 < len(raw_lines):
+                        name = raw_lines[i]
+                        line1 = raw_lines[i + 1]
+                        line2 = raw_lines[i + 2]
+                        if line1.startswith("1 ") and line2.startswith("2 "):
+                            norad_id = line1[2:7].strip()
+                            structured_sats.append({
+                                "OBJECT_NAME": name,
+                                "OBJECT_ID": norad_id,
+                                "TLE_LINE1": line1,
+                                "TLE_LINE2": line2
+                            })
 
-            # 2. Auto-heal the backup file with the correct format!
-            if len(structured_sats) > 0:
-                with open(backup_path, "w") as f:
-                    json.dump(structured_sats, f)
+                if structured_sats:
+                    with open(backup_path, "w") as f:
+                        json.dump(structured_sats, f)
+                    return structured_sats[:1500]
 
-            return structured_sats[:1500]
+        except Exception as e:
+            print(f"Space-track fetch failed: {e}. Switching to local backup.")
 
-        except (httpx.ConnectTimeout, httpx.HTTPStatusError, Exception) as e:
-            print(f" LIVE FETCH FAILED: {e}. Switching to local backup.")
+    if backup_path.exists():
+        with open(backup_path, "r") as f:
+            return json.load(f)[:1500]
 
-            if backup_path.exists():
-                with open(backup_path, "r") as f:
-                    data = json.load(f)
-                    return data[:1500]
-
-            return {"error": "Satellite link offline."}
+    return {"error": "Satellite link offline."}
 
 
 @app.get("/sky-summary")
@@ -163,7 +169,7 @@ async def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86))
     sun_alt, sun_az, _ = sun_astrometric.apparent().altaz()
     current_sun_alt = float(sun_alt.degrees)
 
-    is_golden_hour = -4 <= current_sun_alt <= 6
+    is_golden_hour = -4 <= current_sun_alt <= 6 
     is_blue_hour = -6 <= current_sun_alt < -4
 
     # 2. SUNRISE/SUNSET (With Polar Support)
