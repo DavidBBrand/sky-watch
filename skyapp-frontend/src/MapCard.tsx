@@ -30,7 +30,7 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
 
   const zoom = 12;
   const darkStyle = "dark-v11";
-  const lightStyle = "light-v11";
+  const lightStyle = "satellite-streets-v11";
   const currentStyle = theme === "night" ? darkStyle : lightStyle;
 
   

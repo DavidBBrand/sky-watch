@@ -43,7 +43,7 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
       <MapContainer
         // key={`${theme}-${lat}-${lon}`} 
         center={[lat, lon]}
-        zoom={4}
+        zoom={5}
         dragging={false}
         doubleClickZoom={false}
         scrollWheelZoom={false}
