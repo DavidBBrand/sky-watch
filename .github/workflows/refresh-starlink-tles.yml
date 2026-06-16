@@ -37,9 +37,13 @@ jobs:
 
           with httpx.Client(follow_redirects=True) as client:
               login = client.post(login_url, data={"identity": username, "password": password}, timeout=30)
+              print(f"Login status: {login.status_code}")
+              print(f"Login body: {login.text[:200]}")
               login.raise_for_status()
 
               tle = client.get(tle_url, timeout=60)
+              print(f"TLE status: {tle.status_code}")
+              print(f"TLE body preview: {tle.text[:300]}")
               tle.raise_for_status()
 
           raw_lines = [l.strip() for l in tle.text.splitlines() if l.strip()]
