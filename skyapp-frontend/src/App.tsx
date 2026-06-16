@@ -197,7 +197,7 @@ const App: React.FC = () => {
             {Math.abs(location.lon).toFixed(2)}°{location.lon >= 0 ? "E" : "W"}
           </span>
           <span className="time-display">
-            Solar Time: {solar24} ({solar12})
+            Solar Time: {solar12}
           </span>
           <span className="glow-sub">
             UTC Offset: {location.lon >= 0 ? "+" : ""}
