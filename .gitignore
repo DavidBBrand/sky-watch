@@ -14,9 +14,6 @@ Thumbs.db
 backend/*.bsp
 de421.bsp
 
-# Runtime-generated satellite backup (auto-refreshed by the API)
-backend/starlink_backup.json
-
 # Ignore React dependencies and .env file
 skyapp-frontend/node_modules/
 skyapp-frontend/dist/
