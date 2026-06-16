@@ -46,7 +46,7 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
           justifyContent: "center"
         }}
       >
-        <div className="card-title">Solar Arc {date}</div>
+        <div className="card-title">Solar Arc<div> {date}</div></div>
         {skyData?.sun ? (
           <SolarCycle sun={skyData.sun} timezone={location.timezone} />
         ) : (
