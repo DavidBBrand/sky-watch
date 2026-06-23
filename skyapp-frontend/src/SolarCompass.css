@@ -6,7 +6,7 @@
   height: 80px;
   padding: 0 15px;
   box-sizing: border-box;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .solar-gauge-track {
@@ -47,6 +47,6 @@
 .altitude-value {
   font-family: "Share tech", sans-serif;
   color: var(--accent-color2);
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   display: block;
 }

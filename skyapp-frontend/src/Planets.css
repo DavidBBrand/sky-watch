@@ -46,16 +46,15 @@
   background: rgba(169, 3, 3, 0.128);
   color: var(--text-sub);
   opacity: 0.78;
-  font-size: 1rem;
+  font-size: 1.4rem;
   font-family: "Barlow Condensed";
   border: 1px solid red;
 }
 
 .distance {
   color: var(--accent-color2);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-family: "Barlow Condensed";
-  
 }
 
 
