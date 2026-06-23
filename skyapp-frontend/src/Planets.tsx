@@ -152,17 +152,22 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
           <clipPath id="saturn-sphere-clip">
             <circle cx="80" cy="46" r="34" />
           </clipPath>
+          {/* Clips everything OUTSIDE the planet sphere — used for back rings */}
+          <clipPath id="saturn-back-ring-clip">
+            <path clipRule="evenodd" d="M -10,-10 H 170 V 110 H -10 Z M 80,12 A 34,34 0 0 1 114,46 A 34,34 0 0 1 80,80 A 34,34 0 0 1 46,46 A 34,34 0 0 1 80,12 Z" />
+          </clipPath>
+          {/* y > 48 safely clears all ring back-arcs before showing front arcs */}
           <clipPath id="saturn-front-ring-clip">
-            <rect x="0" y="39.5" width="160" height="60.5" />
+            <rect x="0" y="48" width="160" height="52" />
           </clipPath>
         </defs>
         <g filter="url(#saturn-glow)">
-          {/* Back rings */}
-          <ellipse cx="80" cy="54" rx="46.4" ry="9.77"  fill="none" stroke="rgba(180,162,118,0.26)" strokeWidth="9.7" />
-          <ellipse cx="80" cy="54" rx="58.3" ry="12.27" fill="none" stroke="rgba(242,225,165,0.84)" strokeWidth="14.1" />
-          <ellipse cx="80" cy="54" rx="52"   ry="10.95" fill="none" stroke="rgba(255,245,195,0.32)" strokeWidth="2" />
-          <ellipse cx="80" cy="54" rx="66.5" ry="14.0"  fill="none" stroke="rgba(4,2,0,0.92)"        strokeWidth="2.3" />
-          <ellipse cx="80" cy="54" rx="71.9" ry="15.13" fill="none" stroke="rgba(218,196,136,0.68)" strokeWidth="8.4" />
+          {/* Back rings — clipped to outside sphere only */}
+          <ellipse cx="80" cy="54" rx="46.4" ry="9.77"  fill="none" stroke="rgba(180,162,118,0.26)" strokeWidth="9.7"  clipPath="url(#saturn-back-ring-clip)" />
+          <ellipse cx="80" cy="54" rx="58.3" ry="12.27" fill="none" stroke="rgba(242,225,165,0.84)" strokeWidth="14.1" clipPath="url(#saturn-back-ring-clip)" />
+          <ellipse cx="80" cy="54" rx="52"   ry="10.95" fill="none" stroke="rgba(255,245,195,0.32)" strokeWidth="2"    clipPath="url(#saturn-back-ring-clip)" />
+          <ellipse cx="80" cy="54" rx="66.5" ry="14.0"  fill="none" stroke="rgba(4,2,0,0.92)"       strokeWidth="2.3"  clipPath="url(#saturn-back-ring-clip)" />
+          <ellipse cx="80" cy="54" rx="71.9" ry="15.13" fill="none" stroke="rgba(218,196,136,0.68)" strokeWidth="8.4"  clipPath="url(#saturn-back-ring-clip)" />
           {/* Planet */}
           <circle cx="80" cy="46" r="34" fill="url(#saturn-g)" />
           <g clipPath="url(#saturn-sphere-clip)">
@@ -173,7 +178,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
             <ellipse cx="80" cy="53" rx="32"  ry="2.2" fill="rgba(160,120,34,0.18)" />
             <circle  cx="80" cy="46" r="34"            fill="url(#saturn-limb)" />
           </g>
-          {/* Front rings */}
+          {/* Front rings — only the near-side arc that crosses in front of the planet */}
           <ellipse cx="80" cy="54" rx="46.4" ry="9.77"  fill="none" stroke="rgba(180,162,118,0.28)" strokeWidth="9.7"  clipPath="url(#saturn-front-ring-clip)" />
           <ellipse cx="80" cy="54" rx="58.3" ry="12.27" fill="none" stroke="rgba(248,230,170,0.90)" strokeWidth="14.1" clipPath="url(#saturn-front-ring-clip)" />
           <ellipse cx="80" cy="54" rx="52"   ry="10.95" fill="none" stroke="rgba(255,245,195,0.35)" strokeWidth="2"    clipPath="url(#saturn-front-ring-clip)" />
