@@ -25,12 +25,14 @@
   line-height: 24px;
   font-family: "Roboto Condensed";
   font-weight: 600;
-  font-size: 30px;
+  font-size: 24px;
+  text-transform: uppercase;
 }
 
 .solar2 {
   margin-top: 12px;
   font-weight: 600;
+  font-size:20px;
 }
 
 .solar-time {

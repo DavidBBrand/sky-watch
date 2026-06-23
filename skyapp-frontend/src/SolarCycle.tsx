@@ -53,9 +53,16 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
       <div className="solar-flex">
         <div className="solar-item" style={{ flex: 1 }}>
           <div className="solar sub-title">Sunrise</div>
-          <span style={{ fontSize: "3.0rem" }} role="img" aria-label="sunrise">
-            🌅
-          </span>
+          <svg width="6rem" height="5.5rem" viewBox="0 0 48 52" fill="none" role="img" aria-label="sunrise" xmlns="http://www.w3.org/2000/svg">
+            <line x1="4" y1="42" x2="44" y2="42" stroke="#FFD060" strokeWidth="2.5" strokeLinecap="round"/>
+            <circle cx="24" cy="24" r="9" fill="#FFD060"/>
+            <line x1="24" y1="13" x2="24" y2="9" stroke="#FFD060" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="16" y1="16" x2="13" y2="13" stroke="#FFD060" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="32" y1="16" x2="35" y2="13" stroke="#FFD060" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="13" y1="24" x2="9" y2="24" stroke="#FFD060" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="35" y1="24" x2="39" y2="24" stroke="#FFD060" strokeWidth="2.5" strokeLinecap="round"/>
+            <polyline points="17,41 24,36 31,41" stroke="#FFD060" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
           <div className="solar-time">{formatTime(sun.sunrise)}</div>
         </div>
         
@@ -99,9 +106,14 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
         </div>
         <div className="solar-item" style={{ flex: 1 }}>
           <div className="solar sub-title">Sunset</div>
-          <span style={{ fontSize: "3.0rem" }} role="img" aria-label="sunset">
-            🌇
-          </span>
+          <svg width="6rem" height="5.5rem" viewBox="0 0 48 52" fill="none" role="img" aria-label="sunset" xmlns="http://www.w3.org/2000/svg">
+            <line x1="4" y1="28" x2="44" y2="28" stroke="#FF9040" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M 15 28 A 9 9 0 0 0 33 28 Z" fill="#FF9040"/>
+            <line x1="24" y1="13" x2="24" y2="9" stroke="#FF9040" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="17" y1="21" x2="14" y2="18" stroke="#FF9040" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="31" y1="21" x2="34" y2="18" stroke="#FF9040" strokeWidth="2.5" strokeLinecap="round"/>
+            <polyline points="17,35 24,42 31,35" stroke="#FF9040" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
           <div className="solar-time">{formatTime(sun.sunset)}</div>
         </div>
       </div>
