@@ -38,10 +38,10 @@
 }
 .moon-header-block .location-name {
   display: block;
-  font-family: 'Share Tech', sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
   font-size:2.6rem;
   font-weight: 400;;
-  letter-spacing: -2.5px; /* Tighter look */
+  letter-spacing: -2px; /* Tighter look */
     color: var(--text-main);
   opacity: 0.92;
   /* 2. Glass  Effect */
@@ -67,7 +67,7 @@
 /* 4. Style the Date */
 .moon-header-block .date-display {
   display: block;
-  font-family: 'Share Tech', sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
   font-size: 1.8rem; /* Date should usually be smaller for hierarchy */
   color: var(--text-sub);
   margin-top: 2px !important; 
@@ -95,13 +95,13 @@
     inset 0 0 10px var(--separator-glow2); /* Subtle inner bloom */
     
   transition: all 0.3s ease-in-out;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
   border: 0px solid var(--separator-glow2);
   
 }
 .illumination-value {
     font-size: 7.4rem;
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .milestone-item {
@@ -120,7 +120,8 @@
 /* Milestone Date Value (e.g., Feb. 16) */
 .milestone-date {
   color: var(--text-main);
-  font-size: 1.7rem;
+  font-size: 2rem;
+  font-weight: 500;
 }
 .moon-container {
   display: flex;
@@ -177,7 +178,8 @@
   gap: 10px;
   padding: 15px 5px;
   width: 100%;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 600;
 }
 
 .stat-label {
@@ -218,6 +220,8 @@
 .loading-text {
   font-size: 1.4rem;
   opacity: 0.9;
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 500;
 }
 
 .signal-lost {

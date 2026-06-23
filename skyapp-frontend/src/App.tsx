@@ -204,7 +204,7 @@ const App: React.FC = () => {
             {(location.lon / 15).toFixed(1)} HRS
           </span>
           <span className="time-display">
-            Local Time: {weatherData ? getLiveLocalTime() : "--:--"}
+            Local Standard Time: {weatherData ? getLiveLocalTime() : "--:--"}
           </span>
           {skyData?.sun?.phase && <GoldenHour sunData={skyData.sun} />}
         </div>

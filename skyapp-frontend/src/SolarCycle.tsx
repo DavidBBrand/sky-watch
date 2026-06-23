@@ -76,6 +76,7 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
               style={{
                 fontSize: "1.6rem",
                 color: "var(--accent-color2)",
+                fontWeight: "600"
     
               }}
             >
@@ -86,11 +87,11 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
               className="zenith-coords"
               style={{ fontSize: "1.6rem", marginTop: "8px" }}
             >
-              <span style={{ color: "var(--accent-color2)" }}>
+              <span style={{ color: "var(--accent-color2)", fontWeight: "600" }}>
                 <div className="zenith-label sub-title">Peak</div> {sun.zenith_alt}°
               </span>
               <span style={{ margin: "0 10px", opacity: 0.3 }}></span>
-              <span style={{ color: "var(--accent-color2)" }}>
+              <span style={{ color: "var(--accent-color2)", fontWeight: "600" }}>
                 <div className="zenith-label sub-title">Az</div> {sun.zenith_az}°
               </span>
             </div>

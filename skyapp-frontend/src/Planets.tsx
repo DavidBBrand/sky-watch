@@ -314,8 +314,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       color: "var(--text-main)",
                       fontFamily: "Share Tech, sans-serif",
                       lineHeight: 1,
-                      marginBottom: "0px",
-                      marginTop: "2px",
+                      marginBottom: "2px",
                     }}
                   >
                     {name}
@@ -328,10 +327,10 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                   <div 
                     className="glow-sub2"
                     style={{
-                      fontSize: "1.4rem",
+                      fontSize: "1.6rem",
                       fontFamily: "Roboto Condensed",
                       color: "var(--text-sub)",
-                      marginTop: "0px",
+                      marginTop: "2px",
                       letterSpacing: "-1px"
                     }}
                   >
@@ -340,13 +339,13 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                   
                   <div
                     style={{
-                      fontSize: "1.4rem",
+                      fontSize: "1.6rem",
                       fontFamily: "Roboto Condensed",
-                      color: isBelowHorizon ? "#a34631" : "#4a95ae",
+                      color: isBelowHorizon ? "#bc4e35" : "#3baed4",
                       fontWeight: "600",
                       letterSpacing: "-1px",
                       lineHeight: "1",
-                      marginBottom: "-6px"
+                      marginBottom: "-1px"
                       
                     }}
                   >
@@ -354,7 +353,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                   </div>
                   <div style={{ lineHeight: "1", marginBottom: "6px"}}>
                     <span className="distance">Distance: </span>
-                    <span className="glow-sub2" style={{ fontSize: "1.3rem" }}>
+                    <span className="glow-sub2" style={{ fontSize: "1.1rem" }}>
                       {info.distance_au} AU
                     </span>
                   </div>

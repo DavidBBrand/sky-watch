@@ -45,8 +45,9 @@
 }
 
 .altitude-value {
-  font-family: "Share tech", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   color: var(--accent-color2);
-  font-size: 1.8rem;
+  font-size: 2rem;
   display: block;
+  font-weight:600;
 }

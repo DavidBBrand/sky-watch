@@ -21,19 +21,25 @@
   /* Ensures equal width distribution */
 }
 .solar {
-  margin-top: 52px;
+  margin-top: 32px;
+  line-height: 24px;
+  font-family: "Roboto Condensed";
+  font-weight: 600;
+  font-size: 30px;
 }
 
 .solar2 {
   margin-top: 12px;
+  font-weight: 600;
 }
 
 .solar-time {
   font-size: 1.6rem;
   color: var(--accent-color2);
   font-family: "Roboto Condensed", sans-serif;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
   margin-top: 12px;
+  font-weight: 600;
 }
 
 .solar-label {
@@ -58,8 +64,8 @@
 }
 
 .zenith-time {
-  font-family: "Share tech", sans-serif;
-  font-weight:lighter;
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 400;
  
 }
 
@@ -67,7 +73,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Share tech", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   letter-spacing: 0.5px;
   padding: 4px 12px;
   border-radius: 2rem;
