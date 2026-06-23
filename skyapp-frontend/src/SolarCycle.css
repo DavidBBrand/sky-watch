@@ -29,9 +29,9 @@
 }
 
 .solar-time {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: var(--accent-color2);
-  font-family: "Share tech", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   letter-spacing: -2px;
   margin-top: 12px;
 }

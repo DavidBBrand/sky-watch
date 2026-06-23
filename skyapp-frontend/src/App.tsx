@@ -60,7 +60,7 @@ const App: React.FC = () => {
     const solar24 = `${h.toString().padStart(2, "0")}:${minutes}`;
     const period = h >= 12 ? "PM" : "AM";
     const h12 = h % 12 || 12;
-    const solar12 = `${h12.toString().padStart(2, "0")}:${minutes} ${period}`;
+    const solar12 = `${h12}:${minutes} ${period}`;
 
     return { solar24, solar12 };
   };
@@ -70,7 +70,7 @@ const App: React.FC = () => {
 
     try {
       return new Date().toLocaleTimeString("en-US", {
-        hour: "2-digit",
+        hour: "numeric",
         minute: "2-digit",
         hour12: true,
         timeZone: weatherData.timezone

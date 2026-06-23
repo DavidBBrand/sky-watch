@@ -28,7 +28,7 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
     }
     try {
       return new Date(isoString).toLocaleTimeString([], {
-        hour: "2-digit",
+        hour: "numeric",
         minute: "2-digit",
         hour12: true,
         // Fallback to UTC if timezone is missing to prevent crashing
@@ -39,7 +39,7 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
       
       // Final fallback: try a standard local format if the timezone object specifically failed
       return new Date(isoString).toLocaleTimeString([], {
-        hour: "2-digit",
+        hour: "numeric",
         minute: "2-digit",
         hour12: true
       });
