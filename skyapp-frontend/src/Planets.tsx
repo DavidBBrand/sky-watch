@@ -33,7 +33,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
   const planetIcons: Record<string, React.ReactNode> = {
     Mercury: "🌑",
     Venus: (
-      <svg viewBox="0 0 100 100" style={{ width: "3.8rem", height: "3.8rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="venus-g" cx="38%" cy="32%" r="65%">
             <stop offset="0%" stopColor="#fffde8" />
@@ -56,7 +56,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
       </svg>
     ),
     Mars: (
-      <svg viewBox="0 0 100 100" style={{ width: "3.8rem", height: "3.8rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="mars-g" cx="36%" cy="30%" r="68%">
             <stop offset="0%"   stopColor="#e07248" />
@@ -91,7 +91,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
       </svg>
     ),
     Jupiter: (
-      <svg viewBox="0 0 100 100" style={{ width: "3.8rem", height: "3.8rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="jup-sphere" cx="35%" cy="30%" r="70%">
             <stop offset="0%" stopColor="rgba(255,240,210,0.45)" />
@@ -128,7 +128,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
       </svg>
     ),
     Saturn: (
-      <svg viewBox="0 0 160 100" style={{ width: "6rem", height: "3.75rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 160 100" style={{ width: "7rem", height: "4.375rem" }} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="saturn-g" cx="38%" cy="28%" r="72%">
             <stop offset="0%"   stopColor="#fdf6dc" />
@@ -188,7 +188,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
       </svg>
     ),
     Uranus: (
-      <svg viewBox="0 0 100 100" style={{ width: "3.8rem", height: "3.8rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="uranus-g" cx="36%" cy="30%" r="68%">
             <stop offset="0%" stopColor="#d8f8f8" />
@@ -219,7 +219,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
       </svg>
     ),
     Neptune: (
-      <svg viewBox="0 0 100 100" style={{ width: "3.8rem", height: "3.8rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="nept-g" cx="36%" cy="30%" r="68%">
             <stop offset="0%" stopColor="#80c8f8" />
@@ -287,7 +287,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
 
               return (
                 <div key={name} className="planet-item">
-                  <div style={{ fontSize: "3.8rem", lineHeight: 1, display: "flex", justifyContent: "center", marginBottom: "-2px" }}>
+                  <div style={{ fontSize: "4.4rem", lineHeight: 1, display: "flex", justifyContent: "center", marginBottom: "-2px" }}>
                     {planetIcons[name] || "✨"}
                   </div>
 
