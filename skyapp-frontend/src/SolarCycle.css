@@ -1,12 +1,19 @@
+.solar-cycle-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .solar-flex {
   display: flex;
   gap: 8px;
   align-items: stretch; /* Ensures all items are the same height */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .solar-item {
   background: rgba(19, 82, 57, 0);
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   font-size: 1rem;
   border: 0px solid var(--separator-glow2);
   border-radius: 1.2rem;
@@ -23,7 +30,7 @@
 .solar {
   margin-top: 32px;
   line-height: 24px;
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   font-weight: 600;
   font-size: 20px;
   text-transform: uppercase;
@@ -38,7 +45,7 @@
 .solar-time {
   font-size: 1.4rem;
   color: var(--accent-color2);
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   letter-spacing: -1px;
   margin-top: 12px;
   font-weight: 600;
@@ -66,7 +73,7 @@
 }
 
 .zenith-time {
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   font-weight: 400;
  
 }
@@ -75,12 +82,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   letter-spacing: 0.5px;
-  padding: 4px 12px;
+  padding: 4px 4px;
   border-radius: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.01);
-  
 }
 
 /* Ensures the divider between Peak and Azimuth is subtle */

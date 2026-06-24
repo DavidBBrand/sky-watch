@@ -41,9 +41,10 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
       <div
         style={{
           minHeight: "120px",
-          display: "grid",
-          alignItems: "center",
-          justifyContent: "center"
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
         }}
       >
         <div className="card-title">Solar Arc<div> {date}</div></div>

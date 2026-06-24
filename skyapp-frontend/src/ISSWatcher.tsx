@@ -105,13 +105,13 @@ const ISSWatcher: React.FC<ISSWatcherProps> = memo(({ onDistanceUpdate }) => {
 
       <div className="telemetry-coords">
         <div style={{ letterSpacing: "1px" }}>
-          Latitude: <span className="glow-sub2">
+          Latitude: <span className="glow-sub2" style={{ fontFamily: "Oxanium" }}>
             {/* Use optional chaining ?. and provide a fallback "0.00" */}
             {issPos.lat?.toFixed?.(2) ?? "0.00"}
           </span>
         </div>
         <div>
-          Longitude: <span className="glow-sub2">
+          Longitude: <span className="glow-sub2" style={{ fontFamily: "Oxanium" }}>
             {issPos.lon?.toFixed?.(2) ?? "0.00"}
           </span>
         </div>

@@ -1,7 +1,7 @@
 #root {
   width: 100%;
   margin: 0 auto;
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   text-align: center;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -39,7 +39,7 @@
   z-index: 10;
 }
 .main-title {
-  font-family: 'Play', sans-serif;
+  font-family: 'Oxanium', sans-serif;
   font-size: 4rem;
   margin: 0px auto;
   text-transform: uppercase;
@@ -70,7 +70,7 @@
 }
 
 .sub-title {
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   font-size: 1.6rem; /* Slightly larger for the new name */
   margin: 0px 0;
   letter-spacing: 0px;
@@ -115,7 +115,7 @@
   font-size: 2.4rem;
   letter-spacing: -1px;
   font-weight: 400;
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   margin: 0px 0 12px;
   color: var(--text-main);
   opacity: 0.92;
@@ -199,7 +199,7 @@
 }
 
 .telemetry-info span {
-  font-family: 'Play', sans-serif;
+  font-family: 'Oxanium', sans-serif;
   font-weight: 600;
   transition: color 0.3s ease;
 }
@@ -248,6 +248,7 @@
     border-color 0.2s ease,
     background 0.2s ease,
     box-shadow 0.2s ease;
+  font-family: 'Roboto', sans-serif;
 }
 
 .search-wrapper input::placeholder {
@@ -255,6 +256,7 @@
   line-height: 16px;
   color: var(--text-sub);
   opacity: 0.58;
+  font-family: 'Roboto';
 }
 .search-wrapper input:focus {
   border-color: var(--accent-color);
@@ -321,7 +323,7 @@
   z-index: 1000;
   width: fit-content;
   min-width: 140px;
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   opacity: 0.92;
   /* Glass  Effect */
   text-shadow:

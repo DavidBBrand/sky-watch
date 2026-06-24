@@ -4,9 +4,9 @@
   justify-content: space-between;
   width: 100%;
   height: 80px;
-  padding: 0 15px;
+  padding: 0 4px;
   box-sizing: border-box;
-  font-family: 'Play', sans-serif;
+  font-family: 'Oxanium', sans-serif;
 }
 
 .solar-gauge-track {
@@ -40,12 +40,12 @@
 }
 
 .altitude-readout {
-  flex: 0 0 70px; /* Fixed width so it doesn't jump around */
+  flex: 0 0 52px; /* Fixed width so it doesn't jump around */
   text-align: right;
 }
 
 .altitude-value {
-  font-family: "Play", sans-serif;
+  font-family: "Oxanium", sans-serif;
   color: var(--accent-color2);
   font-size: 1.6rem;
   display: block;

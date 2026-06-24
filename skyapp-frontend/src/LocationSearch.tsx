@@ -93,7 +93,6 @@ const LocationSearch = memo<LocationSearchProps>(({ onLocationChange }) => {
           style={{
             cursor: loading ? "wait" : "text",
             opacity: loading ? 0.7 : 1,
-            fontFamily: 'Roboto Condensed',
           }}
         />
       </form>

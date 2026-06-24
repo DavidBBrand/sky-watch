@@ -118,8 +118,7 @@ const Moon: React.FC<MoonProps> = memo(({ date }) => {
   return (
     <div className="moon-container">
         <div className="moon-header-block">
-          <div className="glow-sub date-display">The Moon</div>
-          <div className="glow-sub location-name">{location.name}</div>
+          <div className="card-title">Moon</div>
           <div className="glow-sub date-display">{date}</div>
         </div>
 
@@ -137,15 +136,15 @@ const Moon: React.FC<MoonProps> = memo(({ date }) => {
                 Altitude{" "}
                 {trend === "rising" ? "↑" : trend === "setting" ? "↓" : ""}
               </div>
-              <div style={{ fontSize: "1.7rem", fontFamily: "Play" }} className={`glow-sub`}>
+              <div style={{ fontSize: "1.7rem", fontFamily: "Oxanium", fontWeight: 300 }} className={`glow-sub`}>
                 {moonData.altitude?.toFixed(1)}°
               </div>
             </div>
             <div className="text-right">
               <div className="stat-label">Azimuth</div>
-              <div style={{ fontSize: "1.7rem", fontFamily: "Play" }} className="glow-sub">
+              <div style={{ fontSize: "1.7rem", fontFamily: "Oxanium", fontWeight: 300 }} className="glow-sub">
                 {moonData.azimuth?.toFixed(1)}°
-                <span style={{ fontSize: "1.7rem", fontFamily: "Play" }} className="glow-sub">
+                <span style={{ fontSize: "1.7rem", fontFamily: "Oxanium", fontWeight: 300 }} className="glow-sub">
                   {" "}({getCompassDirection(moonData.azimuth)})
                 </span>
               </div>
