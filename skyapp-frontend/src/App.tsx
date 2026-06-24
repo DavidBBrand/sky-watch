@@ -228,7 +228,7 @@ const App: React.FC = () => {
           <ISSWatcher onDistanceUpdate={setIssDistance} />
         </div>
         <div className="glass-card">
-          <Starlink />
+          <Starlink theme={isNight ? "night" : "day"} />
         </div>
         <div className="glass-card">
           <MapCard

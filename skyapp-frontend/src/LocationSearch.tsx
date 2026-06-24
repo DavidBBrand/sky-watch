@@ -6,10 +6,20 @@ interface LocationSearchProps {
 }
 
 // 2. Define the expected shape of the Nominatim API responses
+interface NominatimAddress {
+  city?: string;
+  town?: string;
+  village?: string;
+  state?: string;
+  country?: string;
+  country_code?: string;
+}
+
 interface NominatimSearchResult {
   lat: string;
   lon: string;
   display_name: string;
+  address: NominatimAddress;
 }
 
 // 3. Apply the Props interface to the memoized component
@@ -29,7 +39,7 @@ const LocationSearch = memo<LocationSearchProps>(({ onLocationChange }) => {
 
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
+        `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(query)}`,
         {
           signal: controller.signal,
           headers: {
@@ -47,12 +57,17 @@ const LocationSearch = memo<LocationSearchProps>(({ onLocationChange }) => {
       const data: NominatimSearchResult[] = await response.json();
 
       if (data && data.length > 0) {
-        const { lat, lon, display_name } = data[0];
-        
+        const { lat, lon, address, display_name } = data[0];
+        const city = address.city || address.town || address.village || display_name.split(",")[0];
+        const isUS = address.country_code === "us";
+        const qualifier = isUS
+          ? (address.state || address.country || "")
+          : (address.country || address.state || "");
+
         onLocationChange({
           lat: parseFloat(lat),
           lon: parseFloat(lon),
-          name: display_name.split(",")[0]
+          name: `${city}${qualifier ? ", " + qualifier : ""}`
         });
         setQuery("");
       } else {

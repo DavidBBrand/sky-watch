@@ -7,13 +7,26 @@
   border-radius: 50%;
 
   /*  Glow Effect */
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--accent-radar);
   box-shadow:
     0 0 8px rgba(255, 213, 0, 0.144),
     /* Soft outer spread */ inset 0 0 1px var(--separator-glow2); 
     /* Soft inner glow */
   filter: drop-shadow(0px 0px 12px var(--separator-glow2));
 
+}
+
+.radar-map-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0.75;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
 }
 
 .radar-scanner {
@@ -25,8 +38,8 @@
   background: conic-gradient(
     from 270deg at 100% 100%,
     transparent 0%,
-    color-mix(in srgb, var(--accent-color), transparent 70%) 90%,
-    var(--accent-color) 100%
+    color-mix(in srgb, var(--accent-radar), transparent 70%) 90%,
+    var(--accent-radar) 100%
   );
 
   transform-origin: bottom right;
@@ -52,7 +65,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 55%);
+  border: 1px solid color-mix(in srgb, var(--accent-radar), transparent 55%);
   border-radius: 50%;
   z-index: 1;
 }
@@ -83,7 +96,7 @@
 .radar-label,
 .radar-direction {
   position: absolute;
-  color: var(--accent-color);
+  color: var(--accent-radar);
   font-family:'Roboto Condensed', sans-serif;
   letter-spacing: -.5px;
   text-shadow: 0.05px 0.05px 0.1px #6a6d6dde;
@@ -168,9 +181,9 @@
   position: absolute;
   width: 10px;
   height: 10px;
-  background: var(--accent-color);
+  background: var(--accent-radar);
   border-radius: 50%;
-  box-shadow: 0 0 2px var(--accent-color);
+  box-shadow: 0 0 2px var(--accent-radar);
   transform: translate(-50%, -50%);
   z-index: 20;
   animation: node-pulse 2s infinite ease-in-out;
@@ -183,7 +196,7 @@
   50% {
     transform: translate(-50%, -50%) scale(1.1);
     opacity: 0.8;
-    box-shadow: 0 0 1px var(--accent-color);
+    box-shadow: 0 0 1px var(--accent-radar);
   }
   100% {
     transform: translate(-50%, -50%) scale(1);
@@ -203,7 +216,7 @@
   border-radius: 4px;
   font-size: 1rem;
   font-weight: 800;
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--accent-radar);
   white-space: nowrap;
   text-align: center;
   z-index: 100;
@@ -243,7 +256,7 @@
   text-transform: uppercase;
 }
 .stat-value {
-  color: var(--accent-color);
+  color: var(--accent-radar);
   margin-top: 8px;
   font-size:1.8rem;
   font-weight: 600;

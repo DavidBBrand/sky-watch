@@ -16,6 +16,7 @@
   --accent-color2: rgb(186, 100, 19);
   --accent-color3: #644910;
   --accent-color4: #154490c2;
+  --accent-radar: #1dbb5e;
   
   --separator-glow: rgba(73, 51, 18, 0.097);
   --separator-glow2: rgba(14, 63, 98, 0.436);
@@ -40,6 +41,7 @@
   --accent-color2: rgb(209, 133, 52);
   --accent-color3: #045834;
   --accent-color4: #6792d6d3;
+  --accent-radar: #84d68f;
   
   --separator-glow: rgba(36, 197, 63, 0.948);
   --separator-glow2: rgba(62, 222, 86, 0.536);

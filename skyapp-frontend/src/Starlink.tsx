@@ -23,7 +23,21 @@ interface RadarNode {
   distance: number;
 }
 
-const Starlink: React.FC = memo(() => {
+const MAPBOX_TOKEN = (import.meta.env.VITE_MAPBOX_TOKEN as string) || "";
+const RADIUS_METERS = 500 * 1609.344; // 500 miles in meters
+
+// Compute Mapbox zoom so the image edge = exactly 500 miles from center.
+// Mercator formula: meters_per_px = (cos(lat) * EARTH_CIRC) / (256 * 2^Z)
+const calcRadarZoom = (lat: number, imagePx: number): number => {
+  const metersPerPx = (2 * RADIUS_METERS) / imagePx;
+  return Math.log2((Math.cos((lat * Math.PI) / 180) * 40075016.686) / (256 * metersPerPx));
+};
+
+interface StarlinkProps {
+  theme?: "day" | "night";
+}
+
+const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
   const { location } = useLocation();
   const { lat, lon } = location;
 
@@ -135,6 +149,14 @@ const Starlink: React.FC = memo(() => {
     <div className="starlink-card">
       <div className="card-title">Starlink Satellite Radar</div>
       <div className={`radar-container ${isAlert ? "alert" : ""}`}>
+        {lat !== null && lon !== null && MAPBOX_TOKEN && (
+          <img
+            className="radar-map-overlay"
+            src={`https://api.mapbox.com/styles/v1/mapbox/${theme === "day" ? "light-v11" : "dark-v11"}/static/${lon},${lat},${calcRadarZoom(lat, 600).toFixed(2)},0/600x600@2x?access_token=${MAPBOX_TOKEN}`}
+            alt=""
+            aria-hidden="true"
+          />
+        )}
         <div className="radar-scanner"></div>
         <div className="radar-axis-h"></div>
         <div className="radar-axis-v"></div>

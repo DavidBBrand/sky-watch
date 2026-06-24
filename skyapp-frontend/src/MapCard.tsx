@@ -81,6 +81,9 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
             }}
           // loading="eager"
         />
+          <div className="glow-sub" style={{ textAlign: "center", marginTop: "8px", fontSize: "1.4rem" }}>
+            {location.name}
+          </div>
       </div>
     </div>
   );
