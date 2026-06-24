@@ -36,8 +36,9 @@
 
 .weather-temp {
     font-size: 3.8rem;
-    font-weight: 600;
+    font-weight: 500;
     margin: 12px 0;
+    font-family: 'Play', sans-serif;
 
  
 }
@@ -62,7 +63,7 @@
     0 0 10px rgba(255, 255, 255, 0.05),       /* Ambient outer glow */
     inset 0 0 10px var(--separator-glow2); /* Subtle inner bloom */    
   transition: all 0.3s ease-in-out;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Play', sans-serif;
   border:0px solid var(--separator-glow2);
 }
 
@@ -84,11 +85,11 @@
   font-size: 6rem;
 }
 .detail-item .value {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     color: var(--text-main);
     font-weight: 400;
     margin-top: 4px;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Play', sans-serif;
 }
 .weather-loading-pulse {
     animation: pulse 2s infinite ease-in-out;

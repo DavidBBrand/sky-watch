@@ -137,15 +137,15 @@ const Moon: React.FC<MoonProps> = memo(({ date }) => {
                 Altitude{" "}
                 {trend === "rising" ? "↑" : trend === "setting" ? "↓" : ""}
               </div>
-              <div style={{ fontSize: "1.7rem", fontFamily: "Roboto Condensed" }} className={`glow-sub`}>
+              <div style={{ fontSize: "1.7rem", fontFamily: "Play" }} className={`glow-sub`}>
                 {moonData.altitude?.toFixed(1)}°
               </div>
             </div>
             <div className="text-right">
               <div className="stat-label">Azimuth</div>
-              <div style={{ fontSize: "1.7rem", fontFamily: "Roboto Condensed" }} className="glow-sub">
+              <div style={{ fontSize: "1.7rem", fontFamily: "Play" }} className="glow-sub">
                 {moonData.azimuth?.toFixed(1)}°
-                <span style={{ fontSize: "1.7rem", fontFamily: "Roboto Condensed" }} className="glow-sub">
+                <span style={{ fontSize: "1.7rem", fontFamily: "Play" }} className="glow-sub">
                   {" "}({getCompassDirection(moonData.azimuth)})
                 </span>
               </div>
