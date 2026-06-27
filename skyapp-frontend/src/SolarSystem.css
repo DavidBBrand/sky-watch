@@ -23,6 +23,16 @@
   opacity: 0.7;
 }
 
+.solar-disclaimer {
+  font-family: 'Oxanium', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  opacity: 0.55;
+  text-align: center;
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
 .solar-error {
   color: var(--accent-color2);
   font-size: 1.2rem;

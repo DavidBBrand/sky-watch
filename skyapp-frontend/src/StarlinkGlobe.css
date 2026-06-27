@@ -21,7 +21,7 @@
 
 .globe-container {
   flex: 1;
-  min-height: 360px;
+  min-height: 480px;
   border-radius: 1.5rem;
   overflow: hidden;
   position: relative;

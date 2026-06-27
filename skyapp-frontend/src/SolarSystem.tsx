@@ -100,6 +100,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
   return (
     <div className="solar-system-card">
       <div className="card-title">Solar System — Live Orbital Positions</div>
+      <div className="solar-disclaimer">* Distances compressed for visibility — not to scale</div>
       <div className="solar-svg-wrapper">
         <svg
           viewBox="-400 -400 800 800"
@@ -114,7 +115,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
               <stop offset="100%" stopColor="#ff8800" stopOpacity="0" />
             </radialGradient>
             <filter id="body-glow" x="-80%" y="-80%" width="260%" height="260%">
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
+              <feGaussianBlur stdDeviation="1.5" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
@@ -154,7 +155,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
           </circle>
           <text
             x={0} y={-19}
-            textAnchor="middle" fontSize={10}
+            textAnchor="middle" fontSize={14}
             fontFamily="Oxanium, sans-serif"
             fill="#ffd700" opacity={0.9}
             stroke={theme === "night" ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.9)"}
@@ -201,7 +202,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
                 {/* Label above arrow start */}
                 <text
                   x={lx} y={ly - 5}
-                  textAnchor="middle" fontSize={7}
+                  textAnchor="middle" fontSize={10}
                   fontFamily="Oxanium, sans-serif"
                   fill="#b8b8b8"
                   stroke={theme === "night" ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.95)"}
@@ -248,7 +249,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
                   {/* Label */}
                   <text
                     x={lx} y={ly + 3}
-                    textAnchor="middle" fontSize={9}
+                    textAnchor="middle" fontSize={14}
                     fontFamily="Oxanium, sans-serif"
                     fill={cfg.color}
                     stroke={theme === "night" ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.95)"}
