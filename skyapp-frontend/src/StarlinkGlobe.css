@@ -25,4 +25,9 @@
   border-radius: 1.5rem;
   overflow: hidden;
   position: relative;
+  touch-action: none; /* Pass pinch/pan gestures to Three.js instead of the browser */
+}
+
+.globe-container canvas {
+  touch-action: none;
 }
