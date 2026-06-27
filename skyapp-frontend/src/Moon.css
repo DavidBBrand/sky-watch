@@ -139,7 +139,7 @@
   align-items: center;
   gap: 20px;
   width: 100%;
-  margin-top: 46px;
+  margin-top: 30px;
 }
 
 .moon-svg-frame {
@@ -173,7 +173,7 @@
 
 /* Stats Grid */
 .moon-stats-grid {
-  margin-top: 20px;
+  margin-top: 8px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
@@ -198,12 +198,12 @@
 .milestone-date {
   font-size: 1.2rem;
   font-family: 'Oxanium', sans-serif;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 
 .azimuth-unit {
-  margin-left: 5px;
+  margin-left: 2px;
   font-size: 1rem;
   font-weight: normal;
 }
