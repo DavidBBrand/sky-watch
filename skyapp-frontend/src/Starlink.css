@@ -120,15 +120,15 @@
 }
 
 .radar-label {
-  font-size: 1rem;
+  font-size: .6rem;
   left: 51%;
-  font-weight: bold;
+  font-weight: 600;
 }
 .label-center {
   position: static;
   left: 14px;
   top: -8px;
-  font-size: 1rem;
+  font-size: .6rem;
   background: rgba(0, 0, 0, 0.03);
   white-space: nowrap;
 
@@ -153,26 +153,26 @@
 }
 
 .radar-direction {
-  font-size: 1rem;
-  font-weight: 400;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 .dir-n {
-  top: -35px;
+  top: -30px;
   left: 50%;
   transform: translateX(-50%);
 }
 .dir-s {
-  bottom: -35px;
+  bottom: -30px;
   left: 50%;
   transform: translateX(-50%);
 }
 .dir-e {
-  right: -30px;
+  right: -28px;
   top: 50%;
   transform: translateY(-50%);
 }
 .dir-w {
-  left: -31px;
+  left: -30px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -180,8 +180,8 @@
 /* 5. Nodes & Tooltips */
 .radar-node {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   background: var(--accent-radar);
   border-radius: 50%;
   box-shadow: 0 0 2px var(--accent-radar);
