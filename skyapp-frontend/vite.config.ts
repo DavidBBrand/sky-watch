@@ -10,5 +10,6 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom', // simulates the browser window so we dont get a reference error
+    setupFiles: ['./src/test-setup.ts'],
   }
 })
