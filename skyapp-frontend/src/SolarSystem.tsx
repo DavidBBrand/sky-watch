@@ -50,17 +50,6 @@ function toXY(x_au: number, y_au: number): [number, number] {
   return [r * Math.cos(a), -r * Math.sin(a)];
 }
 
-// Hardcoded star positions [x, y, opacity]
-const STARS: [number, number, number][] = [
-  [-340, -320, 0.50], [-280,  260, 0.40], [ 310, -200, 0.60], [ 220,  330, 0.35],
-  [-150, -280, 0.50], [ 350,  100, 0.40], [-320,   50, 0.60], [ 180, -350, 0.30],
-  [-230,  310, 0.45], [ 290, -310, 0.40], [  50,  340, 0.50], [-370, -180, 0.55],
-  [ 130, -170, 0.35], [ -80,  280, 0.40], [ 370,  230, 0.50], [-240,  -70, 0.60],
-  [ 260,  180, 0.35], [-120,  330, 0.50], [ 340, -100, 0.40], [ -60, -360, 0.60],
-  [-380,  290, 0.30], [ 375, -340, 0.50], [  95,  385, 0.40], [-295, -375, 0.30],
-  [ 200,  -80, 0.30], [-170,  140, 0.35], [ 300,   60, 0.30], [ -60, -190, 0.40],
-  [-200,  200, 0.25], [ 160, -260, 0.35], [-330,  170, 0.30], [ 250, -150, 0.45],
-];
 
 interface SolarSystemProps {
   theme?: "day" | "night";
@@ -125,11 +114,6 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
               <path d="M0,0 L6,2 L0,4 Z" fill="#b8b8b8" fillOpacity="0.65" />
             </marker>
           </defs>
-
-          {/* Background stars (night only) */}
-          {theme === "night" && STARS.map(([sx, sy, op], i) => (
-            <circle key={i} cx={sx} cy={sy} r={0.9} fill="white" opacity={op} />
-          ))}
 
           {/* Orbit rings */}
           {ORBIT_AU.map(([name, au]) => (

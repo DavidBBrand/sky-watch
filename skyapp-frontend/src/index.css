@@ -47,7 +47,7 @@
   --separator-glow2: rgba(62, 222, 86, 0.536);
   --separator-glow3: rgba(14, 100, 6, 0.675);
   
-  --star-opacity: 0.88;
+  --star-opacity: 0.78;
 }
 
 html {
@@ -102,8 +102,8 @@ body::before {
     radial-gradient(2px 2px at 25px 35px, #fff, transparent),
     radial-gradient(2px 2px at 50px 100px, #fff, transparent),
     /* Larger "Glow" stars */
-    radial-gradient(6px 6px at 100px 400px, #ffffff, rgba(255, 255, 255, 0.1) 40%, transparent 100%),
-    radial-gradient(6px 6px at 85% 27%, #ffffff, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    radial-gradient(3px 3px at 100px 400px, #ffffff, rgba(255, 255, 255, 0.1) 40%, transparent 100%),
+    radial-gradient(3px 3px at 85% 27%, #ffffff, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   
   /* Shrinking this multiplier creates the 5x density effect */
   background-size: 433px 520px; 
