@@ -8,6 +8,7 @@ import GoldenHour from "./GoldenHour";
 import MapCard from "./MapCard";
 import ISSWatcher from "./ISSWatcher";
 import Starlink from "./Starlink";
+import StarlinkGlobe from "./StarlinkGlobe";
 import Moon from "./Moon";
 import logoDay from "./assets/skywatchday.png";
 import logoNight from "./assets/skywatch.png";
@@ -229,6 +230,9 @@ const App: React.FC = () => {
         </div>
         <div className="glass-card">
           <Starlink theme={isNight ? "night" : "day"} />
+        </div>
+        <div className="glass-card">
+          <StarlinkGlobe theme={isNight ? "night" : "day"} />
         </div>
         <div className="glass-card">
           <MapCard

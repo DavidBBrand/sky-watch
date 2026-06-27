@@ -1,0 +1,28 @@
+.starlink-globe-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.globe-meta {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.globe-count {
+  font-family: 'Oxanium', sans-serif;
+  font-size: 1.3rem;
+  color: var(--accent-radar);
+  letter-spacing: -0.5px;
+  opacity: 0.85;
+}
+
+.globe-container {
+  flex: 1;
+  min-height: 360px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  position: relative;
+}
