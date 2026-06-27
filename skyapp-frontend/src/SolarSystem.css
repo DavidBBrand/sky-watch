@@ -1,0 +1,32 @@
+.solar-system-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.solar-svg-wrapper {
+  flex: 1;
+  position: relative;
+  min-height: 320px;
+}
+
+.solar-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Oxanium', sans-serif;
+  font-size: 1.4rem;
+  color: var(--text-sub);
+  opacity: 0.7;
+}
+
+.solar-error {
+  color: var(--accent-color2);
+  font-size: 1.2rem;
+  padding: 0 20px;
+  text-align: center;
+  opacity: 0.85;
+}

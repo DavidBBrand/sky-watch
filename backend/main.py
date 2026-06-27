@@ -1,5 +1,6 @@
 import os
 import json
+import math
 import asyncio
 from pathlib import Path
 import requests
@@ -321,6 +322,56 @@ async def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)
         "azimuth": round(float(az.degrees), 2),
         "milestones": milestones
     }
+
+
+@app.get("/solar-system")
+@cache_sky_data(ttl_seconds=3600)
+async def get_solar_system_positions():
+    ts = load.timescale()
+    t = ts.now()
+    sun = eph['sun']
+
+    bodies = {
+        "Mercury": eph['mercury'],
+        "Venus":   eph['venus'],
+        "Earth":   eph['earth'],
+        "Mars":    eph['mars'],
+        "Jupiter": eph['jupiter_barycenter'],
+        "Saturn":  eph['saturn_barycenter'],
+        "Uranus":  eph['uranus_barycenter'],
+        "Neptune": eph['neptune_barycenter'],
+    }
+
+    # Obliquity of ecliptic (J2000) — rotates ICRF equatorial → ecliptic plane
+    eps = math.radians(23.4393)
+    cos_e, sin_e = math.cos(eps), math.sin(eps)
+
+    result: dict = {}
+    for name, body in bodies.items():
+        pos = sun.at(t).observe(body).position.au
+        xi, yi, zi = float(pos[0]), float(pos[1]), float(pos[2])
+        # Rotate to ecliptic plane so top-down view shows circular orbits
+        x_ecl = xi
+        y_ecl = yi * cos_e + zi * sin_e
+        dist = math.sqrt(xi**2 + yi**2 + zi**2)
+        result[name] = {
+            "x_au": round(x_ecl, 4),
+            "y_au": round(y_ecl, 4),
+            "dist_au": round(dist, 4),
+        }
+
+    # Moon: position relative to Earth, then offset by Earth's heliocentric position
+    moon_pos = eph['earth'].at(t).observe(eph['moon']).position.au
+    mx = float(moon_pos[0]) * cos_e  # approximate ecliptic rotation for Moon too
+    my = float(moon_pos[1]) * cos_e + float(moon_pos[2]) * sin_e
+    moon_dist = math.sqrt(sum(float(p)**2 for p in moon_pos))
+    result["Moon"] = {
+        "x_au": round(result["Earth"]["x_au"] + float(moon_pos[0]), 6),
+        "y_au": round(result["Earth"]["y_au"] + my, 6),
+        "dist_au": round(moon_dist, 6),
+    }
+
+    return result
 
 
 if __name__ == "__main__":

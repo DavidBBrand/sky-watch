@@ -9,6 +9,7 @@ import MapCard from "./MapCard";
 import ISSWatcher from "./ISSWatcher";
 import Starlink from "./Starlink";
 import StarlinkGlobe from "./StarlinkGlobe";
+import SolarSystem from "./SolarSystem";
 import Moon from "./Moon";
 import logoDay from "./assets/skywatchday.png";
 import logoNight from "./assets/skywatch.png";
@@ -249,6 +250,9 @@ const App: React.FC = () => {
               <div>Syncing with {location.name}...</div>
             </div>
           )}
+        </div>
+        <div className="glass-card grid-span-2">
+          <SolarSystem theme={isNight ? "night" : "day"} />
         </div>
       </div>
       <p className="copyright glow-sub2"> © 2026 David Brand</p>
