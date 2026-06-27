@@ -8,6 +8,8 @@ on:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -32,7 +34,7 @@ jobs:
           login_url = "https://www.space-track.org/ajaxauth/login"
           tle_url = (
               "https://www.space-track.org/basicspacedata/query/class/gp"
-              "/OBJECT_NAME/STARLINK~~~/orderby/NORAD_CAT_ID/format/tle/limit/1500"
+              "/OBJECT_NAME/STARLINK~~~/orderby/NORAD_CAT_ID/format/3tle"
           )
 
           with httpx.Client(follow_redirects=True) as client:

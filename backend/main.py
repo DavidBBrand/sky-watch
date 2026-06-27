@@ -107,7 +107,7 @@ async def get_starlink_tles():
         login_url = "https://www.space-track.org/ajaxauth/login"
         tle_url = (
             "https://www.space-track.org/basicspacedata/query/class/gp"
-            "/OBJECT_NAME/STARLINK~~~/orderby/NORAD_CAT_ID/format/tle/limit/1500"
+            "/OBJECT_NAME/STARLINK~~~/orderby/NORAD_CAT_ID/format/3tle"
         )
         try:
             async with httpx.AsyncClient(follow_redirects=True) as client:
@@ -143,14 +143,14 @@ async def get_starlink_tles():
                 if structured_sats:
                     with open(backup_path, "w") as f:
                         json.dump(structured_sats, f)
-                    return structured_sats[:1500]
+                    return structured_sats
 
         except Exception as e:
             print(f"Space-track fetch failed: {e}. Switching to local backup.")
 
     if backup_path.exists():
         with open(backup_path, "r") as f:
-            return json.load(f)[:1500]
+            return json.load(f)
 
     return {"error": "Satellite link offline."}
 
