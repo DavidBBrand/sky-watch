@@ -3,6 +3,7 @@
   width: 82%;
   aspect-ratio: 1 / 1;
   margin: 50px auto;
+  max-width: 500px;
   background: rgba(124, 145, 150, 0.188); 
   border-radius: 50%;
 
@@ -268,4 +269,11 @@
   font-family: 'Oxanium', sans-serif;
   margin-top: 100px;
   margin-right: 140px;
+}
+
+@media (max-width: 700px) {
+  .radar-container {
+    margin: 16px auto;
+    width: 88%;
+  }
 }

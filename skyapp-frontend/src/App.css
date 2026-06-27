@@ -194,7 +194,7 @@
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.1), 
     inset 0 0 14px var(--separator-glow2);
-    font-size:1.6rem;
+    font-size:1.2rem;
   backdrop-filter: blue(2px);
 }
 
@@ -387,6 +387,12 @@ img[src*="marker"],
 @media (max-width: 700px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+    padding: 8px;
+    gap: 8px;
+  }
+  /* Prevent span-2 cards from forcing a phantom second column on mobile */
+  .grid-span-2 {
+    grid-column: span 1;
   }
 }
 

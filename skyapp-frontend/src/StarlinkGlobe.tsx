@@ -104,10 +104,8 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
     globeRef.current.pointOfView({ lat, lng: lon, altitude: 2.0 }, 1200);
   }, [lat, lon]);
 
-  const globeImg =
-    theme === "night"
-      ? "//unpkg.com/three-globe/example/img/earth-night.jpg"
-      : "//unpkg.com/three-globe/example/img/earth-blue-marble.jpg";
+  // Night mode: blue marble is far more legible than the near-black city-lights texture
+  const globeImg = "//unpkg.com/three-globe/example/img/earth-blue-marble.jpg";
 
   const satColor = theme === "night" ? "#84d68f" : "#1dbb5e";
 
@@ -134,10 +132,10 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             showAtmosphere
             atmosphereColor={
               theme === "night"
-                ? "rgba(80, 160, 255, 0.22)"
+                ? "rgba(30, 80, 180, 0.45)"
                 : "rgba(100, 200, 255, 0.35)"
             }
-            atmosphereAltitude={0.13}
+            atmosphereAltitude={0.18}
             backgroundColor="rgba(0,0,0,0)"
             // ── Satellite dots ──
             pointsData={satPoints}
@@ -145,7 +143,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             pointLng="lng"
             pointAltitude="alt"
             pointColor={() => satColor}
-            pointRadius={0.28}
+            pointRadius={0.12}
             pointsMerge={false}
             pointLabel={(d: object) => (d as SatPoint).name}
             // ── User location label ──

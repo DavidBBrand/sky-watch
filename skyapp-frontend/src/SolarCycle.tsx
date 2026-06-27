@@ -72,19 +72,16 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
           <SolarCompass sunData={sun} />
 
           <div className="zenith-container" style={{ marginTop: "10px" }}>
-            <div
-              className="sub-title"
-            >
+            <div className="solar2 sub-title">
               Zenith
             </div>
 
             <div
               className="zenith-time"
               style={{
-                fontSize: "1.4rem",
+                fontSize: "1.1rem",
                 color: "var(--accent-color2)",
                 fontWeight: "600"
-    
               }}
             >
               {formatTime(sun.zenith)}
@@ -92,14 +89,14 @@ const SolarCycle: React.FC<SolarCycleProps> = memo(({ sun, timezone }) => {
 
             <div
               className="zenith-coords"
-              style={{ fontSize: "1.4rem", marginTop: "8px" }}
+              style={{ fontSize: "1.05rem", marginTop: "6px" }}
             >
               <span style={{ color: "var(--accent-color2)", fontWeight: "600" }}>
-                <div className="zenith-label sub-title">Peak</div> {sun.zenith_alt}°
+                <div className="zenith-label sub-title" style={{ fontSize: "0.75rem" }}>Peak</div> {sun.zenith_alt}°
               </span>
-              <span style={{ margin: "0 10px", opacity: 0.3 }}></span>
+              <span style={{ margin: "0 6px", opacity: 0.3 }}></span>
               <span style={{ color: "var(--accent-color2)", fontWeight: "600" }}>
-                <div className="zenith-label sub-title">Az</div> {sun.zenith_az}°
+                <div className="zenith-label sub-title" style={{ fontSize: "0.75rem" }}>Az</div> {sun.zenith_az}°
               </span>
             </div>
           </div>
