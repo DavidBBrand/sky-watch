@@ -120,6 +120,9 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+            <marker id="moon-arrow" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+              <path d="M0,0 L6,2 L0,4 Z" fill="#b8b8b8" fillOpacity="0.65" />
+            </marker>
           </defs>
 
           {/* Background stars (night only) */}
@@ -154,33 +157,56 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
             textAnchor="middle" fontSize={10}
             fontFamily="Oxanium, sans-serif"
             fill="#ffd700" opacity={0.9}
+            stroke={theme === "night" ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.9)"}
+            strokeWidth={3}
+            paintOrder="stroke"
           >
             Sun
           </text>
 
-          {/* Moon: exaggerated orbit offset from Earth, connected by a line */}
+          {/* Moon: dot near Earth + label pushed further out with arrow */}
           {data?.Moon && earthXY && (() => {
             const earth = data.Earth!;
             const dx = data.Moon.x_au - earth.x_au;
             const dy = data.Moon.y_au - earth.y_au;
             const dLen = Math.sqrt(dx * dx + dy * dy) || 1;
-            const mx = earthXY[0] + 10 * (dx / dLen);
-            const my = earthXY[1] - 10 * (dy / dLen);
+            const ux = dx / dLen; // unit vector Moon direction (AU/SVG x same)
+            const uy = dy / dLen; // unit vector (SVG y is flipped below)
+
+            // Moon dot: 10px from Earth in Moon's direction
+            const mx = earthXY[0] + 10 * ux;
+            const my = earthXY[1] - 10 * uy;
+
+            // Label: 44px from Earth (34px past Moon dot)
+            const lx = earthXY[0] + 44 * ux;
+            const ly = earthXY[1] - 44 * uy;
+
+            // Arrow line ends 3px before Moon dot (so arrowhead sits flush)
+            const arrowEndX = mx + 3 * ux;
+            const arrowEndY = my - 3 * uy;
+
             return (
               <g>
-                <line
-                  x1={earthXY[0]} y1={earthXY[1]}
-                  x2={mx} y2={my}
-                  stroke="#999" strokeWidth={0.5} opacity={0.4}
-                />
+                {/* Moon dot */}
                 <circle cx={mx} cy={my} r={2} fill="#b8b8b8" filter="url(#body-glow)">
                   <title>Moon — {data.Moon.dist_au.toFixed(5)} AU from Earth</title>
                 </circle>
+                {/* Arrow from label → Moon */}
+                <line
+                  x1={lx} y1={ly}
+                  x2={arrowEndX} y2={arrowEndY}
+                  stroke="#b8b8b8" strokeWidth={0.8} opacity={0.55}
+                  markerEnd="url(#moon-arrow)"
+                />
+                {/* Label above arrow start */}
                 <text
-                  x={mx} y={my - 5}
+                  x={lx} y={ly - 5}
                   textAnchor="middle" fontSize={7}
                   fontFamily="Oxanium, sans-serif"
-                  fill="#b8b8b8" opacity={0.75}
+                  fill="#b8b8b8"
+                  stroke={theme === "night" ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.95)"}
+                  strokeWidth={2.5}
+                  paintOrder="stroke"
                 >
                   Moon
                 </text>
@@ -194,9 +220,9 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
             .map(([name, pos]) => {
               const cfg = STYLE[name];
               const [sx, sy] = toXY(pos.x_au, pos.y_au);
-              // Push label radially outward from Sun for clean placement
+              // Push label radially outward from Sun, far enough to clear the planet body
               const angle = Math.atan2(pos.y_au, pos.x_au);
-              const lr = cfg.r + 9;
+              const lr = cfg.r + 14;
               const lx = sx + lr * Math.cos(angle);
               const ly = sy - lr * Math.sin(angle);
 
@@ -224,7 +250,10 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
                     x={lx} y={ly + 3}
                     textAnchor="middle" fontSize={9}
                     fontFamily="Oxanium, sans-serif"
-                    fill={cfg.color} opacity={0.88}
+                    fill={cfg.color}
+                    stroke={theme === "night" ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.95)"}
+                    strokeWidth={3}
+                    paintOrder="stroke"
                   >
                     {name}
                   </text>

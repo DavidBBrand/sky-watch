@@ -26,10 +26,10 @@
 }
 
 [data-theme="night"] {
-  --bg-color: rgba(23, 8, 46, 0.95);
+  --bg-color: rgba(14, 8, 46, 0.95);
   --mesh-1: rgb(0, 2, 12);
-  --mesh-2: rgb(16, 6, 50);
-  --mesh-3: rgb(33, 16, 53);
+  --mesh-2: rgb(7, 3, 49);
+  --mesh-3: rgb(6, 2, 23);
 
   --card-bg: rgba(42, 51, 75, 0.15); /* Slightly darker for better contrast */
   --card-border: rgba(255, 255, 255, 0.1);
