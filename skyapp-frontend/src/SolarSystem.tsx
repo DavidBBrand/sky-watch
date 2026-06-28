@@ -22,15 +22,15 @@ const ORBIT_AU: [string, number][] = [
 
 // Visual style per body
 const STYLE: Record<string, { color: string; r: number; rings?: boolean }> = {
-  Mercury: { color: "#a09888", r: 3 },
-  Venus:   { color: "#e8c050", r: 5 },
-  Earth:   { color: "#4a90d9", r: 5 },
-  Mars:    { color: "#c0442a", r: 4 },
-  Jupiter: { color: "#d4956a", r: 9 },
-  Saturn:  { color: "#c8a850", r: 7, rings: true },
-  Uranus:  { color: "#7fb8c0", r: 6 },
-  Neptune: { color: "#3a60c8", r: 6 },
-  Moon:    { color: "#b8b8b8", r: 2 },
+  Mercury: { color: "#a09888", r: 4 },
+  Venus:   { color: "#e8c050", r: 7 },
+  Earth:   { color: "#4a90d9", r: 7 },
+  Mars:    { color: "#c0442a", r: 5 },
+  Jupiter: { color: "#d4956a", r: 14 },
+  Saturn:  { color: "#c8a850", r: 11, rings: true },
+  Uranus:  { color: "#7fb8c0", r: 8 },
+  Neptune: { color: "#3a60c8", r: 8 },
+  Moon:    { color: "#b8b8b8", r: 3 },
 };
 
 // Power-law scale: Neptune (30.07 AU) → 320 display px
@@ -133,12 +133,12 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
           )}
 
           {/* Sun corona + body */}
-          <circle cx={0} cy={0} r={28} fill="url(#sun-grad)" />
-          <circle cx={0} cy={0} r={12} fill="#ffd700" filter="url(#body-glow)">
+          <circle cx={0} cy={0} r={38} fill="url(#sun-grad)" />
+          <circle cx={0} cy={0} r={16} fill="#ffd700" filter="url(#body-glow)">
             <title>Sun</title>
           </circle>
           <text
-            x={0} y={-19}
+            x={0} y={-24}
             textAnchor="middle" fontSize={14}
             fontFamily="Oxanium, sans-serif"
             fill="#ffd700" opacity={0.9}
