@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { useLocation } from "./LocationContext";
 import "./App.css";
 import Weather from "./Weather";
@@ -8,7 +8,7 @@ import GoldenHour from "./GoldenHour";
 import MapCard from "./MapCard";
 import ISSWatcher from "./ISSWatcher";
 import Starlink from "./Starlink";
-import StarlinkGlobe from "./StarlinkGlobe";
+const StarlinkGlobe = lazy(() => import("./StarlinkGlobe"));
 import SolarSystem from "./SolarSystem";
 import Moon from "./Moon";
 import logoDay from "./assets/skywatchday.png";
@@ -233,7 +233,9 @@ const App: React.FC = () => {
           <Starlink theme={isNight ? "night" : "day"} />
         </div>
         <div className="glass-card">
-          <StarlinkGlobe theme={isNight ? "night" : "day"} />
+          <Suspense fallback={<div className="loading-card glow-sub2">Loading Globe…</div>}>
+            <StarlinkGlobe theme={isNight ? "night" : "day"} />
+          </Suspense>
         </div>
         <div className="glass-card">
           <MapCard

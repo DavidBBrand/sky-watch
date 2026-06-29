@@ -7,9 +7,21 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'three':     ['three'],
+          'globe':     ['react-globe.gl'],
+          'satellite': ['satellite.js'],
+          'leaflet':   ['leaflet', 'react-leaflet'],
+        },
+      },
+    },
+  },
   test: {
     globals: true,
-    environment: 'jsdom', // simulates the browser window so we dont get a reference error
+    environment: 'jsdom',
     setupFiles: ['./src/test-setup.ts'],
   }
 })
