@@ -20,6 +20,16 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=Roboto:wght@200;300;400;500;600;800&family=Roboto+Condensed:wght@200;300;400;500;600;800&family=Share+Tech"
     rel="stylesheet">
+  <!-- Set theme before React loads to prevent flash of light background -->
+  <script>
+    (function () {
+      var h = new Date().getHours();
+      if (h < 6 || h >= 20) {
+        document.documentElement.setAttribute('data-theme', 'night');
+        document.documentElement.style.background = 'rgb(14, 8, 46)';
+      }
+    })();
+  </script>
   <title>Sky Watch Dashboard | Real-Time Planetary Telemetry</title>
   <meta name="title" content="Sky Watch Dashboard | Real-Time Planetary Telemetry" />
   <meta name="description"

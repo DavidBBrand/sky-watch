@@ -104,7 +104,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
   // Fly to user location whenever it changes
   useEffect(() => {
     if (!globeRef.current || lat === null || lon === null) return;
-    globeRef.current.pointOfView({ lat, lng: lon, altitude: 2.0 }, 1200);
+    globeRef.current.pointOfView({ lat, lng: lon, altitude: 1.5 }, 1200);
   }, [lat, lon]);
 
   // Night mode: blue marble is far more legible than the near-black city-lights texture
@@ -134,7 +134,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             globeImageUrl={globeImg}
             onGlobeReady={() => {
               if (globeRef.current && lat !== null && lon !== null) {
-                globeRef.current.pointOfView({ lat, lng: lon, altitude: 2.0 }, 0);
+                globeRef.current.pointOfView({ lat, lng: lon, altitude: 1.5 }, 0);
               }
             }}
             showAtmosphere
@@ -145,13 +145,13 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             }
             atmosphereAltitude={0.18}
             backgroundColor="rgba(0,0,0,0)"
-            // ── Satellite dots ──
+            // ── Satellite dots at real orbital altitude ──
             pointsData={satPoints}
             pointLat="lat"
             pointLng="lng"
             pointAltitude="alt"
             pointColor={() => satColor}
-            pointRadius={0.12}
+            pointRadius={0.08}
             pointsMerge={false}
             pointLabel={(d: object) => (d as SatPoint).name}
             // ── User location label ──
