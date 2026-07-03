@@ -132,6 +132,11 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             width={dimensions.width}
             height={dimensions.height}
             globeImageUrl={globeImg}
+            onGlobeReady={() => {
+              if (globeRef.current && lat !== null && lon !== null) {
+                globeRef.current.pointOfView({ lat, lng: lon, altitude: 2.0 }, 0);
+              }
+            }}
             showAtmosphere
             atmosphereColor={
               theme === "night"
