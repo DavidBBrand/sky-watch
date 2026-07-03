@@ -78,6 +78,9 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
           pv.position as satellite.EciVec3<number>,
           gmst
         );
+        // Skip satellites outside realistic Starlink altitude range (200–1200 km)
+        // Values outside this range indicate stale/bad TLE propagation
+        if (geo.height < 200 || geo.height > 1200) continue;
         points.push({
           lat: satellite.radiansToDegrees(geo.latitude),
           lng: satellite.radiansToDegrees(geo.longitude),
