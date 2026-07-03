@@ -42,6 +42,9 @@ jobs:
               print(f"Login status: {login.status_code}")
               print(f"Login body: {login.text[:300]}")
               login.raise_for_status()
+              if "Failed" in login.text or "failed" in login.text:
+                  print("Login rejected by space-track.org — check SPACETRACK_USER / SPACETRACK_PASS secrets.")
+                  sys.exit(1)
 
               tle = client.get(tle_url, timeout=60)
               print(f"TLE status: {tle.status_code}")

@@ -35,7 +35,17 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install pytest httpx pytest-asyncio
-          
+
+      - name: Cache de421.bsp ephemeris
+        uses: actions/cache@v4
+        with:
+          path: backend/de421.bsp
+          key: de421-bsp-v1
+
+      - name: Download de421.bsp if not cached
+        run: |
+          python -c "from skyfield.api import load; load('de421.bsp')"
+
       - name: Run Pytest
         run: PYTHONPATH=. pytest
 

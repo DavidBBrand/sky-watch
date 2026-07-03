@@ -78,6 +78,9 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
           pv.position as satellite.EciVec3<number>,
           gmst
         );
+        // Skip satellites outside realistic Starlink altitude range (200–1200 km)
+        // Values outside this range indicate stale/bad TLE propagation
+        if (geo.height < 200 || geo.height > 1200) continue;
         points.push({
           lat: satellite.radiansToDegrees(geo.latitude),
           lng: satellite.radiansToDegrees(geo.longitude),
@@ -101,7 +104,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
   // Fly to user location whenever it changes
   useEffect(() => {
     if (!globeRef.current || lat === null || lon === null) return;
-    globeRef.current.pointOfView({ lat, lng: lon, altitude: 2.0 }, 1200);
+    globeRef.current.pointOfView({ lat, lng: lon, altitude: 1.5 }, 1200);
   }, [lat, lon]);
 
   // Night mode: blue marble is far more legible than the near-black city-lights texture
@@ -129,6 +132,11 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             width={dimensions.width}
             height={dimensions.height}
             globeImageUrl={globeImg}
+            onGlobeReady={() => {
+              if (globeRef.current && lat !== null && lon !== null) {
+                globeRef.current.pointOfView({ lat, lng: lon, altitude: 1.5 }, 0);
+              }
+            }}
             showAtmosphere
             atmosphereColor={
               theme === "night"
@@ -137,13 +145,13 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             }
             atmosphereAltitude={0.18}
             backgroundColor="rgba(0,0,0,0)"
-            // ── Satellite dots ──
+            // ── Satellite dots at real orbital altitude ──
             pointsData={satPoints}
             pointLat="lat"
             pointLng="lng"
             pointAltitude="alt"
             pointColor={() => satColor}
-            pointRadius={0.12}
+            pointRadius={0.08}
             pointsMerge={false}
             pointLabel={(d: object) => (d as SatPoint).name}
             // ── User location label ──
