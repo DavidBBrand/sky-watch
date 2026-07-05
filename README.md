@@ -1,8 +1,8 @@
-# 🌙 Sky Watch Telemetry Dashboard
+# Sky Watch Telemetry Dashboard
 
 A high-precision, observatory-style dashboard featuring real-time astronomical tracking and local weather synchronization.
 
-## 🚀 Getting Started
+## Getting Started
 
 Live Demo: [skywatchdash.com](https://www.skywatchdash.com)
 
@@ -12,7 +12,7 @@ This application is fully containerized using **Docker** and **Docker Compose**.
 
 * **Docker Desktop**: Must be installed and running
 * **Weather API Key**: Sign up for a free key at [Visual Crossing Weather](https://www.visualcrossing.com/weather-api).
-### 🗄️ Infrastructure Services
+### Infrastructure Services
 This project uses **Docker Compose** to automatically orchestrate the following services:
 
 * **FastAPI (telemetry-api):** The core Python engine running on port `8000`.
