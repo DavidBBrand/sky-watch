@@ -24,7 +24,7 @@ This project uses **Docker Compose** to automatically orchestrate the following 
 ### Local Installation
 1. **Clone & Navigate:**
    ```bash
-   git clone [https://github.com/dbrand87/sky-watch.git](https://github.com/dbrand87/sky-watch.git)
+   git clone [https://github.com/DavidBBrand/sky-watch.git]
    cd sky-watch
 ### Frontend Setup (React + Vite)
 ```bash
