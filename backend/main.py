@@ -108,7 +108,7 @@ async def get_starlink_tles():
         login_url = "https://www.space-track.org/ajaxauth/login"
         tle_url = (
             "https://www.space-track.org/basicspacedata/query/class/gp"
-            "/OBJECT_NAME/STARLINK~~~/orderby/NORAD_CAT_ID/format/3tle"
+            "/OBJECT_NAME/^^STARLINK/orderby/NORAD_CAT_ID/format/3le"
         )
         try:
             async with httpx.AsyncClient(follow_redirects=True) as client:
