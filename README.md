@@ -39,36 +39,49 @@ docker-compose up --build
 ```
 
 ## 🛰️ System Architecture
+```
 
-```mermaid
 graph TD
-    subgraph Frontend [React Frontend - Vite]
-        UI[App.jsx / Dashboard UI]
-        LC[LocationContext - GPS/Address]
-        TC[ThemeContext - Night/Day Mode]
-        Map[Leaflet - Star/ISS Map]
+    subgraph Frontend ["⚛️ React Frontend (Vite)"]
+        UI[App.tsx / Dashboard]
+        LC[LocationContext - GPS / Search]
+        Radar[Starlink Radar - satellite.js]
+        Globe[StarlinkGlobe - react-globe.gl]
+        Solar[SolarSystem - SVG]
+        LeafletMap[WeatherMap - Leaflet]
     end
 
-    subgraph Backend [FastAPI - Python]
-        API[Main API Endpoints]
-        SF[Skyfield - Ephemeris Engine]
+    subgraph Backend ["🐍 FastAPI Backend (Python)"]
+        API[API Endpoints]
+        SF[Skyfield - de421.bsp]
         Redis[(Redis Cache)]
+        Backup[starlink_backup.json]
     end
 
-    subgraph External [External Data]
-        NASA[NASA JPL/DE421 Data]
-        ReverseGeo[Reverse Geocoding API]
+    subgraph External ["🌐 External APIs"]
+        VC[Visual Crossing - Weather]
+        ST[Space-Track - TLE Data]
+        MB[Mapbox - Radar Map Tiles]
     end
 
-    %% Interactions
-    LC -->|Lat/Lon| UI
+    LC -->|lat/lon| UI
     UI -->|GET /sky-summary| API
-    API -->|Check Cache| Redis
-    Redis -->|Miss| SF
-    SF -->|Orbital Math| NASA
-    SF -->|Result| API
-    API -->|JSON Data| UI
-    UI -->|Render Planets/Moon| Map
+    UI -->|GET /starlink-live| API
+    UI -->|GET /solar-system| API
+    API <-->|TTL Cache| Redis
+    API --> SF
+    SF -->|de421.bsp local| SF
+    API -->|Weather fetch| VC
+    API -->|TLE fetch| ST
+    ST -->|Fallback| Backup
+    VC --> API
+    ST --> API
+    API -->|JSON| UI
+    UI -->|Map tiles| MB
+    UI --> Radar
+    UI --> Globe
+    UI --> Solar
+    UI --> LeafletMap
 ```
 
 ## ⏱️ Timing Diagram
