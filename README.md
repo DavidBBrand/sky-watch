@@ -79,19 +79,26 @@ sequenceDiagram
     participant Browser
     participant FastAPI
     participant Redis
-    participant NASA
+    participant VisualCrossing
+    participant SpaceTrack
 
     User->>Browser: Opens Sky Watch
-    Browser->>Browser: Get GPS Coord
+    Browser->>Browser: Request GPS Coordinates
     Browser->>FastAPI: GET /sky-summary?lat=xx&lon=yy
     FastAPI->>Redis: Check Cache
     alt Cache Hit
         Redis-->>FastAPI: Return Cached Data
     else Cache Miss
-        FastAPI->>NASA: Fetch Ephemeris (DE421)
-        NASA-->>FastAPI: Planetary Vectors
-        FastAPI->>Redis: Store Result (24h)
+        FastAPI->>VisualCrossing: Fetch Weather Data
+        VisualCrossing-->>FastAPI: Weather JSON
+        FastAPI->>FastAPI: Compute Planetary Positions (de421.bsp)
+        FastAPI->>Redis: Store Result (TTL 24h)
     end
     FastAPI-->>Browser: JSON Payload
-    Browser->>User: Render HUD & Star Map
+    Browser->>FastAPI: GET /starlink-live
+    FastAPI->>SpaceTrack: Fetch TLEs (or serve backup)
+    SpaceTrack-->>FastAPI: TLE Data
+    FastAPI-->>Browser: Satellite TLEs
+    Browser->>Browser: Propagate Orbits (satellite.js)
+    Browser->>User: Render Dashboard
 ```
