@@ -39,8 +39,7 @@ docker-compose up --build
 ```
 
 ## 🛰️ System Architecture
-```
-
+```mermaid
 graph TD
     subgraph Frontend ["⚛️ React Frontend (Vite)"]
         UI[App.tsx / Dashboard]
