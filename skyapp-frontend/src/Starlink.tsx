@@ -154,7 +154,7 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
 
   useEffect(() => {
     updateRadar();
-    const timer = setInterval(updateRadar, 15000);
+    const timer = setInterval(updateRadar, 3500);
     return () => clearInterval(timer);
   }, [updateRadar]);
 

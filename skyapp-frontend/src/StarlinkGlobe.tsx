@@ -112,7 +112,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
 
   useEffect(() => {
     propagate();
-    const timer = setInterval(propagate, 30_000);
+    const timer = setInterval(propagate, 3500);
     return () => clearInterval(timer);
   }, [propagate]);
 
@@ -171,6 +171,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             }
             pointRadius={0.15}
             pointsMerge={false}
+            pointsTransitionDuration={0}
             pointLabel={(d: object) => (d as SatPoint).name}
             // ── User location label (fixed 14px DOM element — never scales with zoom) ──
             htmlElementsData={userMarker}
@@ -179,15 +180,15 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             htmlAltitude={0.01}
             htmlElement={(d: object) => {
               const marker = d as UserMarker;
-              // Wrapper is positioned by react-globe.gl at the coordinate (0×0, no visual)
+              // Wrapper: react-globe.gl positions this at the coordinate (0×0, no visual)
               const wrapper = document.createElement('div');
               wrapper.style.cssText = 'position:relative;width:0;height:0;overflow:visible;';
-              // Inner label: absolutely positioned above and centered on the coordinate
+              // Label above the coordinate
               const el = document.createElement('div');
               el.textContent = marker.name;
               el.style.cssText = [
                 'position: absolute',
-                'bottom: 8px',
+                'bottom: 10px',
                 'left: 0',
                 'transform: translateX(-50%)',
                 'color: #ff6b35',
@@ -198,17 +199,24 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
                 'pointer-events: none',
                 'text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7)',
               ].join(';');
+              // Static dot — fixed pixel size, never scales with zoom
+              const dot = document.createElement('div');
+              dot.style.cssText = [
+                'position: absolute',
+                'width: 8px',
+                'height: 8px',
+                'background: #ff6b35',
+                'border-radius: 50%',
+                'top: 0',
+                'left: 0',
+                'transform: translate(-50%, -50%)',
+                'pointer-events: none',
+                'box-shadow: 0 0 6px rgba(255,107,53,0.8)',
+              ].join(';');
               wrapper.appendChild(el);
+              wrapper.appendChild(dot);
               return wrapper;
             }}
-            // ── 500-mile pulsing ring ──
-            ringsData={userMarker}
-            ringLat="lat"
-            ringLng="lng"
-            ringColor={() => (t: number) => `rgba(255,107,53,${1 - t})`}
-            ringMaxRadius={7.2}
-            ringPropagationSpeed={2}
-            ringRepeatPeriod={1800}
           />
         )}
       </div>
