@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo } from "react";
+import React, { useState, useEffect, useCallback, useRef, memo } from "react";
 import * as satellite from "satellite.js";
 import { useLocation } from "./LocationContext";
 import "./Starlink.css";
@@ -30,7 +30,7 @@ const RADIUS_METERS = 500 * 1609.344; // 500 miles in meters
 // Mercator formula: meters_per_px = (cos(lat) * EARTH_CIRC) / (256 * 2^Z)
 const calcRadarZoom = (lat: number, imagePx: number): number => {
   const metersPerPx = (2 * RADIUS_METERS) / imagePx;
-  return Math.log2((Math.cos((lat * Math.PI) / 180) * 40075016.686) / (256 * metersPerPx));
+  return Math.log2((Math.cos((lat * Math.PI) / 180) * 40075016.686) / (512 * metersPerPx));
 };
 
 interface StarlinkProps {
@@ -45,6 +45,19 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
   const [tles, setTles] = useState<TLEData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [radarSize, setRadarSize] = useState<number>(0);
+  const radarRef = useRef<HTMLDivElement>(null);
+
+  // Measure the actual rendered radar container so the map zoom is always correct
+  useEffect(() => {
+    const el = radarRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(entries => {
+      setRadarSize(Math.round(entries[0].contentRect.width));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -148,11 +161,11 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
   return (
     <div className="starlink-card">
       <div className="card-title">Starlink Satellite Radar</div>
-      <div className={`radar-container ${isAlert ? "alert" : ""}`}>
-        {lat !== null && lon !== null && MAPBOX_TOKEN && (
+      <div ref={radarRef} className={`radar-container ${isAlert ? "alert" : ""}`}>
+        {lat !== null && lon !== null && MAPBOX_TOKEN && radarSize > 0 && (
           <img
             className="radar-map-overlay"
-            src={`https://api.mapbox.com/styles/v1/mapbox/${theme === "day" ? "light-v11" : "dark-v11"}/static/${lon},${lat},${calcRadarZoom(lat, 600).toFixed(2)},0/600x600@2x?access_token=${MAPBOX_TOKEN}`}
+            src={`https://api.mapbox.com/styles/v1/mapbox/${theme === "day" ? "light-v11" : "dark-v11"}/static/${lon},${lat},${calcRadarZoom(lat, radarSize).toFixed(2)},0/${radarSize}x${radarSize}@2x?access_token=${MAPBOX_TOKEN}`}
             alt=""
             aria-hidden="true"
           />
