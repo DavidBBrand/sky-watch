@@ -1,6 +1,8 @@
 import React, { memo } from "react";
-import { useLocation } from "./LocationContext"; // Use context
+import { MapContainer, TileLayer, CircleMarker, Pane } from "react-leaflet";
+import { useLocation } from "./LocationContext";
 import "./MapCard.css";
+import "leaflet/dist/leaflet.css";
 import SolarCycle from "./SolarCycle";
 
 interface MapCardProps {
@@ -20,24 +22,21 @@ interface MapCardProps {
   date: string;
 }
 
-// const MapCard = memo(({ theme, skyData, date }) => {
 const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
-  // Pull location from Context
   const { location } = useLocation();
   const { lat, lon } = location;
-
   const MAPBOX_TOKEN = (import.meta.env.VITE_MAPBOX_TOKEN as string) || "";
 
-  const zoom = 12;
-  const darkStyle = "dark-v11";
-  const lightStyle = "satellite-v9";
-  const currentStyle = theme === "night" ? darkStyle : lightStyle;
+  const dayMapUrl =
+    lat !== null && lon !== null
+      ? `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/pin-s+ff4444(${lon},${lat})/${lon},${lat},12,0/600x400@2x?access_token=${MAPBOX_TOKEN}`
+      : null;
 
-  
-  const mapUrl = `https://api.mapbox.com/styles/v1/mapbox/${currentStyle}/static/pin-s+ff4444(${lon},${lat})/${lon},${lat},${zoom},0/600x400@2x?access_token=${MAPBOX_TOKEN}`;
+  // Mapbox satellite tile URL for Leaflet (night mode base layer)
+  const satTileUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`;
 
   return (
-    <div className="map-card-content">  
+    <div className="map-card-content">
       <div
         style={{
           minHeight: "120px",
@@ -47,43 +46,82 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
           alignItems: "stretch",
         }}
       >
-        <div className="card-title">Solar Arc<div> {date}</div></div>
+        <div className="card-title">Solar Arc<div>{date}</div></div>
         {skyData?.sun ? (
           <SolarCycle sun={skyData.sun} timezone={location.timezone} />
         ) : (
           <div className="solar-loader">
             <div className="scanning-line"></div>
-            <div
-              style={{
-                fontSize: "1.4rem",
-                fontFamily: "Roboto Condensed"
-
-              }}
-            >
+            <div style={{ fontSize: "1.4rem", fontFamily: "Roboto Condensed" }}>
               Calculating Solar Arc...
             </div>
           </div>
         )}
       </div>
-      <div className="map-holder">
 
-        <img
-          src={mapUrl}
-          alt="Regional Telemetry Map"
-          key={currentStyle} 
-          style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: "2rem",
-            display: "block",
-            transition: "opacity 0.5s ease",
-            border: "0px solid var(--separator-glow2)",
-            }}
-          // loading="eager"
-        />
-          <div className="glow-sub" style={{ textAlign: "center", marginTop: "8px", fontSize: "1.4rem" }}>
-            {location.name}
-          </div>
+      <div className="map-holder">
+        {theme === "night" && lat !== null && lon !== null ? (
+          // Night mode: Mapbox satellite tiles + CSS dark filter = city-lights-from-orbit effect
+          // Urban concrete & roads are brighter in daytime aerial imagery;
+          // extreme brightness/contrast reduction makes them glow against a black background.
+          <MapContainer
+            key={`${lat},${lon}`}
+            center={[lat, lon]}
+            zoom={8}
+            className="night-satellite-map"
+            style={{ width: "100%", height: "240px", borderRadius: "1.6rem" }}
+            zoomControl={false}
+            attributionControl={false}
+            dragging={false}
+            scrollWheelZoom={false}
+            doubleClickZoom={false}
+            touchZoom={false}
+          >
+            {/* Satellite base — CSS-filtered to city-lights look in MapCard.css */}
+            <TileLayer url={satTileUrl} />
+
+            {/* City labels in a separate pane above the filtered tile layer */}
+            <Pane name="labelsPane" style={{ zIndex: 650 }}>
+              <TileLayer
+                pane="labelsPane"
+                url="https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png"
+                subdomains="abcd"
+              />
+            </Pane>
+
+            <CircleMarker
+              center={[lat, lon]}
+              radius={3}
+              pathOptions={{
+                color: "#ff4444",
+                fillColor: "#ff4444",
+                fillOpacity: 1,
+                weight: 2,
+              }}
+            />
+          </MapContainer>
+        ) : (
+          dayMapUrl && (
+            <img
+              src={dayMapUrl}
+              alt="Regional Telemetry Map"
+              key="day-map"
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "2rem",
+                display: "block",
+                transition: "opacity 0.5s ease",
+              }}
+            />
+          )
+        )}
+        <div
+          className="glow-sub"
+          style={{ textAlign: "center", marginTop: "8px", fontSize: "1.4rem" }}
+        >
+          {location.name}
+        </div>
       </div>
     </div>
   );

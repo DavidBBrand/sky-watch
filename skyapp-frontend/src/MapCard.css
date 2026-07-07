@@ -1,3 +1,10 @@
+/* Night mode Leaflet map */
+.map-holder .leaflet-container {
+  background: #000 !important;
+  border-radius: 1.6rem;
+}
+
+
 @media (max-width: 350px) {
   .map-card {
     min-width: 100%;

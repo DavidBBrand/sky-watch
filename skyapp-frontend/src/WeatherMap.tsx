@@ -63,7 +63,6 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
         <RecenterMap lat={lat} lon={lon} />
       </MapContainer>
       
-      <div className="map-overlay-scan" />
     </div>
   );
 };
