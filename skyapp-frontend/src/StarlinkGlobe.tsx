@@ -154,16 +154,27 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             pointRadius={0.08}
             pointsMerge={false}
             pointLabel={(d: object) => (d as SatPoint).name}
-            // ── User location label ──
-            labelsData={userMarker}
-            labelLat="lat"
-            labelLng="lng"
-            labelText="name"
-            labelColor={() => "#ff6b35"}
-            labelSize={1.0}
-            labelDotRadius={0.5}
-            labelDotOrientation={() => "bottom" as const}
-            labelAltitude={0.01}
+            // ── User location label (fixed 14px DOM element — never scales with zoom) ──
+            htmlElementsData={userMarker}
+            htmlLat={(d: object) => (d as UserMarker).lat}
+            htmlLng={(d: object) => (d as UserMarker).lng}
+            htmlAltitude={0.01}
+            htmlElement={(d: object) => {
+              const marker = d as UserMarker;
+              const el = document.createElement('div');
+              el.textContent = marker.name;
+              el.style.cssText = [
+                'color: #ff6b35',
+                'font-family: Oxanium, sans-serif',
+                'font-size: 14px',
+                'font-weight: 600',
+                'white-space: nowrap',
+                'pointer-events: none',
+                'text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7)',
+                'transform: translate(-50%, -24px)',
+              ].join(';');
+              return el;
+            }}
             // ── 500-mile pulsing ring ──
             ringsData={userMarker}
             ringLat="lat"
