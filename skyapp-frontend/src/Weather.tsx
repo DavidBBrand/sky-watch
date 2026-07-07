@@ -120,9 +120,12 @@ const Weather: React.FC<WeatherProps> = memo(({ onDataReceived, theme }) => {
 
   return (
     <div className="weather-container">
-      <h2 className="card-title">
-        {location.name ? `${location.name} Weather` : "Live Weather"}
-      </h2>
+      <div className="weather-header-block">
+        <div className="card-title">Weather</div>
+        <div className="glow-sub weather-location-sub">
+          {location.name || "Live Weather"}
+        </div>
+      </div>
 
       <div
         className={`weather-icon ${!weather ? "weather-loading-pulse" : ""}`}
