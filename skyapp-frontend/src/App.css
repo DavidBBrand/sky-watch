@@ -41,6 +41,7 @@
 .main-title {
   font-family: 'Oxanium', sans-serif;
   font-size: 4rem;
+  font-weight: 400;
   margin: 0px auto;
   text-transform: uppercase;
   color: var(--text-main);
@@ -74,7 +75,7 @@
   font-size: 1.6rem; /* Slightly larger for the new name */
   margin: 0px 0;
   letter-spacing: 0px;
-  font-weight: 600;
+  font-weight: 400;
 
   /*  Dynamic Color */
   color: var(--text-main);
