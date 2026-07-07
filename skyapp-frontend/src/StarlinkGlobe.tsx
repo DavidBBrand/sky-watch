@@ -15,8 +15,8 @@ interface TLEData {
 interface SatPoint {
   lat: number;
   lng: number;
-  alt: number;
   name: string;
+  aboveHorizon: boolean; // elevation > 0 from user's location → matches radar
 }
 
 interface UserMarker {
@@ -68,24 +68,39 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
     const gmst = satellite.gstime(now);
     const points: SatPoint[] = [];
 
+    // Precompute observer lat/lng in radians for haversine
+    const obsLatRad = lat !== null ? lat * Math.PI / 180 : null;
+    const obsLonRad = lon !== null ? lon * Math.PI / 180 : null;
+
     for (const tle of tles) {
       try {
         const satrec = satellite.twoline2satrec(tle.TLE_LINE1, tle.TLE_LINE2);
         if (satrec.error) continue;
         const pv = satellite.propagate(satrec, now);
         if (!pv || typeof pv.position === "boolean") continue;
-        const geo = satellite.eciToGeodetic(
-          pv.position as satellite.EciVec3<number>,
-          gmst
-        );
+        const pos = pv.position as satellite.EciVec3<number>;
+        const geo = satellite.eciToGeodetic(pos, gmst);
         // Skip satellites outside realistic Starlink altitude range (200–1200 km)
-        // Values outside this range indicate stale/bad TLE propagation
         if (geo.height < 200 || geo.height > 1200) continue;
+
+        const satLatDeg = satellite.radiansToDegrees(geo.latitude);
+        const satLngDeg = satellite.radiansToDegrees(geo.longitude);
+
+        // Orange = within 300 miles ground distance (haversine) — tight overhead cluster
+        let aboveHorizon = false;
+        if (obsLatRad !== null && obsLonRad !== null) {
+          const φ2 = satLatDeg * Math.PI / 180;
+          const Δφ = φ2 - obsLatRad;
+          const Δλ = satLngDeg * Math.PI / 180 - obsLonRad;
+          const a = Math.sin(Δφ / 2) ** 2 + Math.cos(obsLatRad) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
+          aboveHorizon = 2 * 3958.8 * Math.asin(Math.sqrt(a)) <= 300;
+        }
+
         points.push({
-          lat: satellite.radiansToDegrees(geo.latitude),
-          lng: satellite.radiansToDegrees(geo.longitude),
-          alt: geo.height / 6371, // km → fraction of Earth radius (~0.05–0.09 for Starlink)
+          lat: satLatDeg,
+          lng: satLngDeg,
           name: tle.OBJECT_NAME,
+          aboveHorizon,
         });
       } catch {
         /* skip malformed TLEs */
@@ -93,7 +108,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
     }
 
     setSatPoints(points);
-  }, [tles]);
+  }, [tles, lat, lon]);
 
   useEffect(() => {
     propagate();
@@ -110,7 +125,8 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
   // Night mode: blue marble is far more legible than the near-black city-lights texture
   const globeImg = "//unpkg.com/three-globe/example/img/earth-blue-marble.jpg";
 
-  const satColor = theme === "night" ? "#84d68f" : "#1dbb5e";
+  const satColorBelow = theme === "night" ? "#84d68f" : "#1dbb5e";
+  const satColorAbove = "#ffa040"; // orange = above horizon, matches radar
 
   const userMarker: UserMarker[] =
     lat !== null && lon !== null
@@ -145,13 +161,15 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             }
             atmosphereAltitude={0.18}
             backgroundColor="rgba(0,0,0,0)"
-            // ── Satellite dots at real orbital altitude ──
+            // ── Satellite dots (flat stubs just above surface) ──
             pointsData={satPoints}
             pointLat="lat"
             pointLng="lng"
-            pointAltitude="alt"
-            pointColor={() => satColor}
-            pointRadius={0.08}
+            pointAltitude={0.03}
+            pointColor={(d: object) =>
+              (d as SatPoint).aboveHorizon ? satColorAbove : satColorBelow
+            }
+            pointRadius={0.15}
             pointsMerge={false}
             pointLabel={(d: object) => (d as SatPoint).name}
             // ── User location label (fixed 14px DOM element — never scales with zoom) ──
@@ -161,9 +179,17 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
             htmlAltitude={0.01}
             htmlElement={(d: object) => {
               const marker = d as UserMarker;
+              // Wrapper is positioned by react-globe.gl at the coordinate (0×0, no visual)
+              const wrapper = document.createElement('div');
+              wrapper.style.cssText = 'position:relative;width:0;height:0;overflow:visible;';
+              // Inner label: absolutely positioned above and centered on the coordinate
               const el = document.createElement('div');
               el.textContent = marker.name;
               el.style.cssText = [
+                'position: absolute',
+                'bottom: 8px',
+                'left: 0',
+                'transform: translateX(-50%)',
                 'color: #ff6b35',
                 'font-family: Oxanium, sans-serif',
                 'font-size: 14px',
@@ -171,9 +197,9 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
                 'white-space: nowrap',
                 'pointer-events: none',
                 'text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7)',
-                'transform: translate(-50%, -24px)',
               ].join(';');
-              return el;
+              wrapper.appendChild(el);
+              return wrapper;
             }}
             // ── 500-mile pulsing ring ──
             ringsData={userMarker}
