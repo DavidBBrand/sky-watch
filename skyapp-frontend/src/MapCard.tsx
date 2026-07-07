@@ -46,13 +46,16 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
           alignItems: "stretch",
         }}
       >
-        <div className="card-title">Solar Arc<div>{date}</div></div>
+        <div className="card-header-block">
+          <div className="card-title">Solar Arc</div>
+          <div className="glow-sub card-subtitle">{date}</div>
+        </div>
         {skyData?.sun ? (
           <SolarCycle sun={skyData.sun} timezone={location.timezone} />
         ) : (
           <div className="solar-loader">
             <div className="scanning-line"></div>
-            <div style={{ fontSize: "1.4rem", fontFamily: "Roboto Condensed" }}>
+            <div style={{ fontSize: "1.4rem", fontFamily: "Oxanium" }}>
               Calculating Solar Arc...
             </div>
           </div>

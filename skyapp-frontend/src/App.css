@@ -137,6 +137,28 @@
   transition: all 0.5s ease-in-out;
 }
 
+/* Shared two-line card header: title + subtitle (date, location, etc.) */
+.card-header-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2px;
+  width: 100%;
+}
+
+.card-header-block * {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.0;
+}
+
+.card-subtitle {
+  font-family: 'Oxanium', sans-serif;
+  font-size: 1.8rem;
+  margin-top: 2px !important;
+  letter-spacing: -2px;
+}
+
 .glow-sub {
   color: var(--text-main);
   opacity: 0.88;
