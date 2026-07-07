@@ -249,7 +249,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
           {/* Moon orbit ring around Earth */}
           {earthXY && (
             <circle
-              cx={earthXY[0]} cy={earthXY[1]} r={10}
+              cx={earthXY[0]} cy={earthXY[1]} r={16}
               fill="none" stroke={ringStroke} strokeWidth={0.6}
             />
           )}
@@ -277,28 +277,35 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
             const dLen = Math.sqrt(dx * dx + dy * dy) || 1;
             const ux = dx / dLen;
             const uy = dy / dLen;
-            const mx = earthXY[0] + 10 * ux;
-            const my = earthXY[1] - 10 * uy;
-            const lx = earthXY[0] + 44 * ux;
-            const ly = earthXY[1] - 44 * uy;
-            const arrowEndX = mx + 3 * ux;
-            const arrowEndY = my - 3 * uy;
+            const MOON_ORBIT_R = 16;
+            const mx = earthXY[0] + MOON_ORBIT_R * ux;
+            const my = earthXY[1] - MOON_ORBIT_R * uy;
+            const lx = earthXY[0] + (MOON_ORBIT_R + 30) * ux;
+            const ly = earthXY[1] - (MOON_ORBIT_R + 30) * uy;
+            const arrowEndX = mx + 5 * ux;
+            const arrowEndY = my - 5 * uy;
+
+            const moonFill  = theme === "night" ? "#d0d0d0" : "#6e6e88";
+            const moonLabel = theme === "night" ? "#c8c8c8" : "#5a5a76";
+            const moonLine  = theme === "night" ? "#b8b8b8" : "#707088";
 
             return (
               <g>
-                <circle cx={mx} cy={my} r={2} fill="#b8b8b8" filter="url(#body-glow)">
+                {/* Subtle glow halo */}
+                <circle cx={mx} cy={my} r={8} fill={moonFill} opacity={0.15} />
+                <circle cx={mx} cy={my} r={4} fill={moonFill} filter="url(#body-glow)">
                   <title>Moon — {data.Moon.dist_au.toFixed(5)} AU from Earth</title>
                 </circle>
                 <line
                   x1={lx} y1={ly} x2={arrowEndX} y2={arrowEndY}
-                  stroke="#b8b8b8" strokeWidth={0.8} opacity={0.55}
+                  stroke={moonLine} strokeWidth={0.8} opacity={0.6}
                   markerEnd="url(#moon-arrow)"
                 />
                 <text
                   x={lx} y={ly - 5}
                   textAnchor="middle" fontSize={FONT_SIZE}
                   fontFamily="Oxanium, sans-serif"
-                  fill="#b8b8b8"
+                  fill={moonLabel}
                   stroke={strokeColor} strokeWidth={2.5} paintOrder="stroke"
                 >
                   Moon
