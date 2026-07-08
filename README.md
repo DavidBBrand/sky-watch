@@ -4,7 +4,7 @@ A high-precision, observatory-style dashboard featuring real-time astronomical t
 
 ## Getting Started
 
-Live Demo: [skywatchdash.com](https://www.skywatchdash.com)
+Live Web App: [skywatchdash.com](https://www.skywatchdash.com)
 
 This application is fully containerized using **Docker** and **Docker Compose**. This ensures sub-millisecond astronomical accuracy and environmental parity across all platforms.
 
