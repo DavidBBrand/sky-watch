@@ -44,6 +44,7 @@ const App: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [issDistance, setIssDistance] = useState<number | null>(null);
   const [locationDate, setLocationDate] = useState<string>("");
+  const [isGlobeExpanded, setIsGlobeExpanded] = useState<boolean>(false);
 
   const currentLogo = isNight ? logoNight : logoDay;
 
@@ -162,6 +163,22 @@ const App: React.FC = () => {
     );
   }
 
+  if (isGlobeExpanded) {
+    return (
+      <div className="app-container fullscreen-page">
+        <div className="glass-card fullscreen-glass-card">
+          <Suspense fallback={<div className="loading-card glow-sub2">Loading Globe…</div>}>
+            <StarlinkGlobe
+              theme={isNight ? "night" : "day"}
+              isExpanded
+              onCollapse={() => setIsGlobeExpanded(false)}
+            />
+          </Suspense>
+        </div>
+      </div>
+    );
+  }
+
   // Below this line, TypeScript mathematically guarantees location.lat and location.lon are numbers!
   const { solar24, solar12 } = getLocalSolarTime();
 
@@ -234,7 +251,10 @@ const App: React.FC = () => {
         </div>
         <div className="glass-card">
           <Suspense fallback={<div className="loading-card glow-sub2">Loading Globe…</div>}>
-            <StarlinkGlobe theme={isNight ? "night" : "day"} />
+            <StarlinkGlobe
+              theme={isNight ? "night" : "day"}
+              onExpand={() => setIsGlobeExpanded(true)}
+            />
           </Suspense>
         </div>
         <div className="glass-card">

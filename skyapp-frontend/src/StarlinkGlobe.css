@@ -5,6 +5,30 @@
   width: 100%;
 }
 
+.globe-expand-btn {
+  align-self: center;
+  margin-bottom: 6px;
+  padding: 4px 14px;
+  border-radius: 2rem;
+  border: 2px groove var(--card-border);
+  color: var(--text-main);
+  background: transparent;
+  font-family: "Oxanium", sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  opacity: 0.85;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.globe-expand-btn:hover {
+  opacity: 1;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.2),
+    inset 0 0 8px 8px var(--separator-glow2);
+  border-color: var(--separator-glow2);
+}
+
 .globe-meta {
   display: flex;
   justify-content: center;
@@ -19,6 +43,41 @@
   opacity: 0.85;
 }
 
+.globe-stage-inline {
+  display: contents;
+}
+
+.globe-stage {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.globe-facts-panel {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  overflow-y: auto;
+}
+
+.globe-fact {
+  font-family: 'Oxanium', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--text-main);
+  opacity: 0.85;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 0.8rem;
+  border: 1px solid var(--separator-glow2);
+  background: rgba(255, 255, 255, 0.03);
+}
+
 .globe-container {
   flex: 1;
   min-height: 480px;
@@ -30,4 +89,22 @@
 
 .globe-container canvas {
   touch-action: none;
+}
+
+@media (max-width: 900px) {
+  .globe-stage {
+    flex-direction: column;
+  }
+
+  .globe-facts-panel {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .globe-fact {
+    flex-shrink: 0;
+    width: 220px;
+  }
 }

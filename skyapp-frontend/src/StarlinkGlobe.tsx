@@ -27,11 +27,38 @@ interface UserMarker {
 
 interface StarlinkGlobeProps {
   theme?: "day" | "night";
+  isExpanded?: boolean;
+  onExpand?: () => void;
+  onCollapse?: () => void;
 }
 
-const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) => {
+const STARLINK_FACTS: string[] = [
+  "Starlink satellites orbit roughly 550 km (340 mi) up — far lower than traditional geostationary satellites at 35,786 km.",
+  "Each Starlink satellite weighs about 260 kg (573 lbs), roughly the mass of a grand piano.",
+  "SpaceX has launched more than 6,000 Starlink satellites since 2019, the largest satellite constellation ever deployed.",
+  "A single Falcon 9 launch can carry up to 60 Starlink satellites at once.",
+  "Many Starlink satellites use krypton or argon-fueled ion thrusters to maintain orbit and dodge space debris.",
+  "Starlink satellites are designed to fully burn up in the atmosphere at the end of their roughly 5-year lifespan.",
+  "Newer Starlink satellites talk to each other via laser inter-satellite links, skipping ground relays entirely.",
+  "Starlink's low orbit cuts latency to as little as 20–40 ms, versus 600+ ms for older geostationary internet satellites.",
+  "SpaceX has FCC approval for up to 12,000 Starlink satellites, with plans for as many as 42,000 in later phases.",
+  "Freshly launched Starlink satellites form a bright 'train' of lights across the night sky before spreading into their final orbits.",
+  "Starlink satellites are flat-panelled so hundreds can stack tightly inside a single rocket fairing.",
+  "Astronomers have raised concerns that Starlink's brightness can interfere with ground-based telescope observations.",
+  "Starlink uses inclined orbital shells at different altitudes to provide broadband coverage worldwide, including polar regions.",
+  "Each satellite steers multiple simultaneous broadband beams toward users on the ground using phased-array antennas.",
+];
+
+const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night", isExpanded = false, onExpand, onCollapse }) => {
   const { location } = useLocation();
   const { lat, lon } = location;
+
+  // Pick a random split of facts once per mount so left/right stay stable while expanded
+  const [[leftFacts, rightFacts]] = useState<[string[], string[]]>(() => {
+    const shuffled = [...STARLINK_FACTS].sort(() => Math.random() - 0.5);
+    const picked = shuffled.slice(0, 8);
+    return [picked.slice(0, 4), picked.slice(4, 8)];
+  });
 
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -136,12 +163,31 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
   return (
     <div className="starlink-globe-card">
       <div className="card-title">Global Starlink Network</div>
+      {isExpanded ? (
+        <button className="globe-expand-btn" onClick={onCollapse}>
+          ← Back to Dashboard
+        </button>
+      ) : (
+        onExpand && (
+          <button className="globe-expand-btn" onClick={onExpand}>
+            Expand
+          </button>
+        )
+      )}
       <div className="globe-meta">
         <span className="globe-count">
           {satPoints.length > 0 ? `${satPoints.length} satellites tracked` : "Propagating orbits…"}
         </span>
       </div>
-      <div ref={containerRef} className="globe-container">
+      <div className={isExpanded ? "globe-stage" : "globe-stage-inline"}>
+        {isExpanded && (
+          <div className="globe-facts-panel">
+            {leftFacts.map((fact, i) => (
+              <p key={i} className="globe-fact">{fact}</p>
+            ))}
+          </div>
+        )}
+        <div ref={containerRef} className="globe-container">
         {dimensions.width > 0 && (
           <Globe
             ref={globeRef}
@@ -218,6 +264,14 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night" }) =
               return wrapper;
             }}
           />
+        )}
+        </div>
+        {isExpanded && (
+          <div className="globe-facts-panel">
+            {rightFacts.map((fact, i) => (
+              <p key={i} className="globe-fact">{fact}</p>
+            ))}
+          </div>
         )}
       </div>
     </div>

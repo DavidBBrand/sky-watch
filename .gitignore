@@ -22,6 +22,9 @@ skyapp-frontend/env
 # System files
 .DS_Store
 
+# Claude Code local settings (personal permission allowlist, not shared)
+.claude/settings.local.json
+
 # Ignore .env files everywhere in the project
 .env
 .env.local

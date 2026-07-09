@@ -306,6 +306,18 @@
   transform: scale(1.05);
 }
 
+.fullscreen-page {
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.fullscreen-glass-card {
+  width: 100%;
+  max-width: 1300px;
+  height: calc(100vh - 32px);
+  margin: 0 auto;
+}
+
 .dashboard-grid {
   display: grid;
   gap: 6px;
