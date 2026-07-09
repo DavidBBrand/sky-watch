@@ -4,6 +4,7 @@ import math
 import asyncio
 from pathlib import Path
 import requests
+import numpy as np
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -372,6 +373,66 @@ async def get_solar_system_positions():
     }
 
     return result
+
+
+@app.get("/solar-system/range")
+@cache_sky_data(ttl_seconds=3600)
+async def get_solar_system_range():
+    ts = load.timescale()
+    t0 = ts.now()
+    t = ts.tt_jd(t0.tt + np.arange(365))
+    sun = eph['sun']
+
+    bodies = {
+        "Mercury": eph['mercury'],
+        "Venus":   eph['venus'],
+        "Earth":   eph['earth'],
+        "Mars":    eph['mars'],
+        "Jupiter": eph['jupiter_barycenter'],
+        "Saturn":  eph['saturn_barycenter'],
+        "Uranus":  eph['uranus_barycenter'],
+        "Neptune": eph['neptune_barycenter'],
+    }
+
+    # Obliquity of ecliptic (J2000) — rotates ICRF equatorial → ecliptic plane
+    eps = math.radians(23.4393)
+    cos_e, sin_e = math.cos(eps), math.sin(eps)
+
+    per_body: dict = {}
+    for name, body in bodies.items():
+        pos = sun.at(t).observe(body).position.au  # shape (3, 365)
+        xi, yi, zi = pos[0], pos[1], pos[2]
+        x_ecl = xi
+        y_ecl = yi * cos_e + zi * sin_e
+        dist = np.sqrt(xi**2 + yi**2 + zi**2)
+        per_body[name] = (x_ecl, y_ecl, dist)
+
+    # Moon: position relative to Earth, then offset by Earth's heliocentric position
+    moon_pos = eph['earth'].at(t).observe(eph['moon']).position.au
+    mx = moon_pos[0]
+    my = moon_pos[1] * cos_e + moon_pos[2] * sin_e
+    moon_dist = np.sqrt(moon_pos[0]**2 + moon_pos[1]**2 + moon_pos[2]**2)
+
+    earth_x, earth_y, _ = per_body["Earth"]
+    dates = t.utc_strftime("%Y-%m-%d")
+
+    days = []
+    for i in range(365):
+        day_entry = {}
+        for name, (xs, ys, ds) in per_body.items():
+            day_entry[name] = {
+                "x_au": round(float(xs[i]), 4),
+                "y_au": round(float(ys[i]), 4),
+                "dist_au": round(float(ds[i]), 4),
+            }
+        day_entry["Moon"] = {
+            "x_au": round(float(earth_x[i] + mx[i]), 6),
+            "y_au": round(float(earth_y[i] + my[i]), 6),
+            "dist_au": round(float(moon_dist[i]), 6),
+        }
+        days.append(day_entry)
+
+    return {"dates": list(dates), "days": days}
 
 
 if __name__ == "__main__":

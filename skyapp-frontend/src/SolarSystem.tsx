@@ -8,6 +8,16 @@ interface BodyPos {
 }
 type SolarData = Record<string, BodyPos>;
 
+interface SolarRange {
+  dates: string[];
+  days: SolarData[];
+}
+
+function formatDayLabel(dateStr: string): string {
+  const d = new Date(`${dateStr}T00:00:00`);
+  return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+}
+
 // Mean semi-major axes for orbit rings (AU)
 const ORBIT_AU: [string, number][] = [
   ["Mercury", 0.387],
@@ -161,21 +171,24 @@ interface SolarSystemProps {
 }
 
 const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
-  const [data, setData] = useState<SolarData | null>(null);
+  const [range, setRange] = useState<SolarRange | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [dayIndex, setDayIndex] = useState(0);
+  // 0 = paused, 1 = playing forward, -1 = playing backward
+  const [playDirection, setPlayDirection] = useState<0 | 1 | -1>(0);
 
   useEffect(() => {
     const BASE = (import.meta.env.VITE_API_URL as string) || "http://127.0.0.1:8000";
-    fetch(`${BASE}/solar-system`)
+    fetch(`${BASE}/solar-system/range`)
       .then(r => {
         if (!r.ok) throw new Error(`Backend returned ${r.status}`);
         return r.json();
       })
       .then(d => {
-        if (d && typeof d === "object" && "Earth" in d) {
-          setData(d as SolarData);
+        if (d && typeof d === "object" && Array.isArray(d.days) && d.days.length > 0) {
+          setRange(d as SolarRange);
         } else {
-          throw new Error("Unexpected response shape from /solar-system");
+          throw new Error("Unexpected response shape from /solar-system/range");
         }
       })
       .catch(e => {
@@ -183,6 +196,24 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
         setError(e.message);
       });
   }, []);
+
+  // Auto-advance the day index while playing, pausing at either end
+  useEffect(() => {
+    if (playDirection === 0 || !range) return;
+    const timer = setInterval(() => {
+      setDayIndex(prev => {
+        const next = prev + playDirection;
+        if (next < 0 || next >= range.days.length) {
+          setPlayDirection(0);
+          return prev;
+        }
+        return next;
+      });
+    }, 120);
+    return () => clearInterval(timer);
+  }, [playDirection, range]);
+
+  const data = range?.days[dayIndex] ?? null;
 
   const ringStroke = theme === "night"
     ? "rgba(255,255,255,0.07)"
@@ -361,6 +392,49 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
           <div className="solar-loading solar-error">{error}</div>
         )}
       </div>
+
+      {range && (
+        <div className="solar-time-controls">
+          <div className="solar-time-buttons">
+            <button
+              type="button"
+              className="solar-time-btn"
+              aria-label="Rewind"
+              onClick={() => setPlayDirection(prev => (prev === -1 ? 0 : -1))}
+            >
+              {playDirection === -1 ? "❚❚" : "◀◀"}
+            </button>
+            <button
+              type="button"
+              className="solar-time-btn"
+              aria-label="Reset to today"
+              onClick={() => { setDayIndex(0); setPlayDirection(0); }}
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              className="solar-time-btn"
+              aria-label="Play forward"
+              onClick={() => setPlayDirection(prev => (prev === 1 ? 0 : 1))}
+            >
+              {playDirection === 1 ? "❚❚" : "▶▶"}
+            </button>
+          </div>
+          <input
+            type="range"
+            className="solar-time-slider"
+            min={0}
+            max={range.days.length - 1}
+            value={dayIndex}
+            onChange={e => {
+              setPlayDirection(0);
+              setDayIndex(Number(e.target.value));
+            }}
+          />
+          <div className="solar-time-label">{formatDayLabel(range.dates[dayIndex])}</div>
+        </div>
+      )}
     </div>
   );
 });
