@@ -1,7 +1,8 @@
 .starlink-globe-card {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   width: 100%;
 }
 
@@ -56,7 +57,7 @@
 }
 
 .globe-facts-panel {
-  width: 220px;
+  width: clamp(220px, 16vw, 300px);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
