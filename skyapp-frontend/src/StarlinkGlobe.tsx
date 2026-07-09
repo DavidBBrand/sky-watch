@@ -139,7 +139,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night", isE
 
   useEffect(() => {
     propagate();
-    const timer = setInterval(propagate, 3500);
+    const timer = setInterval(propagate, 5000);
     return () => clearInterval(timer);
   }, [propagate]);
 
