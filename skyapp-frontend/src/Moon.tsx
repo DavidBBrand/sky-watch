@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, memo } from "react";
-import { useLocation } from "./LocationContext"; 
+import { useLocation } from "./LocationContext";
+import { MoonIcon } from "./PlanetIcons";
 import "./Moon.css";
 
 // 1. Define the Lunar Data interfaces
@@ -95,14 +96,9 @@ const Moon: React.FC<MoonProps> = memo(({ date }) => {
             </defs>
             <circle cx="50" cy="50" r="48" fill="#1a1a1a" />
             <circle cx="50" cy="50" r="48" fill="rgba(254, 252, 215, 0.05)" />
-            <circle
-              cx="50"
-              cy="50"
-              r="48"
-              fill="#fefcd7"
-              mask="url(#moonMask)"
-              className="moon-path-transition"
-            />
+            <g mask="url(#moonMask)" className="moon-path-transition">
+              <MoonIcon cx={50} cy={50} r={48} />
+            </g>
           </svg>
         </div>
         <div className="text-center">

@@ -45,6 +45,7 @@ const App: React.FC = () => {
   const [issDistance, setIssDistance] = useState<number | null>(null);
   const [locationDate, setLocationDate] = useState<string>("");
   const [isGlobeExpanded, setIsGlobeExpanded] = useState<boolean>(false);
+  const [isSolarExpanded, setIsSolarExpanded] = useState<boolean>(false);
 
   const currentLogo = isNight ? logoNight : logoDay;
 
@@ -179,6 +180,20 @@ const App: React.FC = () => {
     );
   }
 
+  if (isSolarExpanded) {
+    return (
+      <div className="app-container fullscreen-page">
+        <div className="glass-card fullscreen-glass-card">
+          <SolarSystem
+            theme={isNight ? "night" : "day"}
+            isExpanded
+            onCollapse={() => setIsSolarExpanded(false)}
+          />
+        </div>
+      </div>
+    );
+  }
+
   // Below this line, TypeScript mathematically guarantees location.lat and location.lon are numbers!
   const { solar24, solar12 } = getLocalSolarTime();
 
@@ -274,7 +289,10 @@ const App: React.FC = () => {
           )}
         </div>
         <div className="glass-card grid-span-2">
-          <SolarSystem theme={isNight ? "night" : "day"} />
+          <SolarSystem
+            theme={isNight ? "night" : "day"}
+            onExpand={() => setIsSolarExpanded(true)}
+          />
         </div>
       </div>
       <p className="copyright glow-sub2"> © 2026 David Brand</p>

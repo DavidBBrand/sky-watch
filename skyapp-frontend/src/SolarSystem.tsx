@@ -1,5 +1,6 @@
 import React, { useState, useEffect, memo } from "react";
 import "./SolarSystem.css";
+import { PLANET_ICONS, MoonIcon } from "./PlanetIcons";
 
 interface BodyPos {
   x_au: number;
@@ -31,56 +32,63 @@ const ORBIT_AU: [string, number][] = [
 ];
 
 // Visual style per body
-const STYLE: Record<string, { color: string; r: number; rings?: boolean }> = {
+const STYLE: Record<string, { color: string; r: number }> = {
   Mercury: { color: "#a09888", r: 4 },
   Venus:   { color: "#e8c050", r: 7 },
   Earth:   { color: "#4a90d9", r: 7 },
   Mars:    { color: "#c0442a", r: 5 },
   Jupiter: { color: "#d4956a", r: 14 },
-  Saturn:  { color: "#c8a850", r: 11, rings: true },
+  Saturn:  { color: "#c8a850", r: 11 },
   Uranus:  { color: "#7fb8c0", r: 8 },
   Neptune: { color: "#3a60c8", r: 8 },
   Moon:    { color: "#b8b8b8", r: 3 },
 };
 
-// Piecewise scale: inner planets (0–2 AU) spread across 0–130 px,
-// outer planets (2–30 AU) fill the remaining 130–320 px.
-const INNER_AU   = 2.0;
-const INNER_PX   = 130;
-const INNER_POW  = 0.55;
-const OUTER_POW  = 0.45;
-const OUTER_SCALE =
-  (320 - INNER_PX) /
-  (Math.pow(30.07, OUTER_POW) - Math.pow(INNER_AU, OUTER_POW));
+// Piecewise scale: inner planets spread across 0–INNER_PX px, outer planets
+// fill the remaining INNER_PX–OUTER_MAX_PX px. A lower INNER_POW and larger
+// INNER_PX (vs. a flatter default) give Mercury/Venus/Earth more breathing
+// room near the Sun instead of clustering right against its glow.
+// In the expanded fullscreen view, INNER_PX/OUTER_MAX_PX get a modest bump
+// (safely within the label margin reserved by the fixed 400-unit viewBox)
+// so the whole diagram fills more of the available space.
+const INNER_AU  = 2.0;
+const INNER_POW = 0.45;
+const OUTER_POW = 0.45;
 
-function scaleR(au: number): number {
-  const d = Math.max(au, 0.001);
-  if (d <= INNER_AU) {
-    return Math.pow(d / INNER_AU, INNER_POW) * INNER_PX;
-  }
-  return INNER_PX + (Math.pow(d, OUTER_POW) - Math.pow(INNER_AU, OUTER_POW)) * OUTER_SCALE;
+function makeScaleR(innerPx: number, outerMaxPx: number) {
+  const outerScale =
+    (outerMaxPx - innerPx) /
+    (Math.pow(30.07, OUTER_POW) - Math.pow(INNER_AU, OUTER_POW));
+  return function scaleR(au: number): number {
+    const d = Math.max(au, 0.001);
+    if (d <= INNER_AU) {
+      return Math.pow(d / INNER_AU, INNER_POW) * innerPx;
+    }
+    return innerPx + (Math.pow(d, OUTER_POW) - Math.pow(INNER_AU, OUTER_POW)) * outerScale;
+  };
 }
 
 /** Heliocentric AU → SVG coords (Sun at centre, y-axis flipped) */
-function toXY(x_au: number, y_au: number): [number, number] {
-  const d = Math.sqrt(x_au * x_au + y_au * y_au);
-  if (d < 1e-9) return [0, 0];
-  const r = scaleR(d);
-  const a = Math.atan2(y_au, x_au);
-  return [r * Math.cos(a), -r * Math.sin(a)];
+function makeToXY(scaleR: (au: number) => number) {
+  return function toXY(x_au: number, y_au: number): [number, number] {
+    const d = Math.sqrt(x_au * x_au + y_au * y_au);
+    if (d < 1e-9) return [0, 0];
+    const r = scaleR(d);
+    const a = Math.atan2(y_au, x_au);
+    return [r * Math.cos(a), -r * Math.sin(a)];
+  };
 }
 
 // ── Label collision helpers ──────────────────────────────────────────────────
 
-const FONT_SIZE  = 10;
-const CHAR_W     = FONT_SIZE * 0.56; // approx character width for Oxanium
-const LABEL_PAD  = 4;                // extra clearance around each label box
+const LABEL_PAD  = 4; // extra clearance around each label box
 
 interface Box { x: number; y: number; w: number; h: number }
 
-function labelBox(cx: number, cy: number, name: string): Box {
-  const w = name.length * CHAR_W;
-  return { x: cx - w / 2, y: cy - FONT_SIZE, w, h: FONT_SIZE + 2 };
+function labelBox(cx: number, cy: number, name: string, fontSize: number): Box {
+  const charW = fontSize * 0.56; // approx character width for Oxanium
+  const w = name.length * charW;
+  return { x: cx - w / 2, y: cy - fontSize, w, h: fontSize + 2 };
 }
 
 function boxesOverlap(a: Box, b: Box, pad = LABEL_PAD): boolean {
@@ -118,7 +126,8 @@ interface PlanetEntry {
  */
 function resolveLabelPositions(
   planets: PlanetEntry[],
-  baseAngles: number[]
+  baseAngles: number[],
+  fontSize: number
 ): Array<{ x: number; y: number }> {
   const placed: Array<{ box: Box; x: number; y: number }> = [];
   const result: Array<{ x: number; y: number }> = [];
@@ -134,7 +143,7 @@ function resolveLabelPositions(
       const angle = baseAngle + da;
       const lx = sx + offset * Math.cos(angle);
       const ly = sy - offset * Math.sin(angle);
-      const box = labelBox(lx, ly, name);
+      const box = labelBox(lx, ly, name, fontSize);
 
       let score = Math.abs(da) * 10; // prefer angles closest to natural radial
 
@@ -157,7 +166,7 @@ function resolveLabelPositions(
       }
     }
 
-    placed.push({ box: labelBox(bestX, bestY, name), x: bestX, y: bestY });
+    placed.push({ box: labelBox(bestX, bestY, name, fontSize), x: bestX, y: bestY });
     result.push({ x: bestX, y: bestY });
   }
 
@@ -168,9 +177,12 @@ function resolveLabelPositions(
 
 interface SolarSystemProps {
   theme?: "day" | "night";
+  isExpanded?: boolean;
+  onExpand?: () => void;
+  onCollapse?: () => void;
 }
 
-const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
+const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpanded = false, onExpand, onCollapse }) => {
   const [range, setRange] = useState<SolarRange | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dayIndex, setDayIndex] = useState(0);
@@ -219,6 +231,20 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
     ? "rgba(255,255,255,0.07)"
     : "rgba(60,60,100,0.10)";
 
+  // The expanded fullscreen view gets bigger planet/Sun/Moon bodies, bigger
+  // labels, and a bit more orbital spread — all safely within the fixed
+  // 400-unit viewBox margin reserved for the outermost label.
+  const BODY_ZOOM = isExpanded ? 1.6 : 1;
+  const FONT_SIZE = isExpanded ? 14 : 10;
+  const INNER_PX = isExpanded ? 185 : 170;
+  const OUTER_MAX_PX = isExpanded ? 340 : 320;
+  const scaleR = makeScaleR(INNER_PX, OUTER_MAX_PX);
+  const toXY = makeToXY(scaleR);
+  const styleFor = (name: string) => {
+    const base = STYLE[name];
+    return { color: base.color, r: base.r * BODY_ZOOM };
+  };
+
   const earthXY = data?.Earth ? toXY(data.Earth.x_au, data.Earth.y_au) : null;
 
   // Build planet list (excludes Moon — handled separately)
@@ -227,7 +253,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
         .filter(([name]) => name !== "Moon" && STYLE[name])
         .map(([name, pos]) => {
           const [sx, sy] = toXY(pos.x_au, pos.y_au);
-          return { name, sx, sy, cfg: STYLE[name], pos };
+          return { name, sx, sy, cfg: styleFor(name), pos };
         })
     : [];
 
@@ -235,18 +261,34 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
     Math.atan2(pos.y_au, pos.x_au)
   );
 
-  const labelPositions = data ? resolveLabelPositions(planetEntries, baseAngles) : [];
+  const labelPositions = data ? resolveLabelPositions(planetEntries, baseAngles, FONT_SIZE) : [];
 
   const strokeColor = theme === "night" ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.95)";
+
+  const sunR = 38 * BODY_ZOOM;
+  const sunCoreR = 16 * BODY_ZOOM;
+  const moonOrbitR = 16 * BODY_ZOOM;
 
   return (
     <div className="solar-system-card">
       <div className="card-title">Solar System — Live Orbital Positions</div>
+      {isExpanded ? (
+        <button className="solar-expand-btn" onClick={onCollapse}>
+          ← Back to Dashboard
+        </button>
+      ) : (
+        onExpand && (
+          <button className="solar-expand-btn" onClick={onExpand}>
+            Expand
+          </button>
+        )
+      )}
       <div className="solar-disclaimer">* Distances compressed for visibility — not to scale</div>
       <div className="solar-svg-wrapper">
         <svg
           viewBox="-400 -400 800 800"
           width="100%"
+          height="100%"
           style={{ display: "block" }}
           aria-label="Aerial view of the solar system with live planet positions"
         >
@@ -280,18 +322,18 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
           {/* Moon orbit ring around Earth */}
           {earthXY && (
             <circle
-              cx={earthXY[0]} cy={earthXY[1]} r={16}
+              cx={earthXY[0]} cy={earthXY[1]} r={moonOrbitR}
               fill="none" stroke={ringStroke} strokeWidth={0.6}
             />
           )}
 
           {/* Sun */}
-          <circle cx={0} cy={0} r={38} fill="url(#sun-grad)" />
-          <circle cx={0} cy={0} r={16} fill="#ffd700" filter="url(#body-glow)">
+          <circle cx={0} cy={0} r={sunR} fill="url(#sun-grad)" />
+          <circle cx={0} cy={0} r={sunCoreR} fill="#ffd700" filter="url(#body-glow)">
             <title>Sun</title>
           </circle>
           <text
-            x={0} y={-24}
+            x={0} y={-24 * BODY_ZOOM}
             textAnchor="middle" fontSize={FONT_SIZE}
             fontFamily="Oxanium, sans-serif"
             fill="#ffd700" opacity={0.9}
@@ -308,13 +350,12 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
             const dLen = Math.sqrt(dx * dx + dy * dy) || 1;
             const ux = dx / dLen;
             const uy = dy / dLen;
-            const MOON_ORBIT_R = 16;
-            const mx = earthXY[0] + MOON_ORBIT_R * ux;
-            const my = earthXY[1] - MOON_ORBIT_R * uy;
-            const lx = earthXY[0] + (MOON_ORBIT_R + 30) * ux;
-            const ly = earthXY[1] - (MOON_ORBIT_R + 30) * uy;
-            const arrowEndX = mx + 5 * ux;
-            const arrowEndY = my - 5 * uy;
+            const mx = earthXY[0] + moonOrbitR * ux;
+            const my = earthXY[1] - moonOrbitR * uy;
+            const lx = earthXY[0] + (moonOrbitR + 30 * BODY_ZOOM) * ux;
+            const ly = earthXY[1] - (moonOrbitR + 30 * BODY_ZOOM) * uy;
+            const arrowEndX = mx + 5 * BODY_ZOOM * ux;
+            const arrowEndY = my - 5 * BODY_ZOOM * uy;
 
             const moonFill  = theme === "night" ? "#d0d0d0" : "#6e6e88";
             const moonLabel = theme === "night" ? "#c8c8c8" : "#5a5a76";
@@ -323,10 +364,9 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
             return (
               <g>
                 {/* Subtle glow halo */}
-                <circle cx={mx} cy={my} r={8} fill={moonFill} opacity={0.15} />
-                <circle cx={mx} cy={my} r={4} fill={moonFill} filter="url(#body-glow)">
-                  <title>Moon — {data.Moon.dist_au.toFixed(5)} AU from Earth</title>
-                </circle>
+                <circle cx={mx} cy={my} r={8 * BODY_ZOOM} fill={moonFill} opacity={0.15} />
+                <title>Moon — {data.Moon.dist_au.toFixed(5)} AU from Earth</title>
+                <MoonIcon cx={mx} cy={my} r={4 * BODY_ZOOM} />
                 <line
                   x1={lx} y1={ly} x2={arrowEndX} y2={arrowEndY}
                   stroke={moonLine} strokeWidth={0.8} opacity={0.6}
@@ -348,25 +388,18 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
           {/* Planets */}
           {planetEntries.map(({ name, sx, sy, cfg, pos }, i) => {
             const lp = labelPositions[i] ?? { x: sx, y: sy - cfg.r - 16 };
+            const Icon = PLANET_ICONS[name];
 
             return (
               <g key={name}>
                 {/* Soft glow halo */}
                 <circle cx={sx} cy={sy} r={cfg.r + 6} fill={cfg.color} opacity={0.12} />
+                <title>{name} — {pos.dist_au.toFixed(3)} AU from Sun</title>
                 {/* Planet body */}
-                <circle cx={sx} cy={sy} r={cfg.r} fill={cfg.color} filter="url(#body-glow)">
-                  <title>{name} — {pos.dist_au.toFixed(3)} AU from Sun</title>
-                </circle>
-                {/* Saturn rings */}
-                {cfg.rings && (
-                  <ellipse
-                    cx={sx} cy={sy}
-                    rx={cfg.r + 6} ry={3}
-                    fill="none"
-                    stroke={cfg.color}
-                    strokeOpacity={0.65}
-                    strokeWidth={1.5}
-                  />
+                {Icon ? (
+                  <Icon cx={sx} cy={sy} r={cfg.r} />
+                ) : (
+                  <circle cx={sx} cy={sy} r={cfg.r} fill={cfg.color} filter="url(#body-glow)" />
                 )}
                 {/* Label — collision-resolved position */}
                 <text
@@ -390,6 +423,11 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
         )}
         {error && (
           <div className="solar-loading solar-error">{error}</div>
+        )}
+        {range && (
+          <div className={`solar-date-display${isExpanded ? " solar-date-display--large" : ""}`}>
+            {formatDayLabel(range.dates[dayIndex])}
+          </div>
         )}
       </div>
 
@@ -432,7 +470,6 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night" }) => {
               setDayIndex(Number(e.target.value));
             }}
           />
-          <div className="solar-time-label">{formatDayLabel(range.dates[dayIndex])}</div>
         </div>
       )}
     </div>
