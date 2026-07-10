@@ -45,14 +45,15 @@ const STYLE: Record<string, { color: string; r: number }> = {
 };
 
 // Piecewise scale: inner planets spread across 0–INNER_PX px, outer planets
-// fill the remaining INNER_PX–OUTER_MAX_PX px. A lower INNER_POW and larger
-// INNER_PX (vs. a flatter default) give Mercury/Venus/Earth more breathing
-// room near the Sun instead of clustering right against its glow.
-// In the expanded fullscreen view, INNER_PX/OUTER_MAX_PX get a modest bump
-// (safely within the label margin reserved by the fixed 400-unit viewBox)
-// so the whole diagram fills more of the available space.
+// fill the remaining INNER_PX–OUTER_MAX_PX px. INNER_POW close to 1 (nearly
+// linear) keeps Venus/Earth/Mars from bunching up in the middle of that
+// range — a lower exponent stretches Mercury out but squeezes everything
+// above it together, which is what made Venus/Earth look too close.
+// In the expanded fullscreen view, INNER_PX/OUTER_MAX_PX get a bump (safely
+// within the label margin reserved by the fixed 400-unit viewBox) so the
+// whole diagram fills more of the available space.
 const INNER_AU  = 2.0;
-const INNER_POW = 0.45;
+const INNER_POW = 0.85;
 const OUTER_POW = 0.45;
 
 function makeScaleR(innerPx: number, outerMaxPx: number) {
@@ -265,7 +266,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
   // even this close to the boundary.
   const BODY_ZOOM = isExpanded ? 2.0 : 1;
   const FONT_SIZE = isExpanded ? 16 : 10;
-  const INNER_PX = isExpanded ? 245 : 170;
+  const INNER_PX = isExpanded ? 310 : 230;
   const OUTER_MAX_PX = isExpanded ? 390 : 320;
   const scaleR = makeScaleR(INNER_PX, OUTER_MAX_PX);
   const toXY = makeToXY(scaleR);
@@ -274,14 +275,29 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
     return { color: base.color, r: base.r * BODY_ZOOM };
   };
 
+  const sunR = 38 * BODY_ZOOM;
+  const sunCoreR = 16 * BODY_ZOOM;
+
   const earthXY = data?.Earth ? toXY(data.Earth.x_au, data.Earth.y_au) : null;
 
-  // Build planet list (excludes Moon — handled separately)
+  // Build planet list (excludes Moon — handled separately). Mercury's orbit
+  // is floored so it never sinks into the Sun's glow — the inner power
+  // curve alone can't guarantee that once the Sun grows with BODY_ZOOM.
   const planetEntries: PlanetEntry[] = data
     ? Object.entries(data)
         .filter(([name]) => name !== "Moon" && STYLE[name])
         .map(([name, pos]) => {
-          const [sx, sy] = toXY(pos.x_au, pos.y_au);
+          let [sx, sy] = toXY(pos.x_au, pos.y_au);
+          if (name === "Mercury") {
+            const cfg = styleFor(name);
+            const minD = sunR + cfg.r + 6 + 8;
+            const d = Math.hypot(sx, sy) || 1;
+            if (d < minD) {
+              const scale = minD / d;
+              sx *= scale;
+              sy *= scale;
+            }
+          }
           return { name, sx, sy, cfg: styleFor(name), pos };
         })
     : [];
@@ -293,9 +309,6 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
   const labelPositions = data ? resolveLabelPositions(planetEntries, baseAngles, FONT_SIZE) : [];
 
   const strokeColor = theme === "night" ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.95)";
-
-  const sunR = 38 * BODY_ZOOM;
-  const sunCoreR = 16 * BODY_ZOOM;
   const moonOrbitR = 16 * BODY_ZOOM;
 
   return (

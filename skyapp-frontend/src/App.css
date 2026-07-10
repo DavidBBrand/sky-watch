@@ -308,6 +308,10 @@
 
 .fullscreen-page {
   height: 100vh;
+  /* iOS Safari's 100vh includes space the dynamic toolbar can cover —
+     100dvh tracks the actual visible viewport so content (e.g. the Solar
+     System's time controls) doesn't get clipped in landscape. */
+  height: 100dvh;
   overflow: hidden;
   padding: 16px 16px 0;
   box-sizing: border-box;

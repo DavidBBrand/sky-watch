@@ -53,6 +53,15 @@
   min-height: 320px;
 }
 
+/* Short viewports (phone landscape): the wrapper's min-height alone can
+   exceed the whole available height, pushing the time controls below the
+   fold since .fullscreen-page clips overflow. Let it shrink further here. */
+@media (max-height: 500px) {
+  .solar-system-card--expanded .solar-svg-wrapper {
+    min-height: 140px;
+  }
+}
+
 .solar-loading {
   position: absolute;
   inset: 0;
