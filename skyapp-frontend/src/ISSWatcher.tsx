@@ -122,6 +122,7 @@ const ISSWatcher: React.FC<ISSWatcherProps> = memo(({ onDistanceUpdate }) => {
         title="ISS Map"
         src="https://isstracker.pl/en/widget/map?disableInfoBox=1&lang=en"
         loading="lazy"
+        sandbox="allow-scripts allow-same-origin"
       ></iframe>
 
       {isNearby && (

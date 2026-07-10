@@ -292,7 +292,7 @@ export const SaturnIcon: React.FC<IconProps> = ({ cx, cy, r }) => {
   const uid = useId();
   const scale = r / 34;
   return (
-    <g transform={`translate(${cx}, ${cy}) scale(${scale}) translate(-80, -46)`}>
+    <g transform={`translate(${cx}, ${cy}) rotate(26.73) scale(${scale}) translate(-80, -46)`}>
       <defs>
         <radialGradient id={`${uid}-g`} cx="38%" cy="28%" r="72%">
           <stop offset="0%"   stopColor="#fdf6dc" />
