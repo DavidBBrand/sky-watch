@@ -81,7 +81,8 @@ function makeToXY(scaleR: (au: number) => number) {
 
 // ── Label collision helpers ──────────────────────────────────────────────────
 
-const LABEL_PAD  = 4; // extra clearance around each label box
+const LABEL_PAD  = 4;   // extra clearance around each label box
+const VIEWBOX_HALF = 400; // matches the fixed SVG viewBox (-400 -400 800 800)
 
 interface Box { x: number; y: number; w: number; h: number }
 
@@ -89,6 +90,27 @@ function labelBox(cx: number, cy: number, name: string, fontSize: number): Box {
   const charW = fontSize * 0.56; // approx character width for Oxanium
   const w = name.length * charW;
   return { x: cx - w / 2, y: cy - fontSize, w, h: fontSize + 2 };
+}
+
+function labelBoxOutOfBounds(box: Box): boolean {
+  return (
+    box.x < -VIEWBOX_HALF ||
+    box.x + box.w > VIEWBOX_HALF ||
+    box.y < -VIEWBOX_HALF ||
+    box.y + box.h > VIEWBOX_HALF
+  );
+}
+
+// Last-resort safety net: if every candidate angle still spills past the
+// edge (e.g. a long name right at the boundary), nudge the label back in.
+function clampToBounds(x: number, y: number, name: string, fontSize: number): { x: number; y: number } {
+  const box = labelBox(x, y, name, fontSize);
+  let dx = 0, dy = 0;
+  if (box.x < -VIEWBOX_HALF) dx = -VIEWBOX_HALF - box.x;
+  else if (box.x + box.w > VIEWBOX_HALF) dx = VIEWBOX_HALF - (box.x + box.w);
+  if (box.y < -VIEWBOX_HALF) dy = -VIEWBOX_HALF - box.y;
+  else if (box.y + box.h > VIEWBOX_HALF) dy = VIEWBOX_HALF - (box.y + box.h);
+  return { x: x + dx, y: y + dy };
 }
 
 function boxesOverlap(a: Box, b: Box, pad = LABEL_PAD): boolean {
@@ -147,6 +169,10 @@ function resolveLabelPositions(
 
       let score = Math.abs(da) * 10; // prefer angles closest to natural radial
 
+      // Heavily penalise a label that would spill past the viewBox edge —
+      // lets outer orbit rings grow close to the edge without clipping labels
+      if (labelBoxOutOfBounds(box)) score += 1000;
+
       // Penalise overlap with already-placed labels
       for (const p of placed) {
         if (boxesOverlap(box, p.box)) score += 200;
@@ -166,8 +192,9 @@ function resolveLabelPositions(
       }
     }
 
-    placed.push({ box: labelBox(bestX, bestY, name, fontSize), x: bestX, y: bestY });
-    result.push({ x: bestX, y: bestY });
+    const clamped = clampToBounds(bestX, bestY, name, fontSize);
+    placed.push({ box: labelBox(clamped.x, clamped.y, name, fontSize), x: clamped.x, y: clamped.y });
+    result.push(clamped);
   }
 
   return result;
@@ -232,12 +259,14 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
     : "rgba(60,60,100,0.10)";
 
   // The expanded fullscreen view gets bigger planet/Sun/Moon bodies, bigger
-  // labels, and a bit more orbital spread — all safely within the fixed
-  // 400-unit viewBox margin reserved for the outermost label.
-  const BODY_ZOOM = isExpanded ? 1.6 : 1;
-  const FONT_SIZE = isExpanded ? 14 : 10;
-  const INNER_PX = isExpanded ? 185 : 170;
-  const OUTER_MAX_PX = isExpanded ? 340 : 320;
+  // labels, and a much bigger orbital spread — the outer ring now reaches to
+  // within a few px of the fixed 400-unit viewBox edge. The label collision
+  // system (labelBoxOutOfBounds/clampToBounds) keeps names from clipping
+  // even this close to the boundary.
+  const BODY_ZOOM = isExpanded ? 2.0 : 1;
+  const FONT_SIZE = isExpanded ? 16 : 10;
+  const INNER_PX = isExpanded ? 245 : 170;
+  const OUTER_MAX_PX = isExpanded ? 390 : 320;
   const scaleR = makeScaleR(INNER_PX, OUTER_MAX_PX);
   const toXY = makeToXY(scaleR);
   const styleFor = (name: string) => {
@@ -270,7 +299,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
   const moonOrbitR = 16 * BODY_ZOOM;
 
   return (
-    <div className="solar-system-card">
+    <div className={`solar-system-card${isExpanded ? " solar-system-card--expanded" : ""}`}>
       <div className="card-title">Solar System — Live Orbital Positions</div>
       {isExpanded ? (
         <button className="solar-expand-btn" onClick={onCollapse}>
