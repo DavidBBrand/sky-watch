@@ -131,7 +131,7 @@
   right: 4%;
   bottom: 3%;
   font-family: "Oxanium", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--accent-radar);
   opacity: 0.85;
@@ -140,6 +140,16 @@
   line-height: 1.15;
   pointer-events: none;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* Phones: the compact card is narrow enough that the circle nearly fills
+   the wrapper, so the date needs to be smaller still to stay clear of it. */
+@media (max-width: 480px) {
+  .solar-date-display {
+    right: 5%;
+    bottom: 4%;
+    font-size: 0.75rem;
+  }
 }
 
 /* Fullscreen view: parked lower on the right, clear of the orbit diagram's
