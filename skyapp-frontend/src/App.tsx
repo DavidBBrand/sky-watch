@@ -34,6 +34,35 @@ export interface WeatherData {
   [key: string]: any;
 }
 
+// DST always shifts clocks forward 1hr relative to standard time, so sampling
+// Jan and Jul (6mo apart) always catches one of each, regardless of hemisphere.
+function getUtcOffsets(timezone: string): { standard: number; daylight: number; observesDst: boolean } {
+  const year = new Date().getUTCFullYear();
+
+  const offsetAt = (date: Date) => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      timeZoneName: "shortOffset",
+    }).formatToParts(date);
+    const name = parts.find((p) => p.type === "timeZoneName")?.value ?? "GMT+0";
+    const match = name.match(/GMT([+-]\d+)(?::(\d+))?/);
+    if (!match) return 0;
+    const sign = match[1].startsWith("-") ? -1 : 1;
+    const hours = Math.abs(parseInt(match[1], 10));
+    const minutes = match[2] ? parseInt(match[2], 10) / 60 : 0;
+    return sign * (hours + minutes);
+  };
+
+  const janOffset = offsetAt(new Date(Date.UTC(year, 0, 1)));
+  const julOffset = offsetAt(new Date(Date.UTC(year, 6, 1)));
+
+  return {
+    standard: Math.min(janOffset, julOffset),
+    daylight: Math.max(janOffset, julOffset),
+    observesDst: janOffset !== julOffset,
+  };
+}
+
 const App: React.FC = () => {
   const { location, updateLocation } = useLocation();
   const hour = new Date().getHours();
@@ -83,6 +112,13 @@ const App: React.FC = () => {
       console.error("Local Time Error:", e);
       return "--:--";
     }
+  };
+
+  const getUtcTime = () => {
+    const now = new Date();
+    const hours = now.getUTCHours().toString().padStart(2, "0");
+    const minutes = now.getUTCMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
   };
 
   useEffect(() => {
@@ -196,6 +232,8 @@ const App: React.FC = () => {
 
   // Below this line, TypeScript mathematically guarantees location.lat and location.lon are numbers!
   const { solar24, solar12 } = getLocalSolarTime();
+  const utcOffsets = getUtcOffsets(weatherData?.timezone || "America/Chicago");
+  const formatOffset = (hrs: number) => `${hrs >= 0 ? "+" : ""}${hrs} HRS`;
 
   return (
     <div className="app-container">
@@ -234,8 +272,15 @@ const App: React.FC = () => {
             Solar Time: {solar12}
           </span>
           <span className="glow-sub">
-            UTC Offset: {location.lon >= 0 ? "+" : ""}
+            Solar Offset: {location.lon >= 0 ? "+" : ""}
             {(location.lon / 15).toFixed(1)} HRS
+          </span>
+          <span className="glow-sub">
+            UTC Offset: {formatOffset(utcOffsets.standard)} STD
+            {utcOffsets.observesDst && ` / ${formatOffset(utcOffsets.daylight)} DST`}
+          </span>
+          <span className="time-display">
+            UTC: {getUtcTime()}
           </span>
           <span className="time-display">
             Local Standard Time: {weatherData ? getLiveLocalTime() : "--:--"}
