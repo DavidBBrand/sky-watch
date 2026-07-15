@@ -143,16 +143,23 @@ async def get_starlink_tles():
                             })
 
                 if structured_sats:
-                    with open(backup_path, "w") as f:
+                    # Atomic write: write to temp file then rename so a mid-write
+                    # interruption never leaves the backup in a corrupted state.
+                    tmp_path = backup_path.with_suffix(".tmp")
+                    with open(tmp_path, "w") as f:
                         json.dump(structured_sats, f)
+                    tmp_path.replace(backup_path)
                     return structured_sats
 
         except Exception as e:
             print(f"Space-track fetch failed: {e}. Switching to local backup.")
 
     if backup_path.exists():
-        with open(backup_path, "r") as f:
-            return json.load(f)
+        try:
+            with open(backup_path, "r") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Backup JSON corrupted or unreadable: {e}")
 
     return {"error": "Satellite link offline."}
 
