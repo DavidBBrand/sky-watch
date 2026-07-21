@@ -1,4 +1,5 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
+import { flushSync } from "react-dom";
 import "./SolarSystem.css";
 import { PLANET_ICONS, MoonIcon } from "./PlanetIcons";
 
@@ -56,16 +57,21 @@ const INNER_AU  = 2.0;
 const INNER_POW = 0.85;
 const OUTER_POW = 0.45;
 
-function makeScaleR(innerPx: number, outerMaxPx: number) {
+function makeScaleR(
+  innerPx: number,
+  outerMaxPx: number,
+  innerPow = INNER_POW,
+  outerPow = OUTER_POW,
+) {
   const outerScale =
     (outerMaxPx - innerPx) /
-    (Math.pow(30.07, OUTER_POW) - Math.pow(INNER_AU, OUTER_POW));
+    (Math.pow(30.07, outerPow) - Math.pow(INNER_AU, outerPow));
   return function scaleR(au: number): number {
     const d = Math.max(au, 0.001);
     if (d <= INNER_AU) {
-      return Math.pow(d / INNER_AU, INNER_POW) * innerPx;
+      return Math.pow(d / INNER_AU, innerPow) * innerPx;
     }
-    return innerPx + (Math.pow(d, OUTER_POW) - Math.pow(INNER_AU, OUTER_POW)) * outerScale;
+    return innerPx + (Math.pow(d, outerPow) - Math.pow(INNER_AU, outerPow)) * outerScale;
   };
 }
 
@@ -80,61 +86,6 @@ function makeToXY(scaleR: (au: number) => number) {
   };
 }
 
-// ── Label collision helpers ──────────────────────────────────────────────────
-
-const LABEL_PAD  = 4;   // extra clearance around each label box
-const VIEWBOX_HALF = 400; // matches the fixed SVG viewBox (-400 -400 800 800)
-
-interface Box { x: number; y: number; w: number; h: number }
-
-function labelBox(cx: number, cy: number, name: string, fontSize: number): Box {
-  const charW = fontSize * 0.56; // approx character width for Oxanium
-  const w = name.length * charW;
-  return { x: cx - w / 2, y: cy - fontSize, w, h: fontSize + 2 };
-}
-
-function labelBoxOutOfBounds(box: Box): boolean {
-  return (
-    box.x < -VIEWBOX_HALF ||
-    box.x + box.w > VIEWBOX_HALF ||
-    box.y < -VIEWBOX_HALF ||
-    box.y + box.h > VIEWBOX_HALF
-  );
-}
-
-// Last-resort safety net: if every candidate angle still spills past the
-// edge (e.g. a long name right at the boundary), nudge the label back in.
-function clampToBounds(x: number, y: number, name: string, fontSize: number): { x: number; y: number } {
-  const box = labelBox(x, y, name, fontSize);
-  let dx = 0, dy = 0;
-  if (box.x < -VIEWBOX_HALF) dx = -VIEWBOX_HALF - box.x;
-  else if (box.x + box.w > VIEWBOX_HALF) dx = VIEWBOX_HALF - (box.x + box.w);
-  if (box.y < -VIEWBOX_HALF) dy = -VIEWBOX_HALF - box.y;
-  else if (box.y + box.h > VIEWBOX_HALF) dy = VIEWBOX_HALF - (box.y + box.h);
-  return { x: x + dx, y: y + dy };
-}
-
-function boxesOverlap(a: Box, b: Box, pad = LABEL_PAD): boolean {
-  return (
-    a.x - pad < b.x + b.w &&
-    a.x + a.w + pad > b.x &&
-    a.y - pad < b.y + b.h &&
-    a.y + a.h + pad > b.y
-  );
-}
-
-function circleOverlapsBox(cx: number, cy: number, cr: number, b: Box, pad = 3): boolean {
-  const nx = Math.max(b.x - pad, Math.min(cx, b.x + b.w + pad));
-  const ny = Math.max(b.y - pad, Math.min(cy, b.y + b.h + pad));
-  const dx = cx - nx, dy = cy - ny;
-  return dx * dx + dy * dy < cr * cr;
-}
-
-// 8 candidate angles to try for each label (starting radial-outward)
-const CANDIDATE_OFFSETS = [0, 1, -1, 2, -2, 4, -4, 3, -3].map(
-  n => (n * Math.PI) / 8
-);
-
 interface PlanetEntry {
   name: string;
   sx: number;
@@ -143,65 +94,28 @@ interface PlanetEntry {
   pos: BodyPos;
 }
 
-/**
- * For each planet, pick the candidate angle that overlaps the fewest
- * already-placed labels and planet bodies.
- */
-function resolveLabelPositions(
-  planets: PlanetEntry[],
-  baseAngles: number[],
-  fontSize: number
-): Array<{ x: number; y: number }> {
-  const placed: Array<{ box: Box; x: number; y: number }> = [];
-  const result: Array<{ x: number; y: number }> = [];
+// ────────────────────────────────────────────────────────────────────────────
 
-  for (let i = 0; i < planets.length; i++) {
-    const { name, sx, sy, cfg } = planets[i];
-    const baseAngle = baseAngles[i];
-    const offset = cfg.r + 16;
-
-    let bestX = 0, bestY = 0, bestScore = Infinity;
-
-    for (const da of CANDIDATE_OFFSETS) {
-      const angle = baseAngle + da;
-      const lx = sx + offset * Math.cos(angle);
-      const ly = sy - offset * Math.sin(angle);
-      const box = labelBox(lx, ly, name, fontSize);
-
-      let score = Math.abs(da) * 10; // prefer angles closest to natural radial
-
-      // Heavily penalise a label that would spill past the viewBox edge —
-      // lets outer orbit rings grow close to the edge without clipping labels
-      if (labelBoxOutOfBounds(box)) score += 1000;
-
-      // Penalise overlap with already-placed labels
-      for (const p of placed) {
-        if (boxesOverlap(box, p.box)) score += 200;
-      }
-
-      // Penalise overlap with any planet body (including self)
-      for (const planet of planets) {
-        if (circleOverlapsBox(planet.sx, planet.sy, planet.cfg.r + 3, box)) {
-          score += 150;
-        }
-      }
-
-      if (score < bestScore) {
-        bestScore = score;
-        bestX = lx;
-        bestY = ly;
-      }
+// Linearly interpolate planet positions between two consecutive days so the
+// animation is continuous rather than jumping one day at a time.
+function interpolateSolarData(days: SolarData[], frac: number): SolarData {
+  const i = Math.floor(frac);
+  const t = frac - i;
+  if (t < 1e-9 || i >= days.length - 1) return days[Math.min(i, days.length - 1)];
+  const a = days[i];
+  const b = days[i + 1];
+  const result: SolarData = {};
+  for (const name of Object.keys(a)) {
+    if (b[name]) {
+      result[name] = {
+        x_au:    a[name].x_au    + (b[name].x_au    - a[name].x_au)    * t,
+        y_au:    a[name].y_au    + (b[name].y_au    - a[name].y_au)    * t,
+        dist_au: a[name].dist_au + (b[name].dist_au - a[name].dist_au) * t,
+      };
     }
-
-    const clamped = clampToBounds(bestX, bestY, name, fontSize);
-    placed.push({ box: labelBox(clamped.x, clamped.y, name, fontSize), x: clamped.x, y: clamped.y });
-    result.push(clamped);
   }
-
   return result;
 }
-
-// ────────────────────────────────────────────────────────────────────────────
 
 interface SolarSystemProps {
   theme?: "day" | "night";
@@ -213,9 +127,13 @@ interface SolarSystemProps {
 const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpanded = false, onExpand, onCollapse }) => {
   const [range, setRange] = useState<SolarRange | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [dayIndex, setDayIndex] = useState(0);
+  // Fractional day position — lets us interpolate between days for smooth motion
+  const [dayFrac, setDayFrac] = useState(0);
+  const dayFracRef = useRef(0); // mirror kept in sync so RAF closure always reads current value
   // 0 = paused, 1 = playing forward, -1 = playing backward
   const [playDirection, setPlayDirection] = useState<0 | 1 | -1>(0);
+  const rafRef    = useRef<number | null>(null);
+  const lastTsRef = useRef<number | null>(null);
 
   useEffect(() => {
     const BASE = (import.meta.env.VITE_API_URL as string) || "http://127.0.0.1:8000";
@@ -237,27 +155,51 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
       });
   }, []);
 
-  // Auto-advance the day index while playing, pausing at either end
+  // requestAnimationFrame loop — advances dayFrac at a fixed real-time speed.
+  // flushSync forces React to commit each frame synchronously before the next
+  // RAF fires, so every 60fps frame produces a visible render. Without it,
+  // React 18 may batch/defer the state update and skip frames, causing chop.
+  const DAYS_PER_SECOND = 8;
+
   useEffect(() => {
     if (playDirection === 0 || !range) return;
-    const timer = setInterval(() => {
-      setDayIndex(prev => {
-        const next = prev + playDirection;
-        if (next < 0 || next >= range.days.length) {
-          setPlayDirection(0);
-          return prev;
-        }
-        return next;
-      });
-    }, 120);
-    return () => clearInterval(timer);
+    lastTsRef.current = null;
+
+    const step = (timestamp: number) => {
+      if (lastTsRef.current === null) lastTsRef.current = timestamp;
+      const dt = Math.min((timestamp - lastTsRef.current) / 1000, 0.1);
+      lastTsRef.current = timestamp;
+
+      const next = dayFracRef.current + playDirection * DAYS_PER_SECOND * dt;
+
+      if (next < 0 || next >= range.days.length - 1) {
+        const clamped = Math.max(0, Math.min(range.days.length - 1, next));
+        dayFracRef.current = clamped;
+        flushSync(() => { setDayFrac(clamped); setPlayDirection(0); });
+        return;
+      }
+
+      dayFracRef.current = next;
+      flushSync(() => setDayFrac(next));
+
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    rafRef.current = requestAnimationFrame(step);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      lastTsRef.current = null;
+    };
   }, [playDirection, range]);
 
-  const data = range?.days[dayIndex] ?? null;
+  // Integer index for the slider and date label; interpolated data for rendering
+  const dayIndex = Math.min(Math.round(dayFrac), (range?.days.length ?? 1) - 1);
+  const data = range ? interpolateSolarData(range.days, dayFrac) : null;
 
   const ringStroke = theme === "night"
     ? "rgba(255,255,255,0.07)"
-    : "rgba(60,60,100,0.10)";
+    : "rgba(40,40,90,0.28)";
 
   // The expanded fullscreen view gets bigger planet/Sun/Moon bodies, bigger
   // labels, and a much bigger orbital spread — the outer ring now reaches to
@@ -265,10 +207,14 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
   // system (labelBoxOutOfBounds/clampToBounds) keeps names from clipping
   // even this close to the boundary.
   const BODY_ZOOM = isExpanded ? 2.0 : 1;
-  const FONT_SIZE = isExpanded ? 16 : 10;
-  const INNER_PX = isExpanded ? 310 : 230;
+  const INNER_PX = isExpanded ? 200 : 230;
   const OUTER_MAX_PX = isExpanded ? 390 : 320;
-  const scaleR = makeScaleR(INNER_PX, OUTER_MAX_PX);
+  // Expanded view uses a tighter inner zone (200px vs 310px) so outer planets
+  // get more of the display space, and a higher outer exponent (0.65 vs 0.45)
+  // so Jupiter–Neptune spread more linearly — closer to true relative distances.
+  const scaleR = isExpanded
+    ? makeScaleR(200, 390, 0.75, 0.65)
+    : makeScaleR(230, 320);
   const toXY = makeToXY(scaleR);
 
   // In expanded view, give inner planets sizes proportional to their real
@@ -321,14 +267,13 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
         })
     : [];
 
-  const baseAngles = planetEntries.map(({ pos }) =>
-    Math.atan2(pos.y_au, pos.x_au)
-  );
 
-  const labelPositions = data ? resolveLabelPositions(planetEntries, baseAngles, FONT_SIZE) : [];
-
-  const strokeColor = theme === "night" ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.95)";
   const moonOrbitR = 16 * BODY_ZOOM;
+  // Moon proportional to Earth: real ratio ≈ 0.27×. Earth is 9px in expanded,
+  // so Moon ≈ 2.5px. Normal view keeps the original 4px.
+  const moonR = isExpanded ? 2.5 : 4;
+  // Label standoff past the orbit ring. Reduced ~80% in expanded so the
+  // arrow is short and doesn't crowd the diagram.
 
   return (
     <div className={`solar-system-card${isExpanded ? " solar-system-card--expanded" : ""}`}>
@@ -366,19 +311,15 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
-            <marker id="moon-arrow" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
-              <path d="M0,0 L6,2 L0,4 Z" fill="#b8b8b8" fillOpacity="0.65" />
-            </marker>
           </defs>
 
-          {/* Orbit rings — use the planet's actual heliocentric distance when
-               data is available so the icon always sits on its ring. Falls
-               back to the mean semi-major axis while data is loading. */}
+          {/* Orbit rings — drawn at each planet's mean semi-major axis so they
+               stay fixed. Planets may sit slightly off the ring at times
+               due to orbital eccentricity; that's physically accurate. */}
           {ORBIT_AU.map(([name, au]) => (
             <circle
               key={name}
-              cx={0} cy={0}
-              r={data?.[name] ? scaleR(data[name].dist_au) : scaleR(au)}
+              cx={0} cy={0} r={scaleR(au)}
               fill="none" stroke={ringStroke} strokeWidth={0.8}
             />
           ))}
@@ -396,15 +337,6 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
           <circle cx={0} cy={0} r={sunCoreR} fill="#ffd700" filter="url(#body-glow)">
             <title>Sun</title>
           </circle>
-          <text
-            x={0} y={-24 * BODY_ZOOM}
-            textAnchor="middle" fontSize={FONT_SIZE}
-            fontFamily="Oxanium, sans-serif"
-            fill="#ffd700" opacity={0.9}
-            stroke={strokeColor} strokeWidth={2.5} paintOrder="stroke"
-          >
-            Sun
-          </text>
 
           {/* Moon */}
           {data?.Moon && earthXY && (() => {
@@ -416,67 +348,30 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
             const uy = dy / dLen;
             const mx = earthXY[0] + moonOrbitR * ux;
             const my = earthXY[1] - moonOrbitR * uy;
-            const lx = earthXY[0] + (moonOrbitR + 30 * BODY_ZOOM) * ux;
-            const ly = earthXY[1] - (moonOrbitR + 30 * BODY_ZOOM) * uy;
-            const arrowEndX = mx + 5 * BODY_ZOOM * ux;
-            const arrowEndY = my - 5 * BODY_ZOOM * uy;
-
-            const moonFill  = theme === "night" ? "#d0d0d0" : "#6e6e88";
-            const moonLabel = theme === "night" ? "#c8c8c8" : "#5a5a76";
-            const moonLine  = theme === "night" ? "#b8b8b8" : "#707088";
+            const moonFill = theme === "night" ? "#d0d0d0" : "#6e6e88";
 
             return (
-              <g>
-                {/* Subtle glow halo */}
-                <circle cx={mx} cy={my} r={8 * BODY_ZOOM} fill={moonFill} opacity={0.15} />
+              <g transform={`translate(${mx}, ${my})`}>
+                <circle cx={0} cy={0} r={moonR * 2} fill={moonFill} opacity={0.15} />
                 <title>Moon — {data.Moon.dist_au.toFixed(5)} AU from Earth</title>
-                <MoonIcon cx={mx} cy={my} r={4 * BODY_ZOOM} />
-                <line
-                  x1={lx} y1={ly} x2={arrowEndX} y2={arrowEndY}
-                  stroke={moonLine} strokeWidth={0.8} opacity={0.6}
-                  markerEnd="url(#moon-arrow)"
-                />
-                <text
-                  x={lx} y={ly - 5}
-                  textAnchor="middle" fontSize={FONT_SIZE}
-                  fontFamily="Oxanium, sans-serif"
-                  fill={moonLabel}
-                  stroke={strokeColor} strokeWidth={2.5} paintOrder="stroke"
-                >
-                  Moon
-                </text>
+                <MoonIcon cx={0} cy={0} r={moonR} />
               </g>
             );
           })()}
 
-          {/* Planets */}
-          {planetEntries.map(({ name, sx, sy, cfg, pos }, i) => {
-            const lp = labelPositions[i] ?? { x: sx, y: sy - cfg.r - 16 };
+          {/* Planets — group translate keeps cx/cy constant inside each icon so
+               React can skip reconciling their many SVG child elements each frame */}
+          {planetEntries.map(({ name, sx, sy, cfg, pos }) => {
             const Icon = PLANET_ICONS[name];
 
             return (
-              <g key={name}>
-                {/* Soft glow halo */}
-                <circle cx={sx} cy={sy} r={cfg.r + 6} fill={cfg.color} opacity={0.12} />
+              <g key={name} transform={`translate(${sx}, ${sy})`}>
                 <title>{name} — {pos.dist_au.toFixed(3)} AU from Sun</title>
-                {/* Planet body */}
                 {Icon ? (
-                  <Icon cx={sx} cy={sy} r={cfg.r} />
+                  <Icon cx={0} cy={0} r={cfg.r} />
                 ) : (
-                  <circle cx={sx} cy={sy} r={cfg.r} fill={cfg.color} filter="url(#body-glow)" />
+                  <circle cx={0} cy={0} r={cfg.r} fill={cfg.color} filter="url(#body-glow)" />
                 )}
-                {/* Label — collision-resolved position */}
-                <text
-                  x={lp.x} y={lp.y}
-                  textAnchor="middle" fontSize={FONT_SIZE}
-                  fontFamily="Oxanium, sans-serif"
-                  fill={cfg.color}
-                  stroke={strokeColor}
-                  strokeWidth={2.5}
-                  paintOrder="stroke"
-                >
-                  {name}
-                </text>
               </g>
             );
           })}
@@ -510,7 +405,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
               type="button"
               className="solar-time-btn"
               aria-label="Reset to today"
-              onClick={() => { setDayIndex(0); setPlayDirection(0); }}
+              onClick={() => { dayFracRef.current = 0; setDayFrac(0); setPlayDirection(0); }}
             >
               Today
             </button>
@@ -530,8 +425,10 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
             max={range.days.length - 1}
             value={dayIndex}
             onChange={e => {
+              const v = Number(e.target.value);
+              dayFracRef.current = v;
               setPlayDirection(0);
-              setDayIndex(Number(e.target.value));
+              setDayFrac(v);
             }}
           />
         </div>
