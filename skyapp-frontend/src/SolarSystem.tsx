@@ -270,9 +270,24 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
   const OUTER_MAX_PX = isExpanded ? 390 : 320;
   const scaleR = makeScaleR(INNER_PX, OUTER_MAX_PX);
   const toXY = makeToXY(scaleR);
+
+  // In expanded view, give inner planets sizes proportional to their real
+  // radii relative to Earth (Mercury 0.38×, Venus 0.95×, Mars 0.53×).
+  // Outer planets keep the normal BODY_ZOOM doubling — they're already
+  // much larger and less crowded.
+  const EXPANDED_R: Partial<Record<string, number>> = {
+    Mercury: 3,   // real: 0.38 × Earth
+    Venus:   8,   // real: 0.95 × Earth
+    Earth:   9,
+    Mars:    5,   // real: 0.53 × Earth
+  };
+
   const styleFor = (name: string) => {
     const base = STYLE[name];
-    return { color: base.color, r: base.r * BODY_ZOOM };
+    const r = isExpanded && EXPANDED_R[name] != null
+      ? EXPANDED_R[name]!
+      : base.r * BODY_ZOOM;
+    return { color: base.color, r };
   };
 
   const sunR = 38 * BODY_ZOOM;
@@ -288,9 +303,13 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
         .filter(([name]) => name !== "Moon" && STYLE[name])
         .map(([name, pos]) => {
           let [sx, sy] = toXY(pos.x_au, pos.y_au);
+          // Only prevent Mercury from overlapping the Sun's hard core circle
+          // (sunCoreR stays proportional to BODY_ZOOM but doesn't grow nearly
+          // as fast as sunR did, so this floor no longer pushes Mercury off
+          // its orbit ring in the expanded view).
           if (name === "Mercury") {
             const cfg = styleFor(name);
-            const minD = sunR + cfg.r + 6 + 8;
+            const minD = sunCoreR + cfg.r + 4;
             const d = Math.hypot(sx, sy) || 1;
             if (d < minD) {
               const scale = minD / d;
@@ -352,11 +371,14 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
             </marker>
           </defs>
 
-          {/* Orbit rings */}
+          {/* Orbit rings — use the planet's actual heliocentric distance when
+               data is available so the icon always sits on its ring. Falls
+               back to the mean semi-major axis while data is loading. */}
           {ORBIT_AU.map(([name, au]) => (
             <circle
               key={name}
-              cx={0} cy={0} r={scaleR(au)}
+              cx={0} cy={0}
+              r={data?.[name] ? scaleR(data[name].dist_au) : scaleR(au)}
               fill="none" stroke={ringStroke} strokeWidth={0.8}
             />
           ))}
