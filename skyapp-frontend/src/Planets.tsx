@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import "./Planets.css";
 import {
+  MercuryIcon,
   VenusIcon,
   MarsIcon,
   JupiterIcon,
@@ -39,7 +40,11 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
   if (!planets) return null;
 
   const planetIcons: Record<string, React.ReactNode> = {
-    Mercury: "🌑",
+    Mercury: (
+      <svg viewBox="0 0 100 100" style={{ width: "4.0rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
+        <MercuryIcon cx={50} cy={50} r={43} />
+      </svg>
+    ),
     Venus: (
       <svg viewBox="0 0 100 100" style={{ width: "4.0rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <VenusIcon cx={50} cy={50} r={43} />

@@ -216,6 +216,7 @@ async def get_sky_summary(lat: float = Query(35.92), lon: float = Query(-86.86))
 
     # 5. PLANET VISIBILITY LOGIC
     target_planets = {
+        "Mercury": eph['mercury'],
         "Venus": eph['venus'],
         "Mars": eph['mars'],
         "Jupiter": eph['jupiter_barycenter'],
