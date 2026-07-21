@@ -41,32 +41,32 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
   const planetIcons: Record<string, React.ReactNode> = {
     Mercury: "🌑",
     Venus: (
-      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.0rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <VenusIcon cx={50} cy={50} r={43} />
       </svg>
     ),
     Mars: (
-      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.0rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <MarsIcon cx={50} cy={50} r={43} />
       </svg>
     ),
     Jupiter: (
-      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.0rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <JupiterIcon cx={50} cy={50} r={43} />
       </svg>
     ),
     Saturn: (
-      <svg viewBox="0 0 160 100" style={{ width: "7rem", height: "4.375rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 160 100" style={{ width: "6.4rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <SaturnIcon cx={80} cy={46} r={34} />
       </svg>
     ),
     Uranus: (
-      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.0rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <UranusIcon cx={50} cy={50} r={43} />
       </svg>
     ),
     Neptune: (
-      <svg viewBox="0 0 100 100" style={{ width: "4.4rem", height: "4.4rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "4.0rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <NeptuneIcon cx={50} cy={50} r={43} />
       </svg>
     )
@@ -105,7 +105,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
 
               return (
                 <div key={name} className="planet-item">
-                  <div style={{ fontSize: "4.4rem", lineHeight: 1, display: "flex", justifyContent: "center", marginBottom: "-2px" }}>
+                  <div style={{ fontSize: "4.0rem", lineHeight: 1, display: "flex", justifyContent: "center", marginBottom: "-2px" }}>
                     {planetIcons[name] || "✨"}
                   </div>
 
