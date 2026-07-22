@@ -5,6 +5,14 @@
   width: 100%;
 }
 
+[data-theme="night"] .glass-card:has(> .solar-system-card) {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="day"] .glass-card:has(> .solar-system-card) {
+  background: rgba(5, 10, 40, 0.55);
+}
+
 .solar-expand-btn {
   align-self: center;
   margin-bottom: 6px;
