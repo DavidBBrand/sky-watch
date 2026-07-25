@@ -13,6 +13,16 @@
   background: rgba(5, 10, 40, 0.55);
 }
 
+[data-theme="day"] .solar-system-card .card-title {
+  background: linear-gradient(to bottom, #f5f5fa 0%, #c9d6f0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme="day"] .solar-date-display {
+  color: #9fd6ff;
+}
+
 .solar-expand-btn {
   align-self: center;
   margin-bottom: 6px;
