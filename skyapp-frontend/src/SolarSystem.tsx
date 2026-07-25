@@ -397,6 +397,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
               type="button"
               className="solar-time-btn"
               aria-label="Rewind"
+              disabled={dayIndex === 0 && playDirection !== -1}
               onClick={() => setPlayDirection(prev => (prev === -1 ? 0 : -1))}
             >
               {playDirection === -1 ? "❚❚" : "◀◀"}
