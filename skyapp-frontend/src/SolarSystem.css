@@ -157,6 +157,10 @@
   cursor: pointer;
 }
 
+[data-theme="day"] .solar-time-slider {
+  accent-color: #f0983f;
+}
+
 /* Compact card: the circle fills the square wrapper edge-to-edge, so the
    only space clear of the orbit diagram is the empty corner outside it. */
 .solar-date-display {
