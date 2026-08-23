@@ -109,37 +109,38 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
             const satEcf = satellite.eciToEcf(pv.position, gmst);
             const lookAngles = satellite.ecfToLookAngles(observerGd, satEcf);
 
-            if (lookAngles.elevation > 0) {
+            // 10° minimum elevation — standard cutoff for satellite tracking.
+            // Below this, passes are blocked by terrain/atmosphere and the
+            // sheer number of far-away satellites floods the outer ring.
+            const MIN_ELEVATION_RAD = 10 * (Math.PI / 180);
+            if (lookAngles.elevation > MIN_ELEVATION_RAD) {
               const slantRangeKm = lookAngles.rangeSat;
+              const slantRangeMiles = slantRangeKm
+                ? Math.round(slantRangeKm * 0.621371)
+                : 0;
 
-              if (slantRangeKm) {
-                const slantRangeMiles = Math.round(slantRangeKm * 0.621371);
-                const MAX_RANGE = 500; // The absolute edge of your radar screen in miles
+              // Close-contact alert still uses slant range
+              if (slantRangeMiles < 150) closeContact = true;
 
-                //  Ignore anything outside our local bubble
-                if (slantRangeMiles <= MAX_RANGE) {
+              // Elevation-based projection remapped to the visible range:
+              // 90° (overhead) → center (r=0), MIN cutoff → outer edge (r=48%).
+              // Using 0° as the base wasted the outer ~11% of the display
+              // since no satellite ever plotted there, clustering everything inward.
+              const MIN_ELEVATION_DEG = 10;
+              const elevationDeg = lookAngles.elevation * (180 / Math.PI);
+              const r = (1 - (elevationDeg - MIN_ELEVATION_DEG) / (90 - MIN_ELEVATION_DEG)) * 48;
+              const theta = lookAngles.azimuth - Math.PI / 2;
 
-                  // Trigger alert if they get within 150 miles
-                  if (slantRangeMiles < 150) closeContact = true;
+              const rawId = sat.OBJECT_ID || sat.NORAD_CAT_ID || Math.random();
+              const rawName = sat.OBJECT_NAME || "STARLINK";
 
-                  //  Linear Distance Scaling:
-                  // If distance is 500mi, r = 48% (outer edge of the CSS circle).
-                  // If distance is 250mi, r = 24% (middle ring).
-                  const r = (slantRangeMiles / MAX_RANGE) * 48;
-                  const theta = lookAngles.azimuth - Math.PI / 2;
-
-                  const rawId = sat.OBJECT_ID || sat.NORAD_CAT_ID || Math.random();
-                  const rawName = sat.OBJECT_NAME || "STARLINK";
-
-                  visiblePoints.push({
-                    x: 50 + r * Math.cos(theta),
-                    y: 50 + r * Math.sin(theta),
-                    id: String(rawId),
-                    name: String(rawName),
-                    distance: slantRangeMiles
-                  });
-                }
-              }
+              visiblePoints.push({
+                x: 50 + r * Math.cos(theta),
+                y: 50 + r * Math.sin(theta),
+                id: String(rawId),
+                name: String(rawName),
+                distance: slantRangeMiles
+              });
             }
           }
         }
@@ -185,9 +186,9 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
         <div className="radar-center-anchor">
           <span className="radar-label label-center">{location.name}</span>
         </div>
-        <span className="radar-label label-r1">150mi</span>
-        <span className="radar-label label-r2">300mi</span>
-        <span className="radar-label label-r3">500mi</span>
+        <span className="radar-label label-r1">60°</span>
+        <span className="radar-label label-r2">30°</span>
+        <span className="radar-label label-r3">10°</span>
 
         {nodes.map((n) => (
           <div
