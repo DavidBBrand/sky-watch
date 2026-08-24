@@ -109,10 +109,11 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
             const satEcf = satellite.eciToEcf(pv.position, gmst);
             const lookAngles = satellite.ecfToLookAngles(observerGd, satEcf);
 
-            // 10° minimum elevation — standard cutoff for satellite tracking.
-            // Below this, passes are blocked by terrain/atmosphere and the
-            // sheer number of far-away satellites floods the outer ring.
-            const MIN_ELEVATION_RAD = 10 * (Math.PI / 180);
+            // 30° minimum elevation — below this, passes are too far away to
+            // see with the naked eye and crowd the display with irrelevant dots.
+            // At 30° elevation a Starlink is ~480 miles ground distance, which
+            // also aligns well with the Mapbox background radius.
+            const MIN_ELEVATION_RAD = 30 * (Math.PI / 180);
             if (lookAngles.elevation > MIN_ELEVATION_RAD) {
               const slantRangeKm = lookAngles.rangeSat;
               const slantRangeMiles = slantRangeKm
@@ -122,11 +123,8 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
               // Close-contact alert still uses slant range
               if (slantRangeMiles < 150) closeContact = true;
 
-              // Elevation-based projection remapped to the visible range:
-              // 90° (overhead) → center (r=0), MIN cutoff → outer edge (r=48%).
-              // Using 0° as the base wasted the outer ~11% of the display
-              // since no satellite ever plotted there, clustering everything inward.
-              const MIN_ELEVATION_DEG = 10;
+              // Remap 30°–90° to fill the full display radius.
+              const MIN_ELEVATION_DEG = 30;
               const elevationDeg = lookAngles.elevation * (180 / Math.PI);
               const r = (1 - (elevationDeg - MIN_ELEVATION_DEG) / (90 - MIN_ELEVATION_DEG)) * 48;
               const theta = lookAngles.azimuth - Math.PI / 2;
@@ -176,7 +174,6 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
         <div className="radar-axis-v"></div>
         <div className="radar-ring r1"></div>
         <div className="radar-ring r2"></div>
-        <div className="radar-ring r3"></div>
 
         <span className="radar-direction dir-n">N</span>
         <span className="radar-direction dir-e">E</span>
@@ -186,9 +183,8 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
         <div className="radar-center-anchor">
           <span className="radar-label label-center">{location.name}</span>
         </div>
-        <span className="radar-label label-r1">60°</span>
-        <span className="radar-label label-r2">30°</span>
-        <span className="radar-label label-r3">10°</span>
+        <span className="radar-label label-r1">70°</span>
+        <span className="radar-label label-r2">50°</span>
 
         {nodes.map((n) => (
           <div
