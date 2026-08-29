@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef, memo } from "react";
-import { flushSync } from "react-dom";
+import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import "./SolarSystem.css";
 import { PLANET_ICONS, MoonIcon } from "./PlanetIcons";
 
@@ -45,14 +44,14 @@ const STYLE: Record<string, { color: string; r: number }> = {
   Moon:    { color: "#b8b8b8", r: 3 },
 };
 
-// Piecewise scale: inner planets spread across 0–INNER_PX px, outer planets
-// fill the remaining INNER_PX–OUTER_MAX_PX px. INNER_POW close to 1 (nearly
-// linear) keeps Venus/Earth/Mars from bunching up in the middle of that
-// range — a lower exponent stretches Mercury out but squeezes everything
-// above it together, which is what made Venus/Earth look too close.
-// In the expanded fullscreen view, INNER_PX/OUTER_MAX_PX get a bump (safely
-// within the label margin reserved by the fixed 400-unit viewBox) so the
-// whole diagram fills more of the available space.
+// Proportional inner planet sizes in expanded view
+const EXPANDED_R: Partial<Record<string, number>> = {
+  Mercury: 3,
+  Venus:   8,
+  Earth:   9,
+  Mars:    5,
+};
+
 const INNER_AU  = 2.0;
 const INNER_POW = 0.85;
 const OUTER_POW = 0.45;
@@ -75,7 +74,6 @@ function makeScaleR(
   };
 }
 
-/** Heliocentric AU → SVG coords (Sun at centre, y-axis flipped) */
 function makeToXY(scaleR: (au: number) => number) {
   return function toXY(x_au: number, y_au: number): [number, number] {
     const d = Math.sqrt(x_au * x_au + y_au * y_au);
@@ -86,18 +84,7 @@ function makeToXY(scaleR: (au: number) => number) {
   };
 }
 
-interface PlanetEntry {
-  name: string;
-  sx: number;
-  sy: number;
-  cfg: (typeof STYLE)[string];
-  pos: BodyPos;
-}
-
-// ────────────────────────────────────────────────────────────────────────────
-
-// Linearly interpolate planet positions between two consecutive days so the
-// animation is continuous rather than jumping one day at a time.
+// Linearly interpolate planet positions between consecutive days for smooth motion.
 function interpolateSolarData(days: SolarData[], frac: number): SolarData {
   const i = Math.floor(frac);
   const t = frac - i;
@@ -127,13 +114,26 @@ interface SolarSystemProps {
 const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpanded = false, onExpand, onCollapse }) => {
   const [range, setRange] = useState<SolarRange | null>(null);
   const [error, setError] = useState<string | null>(null);
-  // Fractional day position — lets us interpolate between days for smooth motion
+  // dayFrac state only drives the slider and date label — not planet positions.
+  // Planet positions are updated imperatively via DOM refs in the RAF loop.
   const [dayFrac, setDayFrac] = useState(0);
-  const dayFracRef = useRef(0); // mirror kept in sync so RAF closure always reads current value
-  // 0 = paused, 1 = playing forward, -1 = playing backward
+  const dayFracRef = useRef(0);
   const [playDirection, setPlayDirection] = useState<0 | 1 | -1>(0);
   const rafRef    = useRef<number | null>(null);
   const lastTsRef = useRef<number | null>(null);
+  const frameCountRef = useRef(0);
+
+  // DOM refs for imperative position updates — bypasses React reconciliation per frame
+  const planetGroupsRef = useRef<Map<string, SVGGElement>>(new Map());
+  const moonGroupRef    = useRef<SVGGElement | null>(null);
+
+  // "Live" refs — updated synchronously in the render body so the RAF closure
+  // always reads the latest scale function and layout params without stale captures.
+  const rangeRef      = useRef<SolarRange | null>(null);
+  const toXYRef       = useRef<(x: number, y: number) => [number, number]>((_x, _y) => [0, 0]);
+  const isExpandedRef = useRef(isExpanded);
+  const sunCoreRRef   = useRef(0);
+  const moonOrbitRRef = useRef(0);
 
   useEffect(() => {
     const BASE = (import.meta.env.VITE_API_URL as string) || "http://127.0.0.1:8000";
@@ -155,15 +155,93 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
       });
   }, []);
 
-  // requestAnimationFrame loop — advances dayFrac at a fixed real-time speed.
-  // flushSync forces React to commit each frame synchronously before the next
-  // RAF fires, so every 60fps frame produces a visible render. Without it,
-  // React 18 may batch/defer the state update and skip frames, causing chop.
+  // ─── Per-render live-ref sync ─────────────────────────────────────────────
+  // These run synchronously during render so the RAF closure reads current values
+  // on its very next tick — no useEffect delay needed.
+  const BODY_ZOOM = isExpanded ? 2.0 : 1;
+  const scaleR = isExpanded
+    ? makeScaleR(200, 390, 0.75, 0.65)
+    : makeScaleR(230, 320);
+  const toXY = makeToXY(scaleR);
+  const sunCoreR   = 16 * BODY_ZOOM;
+  const moonOrbitR = 16 * BODY_ZOOM;
+
+  toXYRef.current       = toXY;
+  isExpandedRef.current = isExpanded;
+  sunCoreRRef.current   = sunCoreR;
+  moonOrbitRRef.current = moonOrbitR;
+  rangeRef.current      = range;
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // Helper: compute and imperatively apply all planet + Moon transforms.
+  // Called from the RAF loop (every frame during playback) and also from the
+  // slider onChange and an initial useEffect so positions are always correct
+  // even when the animation is paused.
+  const applyPositions = useCallback((frac: number) => {
+    const currentRange = rangeRef.current;
+    if (!currentRange) return;
+
+    const frameData = interpolateSolarData(currentRange.days, frac);
+    const toXYcur       = toXYRef.current;
+    const sunCoreCur    = sunCoreRRef.current;
+    const moonOrbitCur  = moonOrbitRRef.current;
+    const isExpandedCur = isExpandedRef.current;
+    const BODY_ZOOM_cur = isExpandedCur ? 2.0 : 1;
+
+    const getR = (name: string) => {
+      const base = STYLE[name];
+      if (!base) return 4;
+      const expanded = EXPANDED_R[name];
+      return isExpandedCur && expanded != null ? expanded : base.r * BODY_ZOOM_cur;
+    };
+
+    // Planet positions
+    for (const [name, pos] of Object.entries(frameData)) {
+      if (name === "Moon") continue;
+      const el = planetGroupsRef.current.get(name);
+      if (!el || !STYLE[name]) continue;
+
+      let [sx, sy] = toXYcur(pos.x_au, pos.y_au);
+      if (name === "Mercury") {
+        const r = getR("Mercury");
+        const minD = sunCoreCur + r + 4;
+        const d = Math.hypot(sx, sy) || 1;
+        if (d < minD) { const s = minD / d; sx *= s; sy *= s; }
+      }
+      el.setAttribute("transform", `translate(${sx}, ${sy})`);
+    }
+
+    // Moon position
+    const earthPos = frameData["Earth"];
+    const moonPos  = frameData["Moon"];
+    if (earthPos && moonPos && moonGroupRef.current) {
+      const [ex, ey] = toXYcur(earthPos.x_au, earthPos.y_au);
+      const dx   = moonPos.x_au - earthPos.x_au;
+      const dy   = moonPos.y_au - earthPos.y_au;
+      const dLen = Math.sqrt(dx * dx + dy * dy) || 1;
+      const mx   = ex + moonOrbitCur * (dx / dLen);
+      const my   = ey - moonOrbitCur * (dy / dLen);
+      moonGroupRef.current.setAttribute("transform", `translate(${mx}, ${my})`);
+    }
+  }, []); // stable — reads everything through refs
+
+  // Apply correct positions when data first arrives or view mode changes.
+  useEffect(() => {
+    if (!range) return;
+    applyPositions(dayFracRef.current);
+  }, [range, isExpanded, applyPositions]);
+
+  // ─── Animation loop ───────────────────────────────────────────────────────
+  // Key design: planet positions are updated imperatively via applyPositions()
+  // — zero React state updates per frame. React state (dayFrac) is updated
+  // only every 3rd frame to keep the slider and date label in sync, without
+  // any flushSync blocking the main thread.
   const DAYS_PER_SECOND = 8;
 
   useEffect(() => {
     if (playDirection === 0 || !range) return;
     lastTsRef.current = null;
+    frameCountRef.current = 0;
 
     const step = (timestamp: number) => {
       if (lastTsRef.current === null) lastTsRef.current = timestamp;
@@ -175,12 +253,22 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
       if (next < 0 || next >= range.days.length - 1) {
         const clamped = Math.max(0, Math.min(range.days.length - 1, next));
         dayFracRef.current = clamped;
-        flushSync(() => { setDayFrac(clamped); setPlayDirection(0); });
+        applyPositions(clamped);
+        setDayFrac(clamped);
+        setPlayDirection(0);
         return;
       }
 
       dayFracRef.current = next;
-      flushSync(() => setDayFrac(next));
+
+      // Imperative DOM update — no React overhead at all
+      applyPositions(next);
+
+      // Throttled React state update for slider/date label only
+      frameCountRef.current++;
+      if (frameCountRef.current % 3 === 0) {
+        setDayFrac(next);
+      }
 
       rafRef.current = requestAnimationFrame(step);
     };
@@ -191,42 +279,15 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
       rafRef.current = null;
       lastTsRef.current = null;
     };
-  }, [playDirection, range]);
+  }, [playDirection, range, applyPositions]);
 
-  // Integer index for the slider and date label; interpolated data for rendering
   const dayIndex = Math.min(Math.round(dayFrac), (range?.days.length ?? 1) - 1);
-  const data = range ? interpolateSolarData(range.days, dayFrac) : null;
 
   const ringStroke = theme === "night"
     ? "rgba(255,255,255,0.07)"
     : "rgba(40,40,90,0.28)";
 
-  // The expanded fullscreen view gets bigger planet/Sun/Moon bodies, bigger
-  // labels, and a much bigger orbital spread — the outer ring now reaches to
-  // within a few px of the fixed 400-unit viewBox edge. The label collision
-  // system (labelBoxOutOfBounds/clampToBounds) keeps names from clipping
-  // even this close to the boundary.
-  const BODY_ZOOM = isExpanded ? 2.0 : 1;
-  const INNER_PX = isExpanded ? 200 : 230;
-  const OUTER_MAX_PX = isExpanded ? 390 : 320;
-  // Expanded view uses a tighter inner zone (200px vs 310px) so outer planets
-  // get more of the display space, and a higher outer exponent (0.65 vs 0.45)
-  // so Jupiter–Neptune spread more linearly — closer to true relative distances.
-  const scaleR = isExpanded
-    ? makeScaleR(200, 390, 0.75, 0.65)
-    : makeScaleR(230, 320);
-  const toXY = makeToXY(scaleR);
-
-  // In expanded view, give inner planets sizes proportional to their real
-  // radii relative to Earth (Mercury 0.38×, Venus 0.95×, Mars 0.53×).
-  // Outer planets keep the normal BODY_ZOOM doubling — they're already
-  // much larger and less crowded.
-  const EXPANDED_R: Partial<Record<string, number>> = {
-    Mercury: 3,   // real: 0.38 × Earth
-    Venus:   8,   // real: 0.95 × Earth
-    Earth:   9,
-    Mars:    5,   // real: 0.53 × Earth
-  };
+  const sunR = 38 * BODY_ZOOM;
 
   const styleFor = (name: string) => {
     const base = STYLE[name];
@@ -236,44 +297,20 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
     return { color: base.color, r };
   };
 
-  const sunR = 38 * BODY_ZOOM;
-  const sunCoreR = 16 * BODY_ZOOM;
-
+  // Earth position for Moon orbit ring (React-rendered, static ring position)
+  // We still need to track Earth in React-land for the orbit ring circle.
+  // Use the current dayFrac (which lags by up to 3 frames — imperceptible for a ring).
+  const data = range ? interpolateSolarData(range.days, dayFrac) : null;
   const earthXY = data?.Earth ? toXY(data.Earth.x_au, data.Earth.y_au) : null;
 
-  // Build planet list (excludes Moon — handled separately). Mercury's orbit
-  // is floored so it never sinks into the Sun's glow — the inner power
-  // curve alone can't guarantee that once the Sun grows with BODY_ZOOM.
-  const planetEntries: PlanetEntry[] = data
-    ? Object.entries(data)
-        .filter(([name]) => name !== "Moon" && STYLE[name])
-        .map(([name, pos]) => {
-          let [sx, sy] = toXY(pos.x_au, pos.y_au);
-          // Only prevent Mercury from overlapping the Sun's hard core circle
-          // (sunCoreR stays proportional to BODY_ZOOM but doesn't grow nearly
-          // as fast as sunR did, so this floor no longer pushes Mercury off
-          // its orbit ring in the expanded view).
-          if (name === "Mercury") {
-            const cfg = styleFor(name);
-            const minD = sunCoreR + cfg.r + 4;
-            const d = Math.hypot(sx, sy) || 1;
-            if (d < minD) {
-              const scale = minD / d;
-              sx *= scale;
-              sy *= scale;
-            }
-          }
-          return { name, sx, sy, cfg: styleFor(name), pos };
-        })
+  // Planet entries for the initial static render (icons + titles).
+  // Transforms are applied imperatively — NOT via the `transform` JSX prop.
+  const planetNames = data
+    ? Object.keys(data).filter(name => name !== "Moon" && STYLE[name])
     : [];
 
-
-  const moonOrbitR = 16 * BODY_ZOOM;
-  // Moon proportional to Earth: real ratio ≈ 0.27×. Earth is 9px in expanded,
-  // so Moon ≈ 2.5px. Normal view keeps the original 4px.
-  const moonR = isExpanded ? 2.5 : 4;
-  // Label standoff past the orbit ring. Reduced ~80% in expanded so the
-  // arrow is short and doesn't crowd the diagram.
+  const moonFill = theme === "night" ? "#d0d0d0" : "#6e6e88";
+  const moonR    = isExpanded ? 2.5 : 4;
 
   return (
     <div className={`solar-system-card${isExpanded ? " solar-system-card--expanded" : ""}`}>
@@ -313,9 +350,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
             </filter>
           </defs>
 
-          {/* Orbit rings — drawn at each planet's mean semi-major axis so they
-               stay fixed. Planets may sit slightly off the ring at times
-               due to orbital eccentricity; that's physically accurate. */}
+          {/* Orbit rings — fixed at mean semi-major axes */}
           {ORBIT_AU.map(([name, au]) => (
             <circle
               key={name}
@@ -324,7 +359,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
             />
           ))}
 
-          {/* Moon orbit ring around Earth */}
+          {/* Moon orbit ring — follows Earth's React-state position (lags ≤3 frames, fine for a static ring) */}
           {earthXY && (
             <circle
               cx={earthXY[0]} cy={earthXY[1]} r={moonOrbitR}
@@ -338,34 +373,32 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
             <title>Sun</title>
           </circle>
 
-          {/* Moon */}
-          {data?.Moon && earthXY && (() => {
-            const earth = data.Earth!;
-            const dx = data.Moon.x_au - earth.x_au;
-            const dy = data.Moon.y_au - earth.y_au;
-            const dLen = Math.sqrt(dx * dx + dy * dy) || 1;
-            const ux = dx / dLen;
-            const uy = dy / dLen;
-            const mx = earthXY[0] + moonOrbitR * ux;
-            const my = earthXY[1] - moonOrbitR * uy;
-            const moonFill = theme === "night" ? "#d0d0d0" : "#6e6e88";
+          {/* Moon — no transform prop; position set imperatively by applyPositions() */}
+          {data?.Moon && earthXY && (
+            <g ref={(el) => { moonGroupRef.current = el; }}>
+              <circle cx={0} cy={0} r={moonR * 2} fill={moonFill} opacity={0.15} />
+              <title>Moon — {data.Moon.dist_au.toFixed(5)} AU from Earth</title>
+              <MoonIcon cx={0} cy={0} r={moonR} />
+            </g>
+          )}
 
-            return (
-              <g transform={`translate(${mx}, ${my})`}>
-                <circle cx={0} cy={0} r={moonR * 2} fill={moonFill} opacity={0.15} />
-                <title>Moon — {data.Moon.dist_au.toFixed(5)} AU from Earth</title>
-                <MoonIcon cx={0} cy={0} r={moonR} />
-              </g>
-            );
-          })()}
-
-          {/* Planets — group translate keeps cx/cy constant inside each icon so
-               React can skip reconciling their many SVG child elements each frame */}
-          {planetEntries.map(({ name, sx, sy, cfg, pos }) => {
+          {/* Planets — no transform prop; positions set imperatively by applyPositions().
+               React manages icon content (cx/cy/r props); the RAF loop manages position.
+               Because `transform` is never in the JSX, React's reconciler never touches
+               it — direct setAttribute calls survive re-renders. */}
+          {planetNames.map((name) => {
             const Icon = PLANET_ICONS[name];
+            const cfg  = styleFor(name);
+            const pos  = data![name];
 
             return (
-              <g key={name} transform={`translate(${sx}, ${sy})`}>
+              <g
+                key={name}
+                ref={(el) => {
+                  if (el) planetGroupsRef.current.set(name, el);
+                  else planetGroupsRef.current.delete(name);
+                }}
+              >
                 <title>{name} — {pos.dist_au.toFixed(3)} AU from Sun</title>
                 {Icon ? (
                   <Icon cx={0} cy={0} r={cfg.r} />
@@ -406,7 +439,12 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
               type="button"
               className="solar-time-btn"
               aria-label="Reset to today"
-              onClick={() => { dayFracRef.current = 0; setDayFrac(0); setPlayDirection(0); }}
+              onClick={() => {
+                dayFracRef.current = 0;
+                applyPositions(0);
+                setDayFrac(0);
+                setPlayDirection(0);
+              }}
             >
               Today
             </button>
@@ -428,6 +466,7 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
             onChange={e => {
               const v = Number(e.target.value);
               dayFracRef.current = v;
+              applyPositions(v);  // immediate imperative update
               setPlayDirection(0);
               setDayFrac(v);
             }}
