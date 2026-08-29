@@ -124,8 +124,9 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
   const frameCountRef = useRef(0);
 
   // DOM refs for imperative position updates — bypasses React reconciliation per frame
-  const planetGroupsRef = useRef<Map<string, SVGGElement>>(new Map());
-  const moonGroupRef    = useRef<SVGGElement | null>(null);
+  const planetGroupsRef  = useRef<Map<string, SVGGElement>>(new Map());
+  const moonGroupRef     = useRef<SVGGElement | null>(null);
+  const moonOrbitRingRef = useRef<SVGCircleElement | null>(null);
 
   // "Live" refs — updated synchronously in the render body so the RAF closure
   // always reads the latest scale function and layout params without stale captures.
@@ -211,17 +212,26 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
       el.setAttribute("transform", `translate(${sx}, ${sy})`);
     }
 
-    // Moon position
+    // Moon orbit ring + Moon position — both derived from Earth's current position
     const earthPos = frameData["Earth"];
     const moonPos  = frameData["Moon"];
-    if (earthPos && moonPos && moonGroupRef.current) {
+    if (earthPos) {
       const [ex, ey] = toXYcur(earthPos.x_au, earthPos.y_au);
-      const dx   = moonPos.x_au - earthPos.x_au;
-      const dy   = moonPos.y_au - earthPos.y_au;
-      const dLen = Math.sqrt(dx * dx + dy * dy) || 1;
-      const mx   = ex + moonOrbitCur * (dx / dLen);
-      const my   = ey - moonOrbitCur * (dy / dLen);
-      moonGroupRef.current.setAttribute("transform", `translate(${mx}, ${my})`);
+
+      // Keep the orbit ring centred on Earth imperatively so it never lags
+      if (moonOrbitRingRef.current) {
+        moonOrbitRingRef.current.setAttribute("cx", String(ex));
+        moonOrbitRingRef.current.setAttribute("cy", String(ey));
+      }
+
+      if (moonPos && moonGroupRef.current) {
+        const dx   = moonPos.x_au - earthPos.x_au;
+        const dy   = moonPos.y_au - earthPos.y_au;
+        const dLen = Math.sqrt(dx * dx + dy * dy) || 1;
+        const mx   = ex + moonOrbitCur * (dx / dLen);
+        const my   = ey - moonOrbitCur * (dy / dLen);
+        moonGroupRef.current.setAttribute("transform", `translate(${mx}, ${my})`);
+      }
     }
   }, []); // stable — reads everything through refs
 
@@ -359,10 +369,13 @@ const SolarSystem: React.FC<SolarSystemProps> = memo(({ theme = "night", isExpan
             />
           ))}
 
-          {/* Moon orbit ring — follows Earth's React-state position (lags ≤3 frames, fine for a static ring) */}
+          {/* Moon orbit ring — cx/cy are set imperatively by applyPositions so they
+               stay perfectly in sync with Earth every frame. No cx/cy JSX props so
+               React never overwrites the imperatively-set values on reconciliation. */}
           {earthXY && (
             <circle
-              cx={earthXY[0]} cy={earthXY[1]} r={moonOrbitR}
+              ref={(el) => { moonOrbitRingRef.current = el; }}
+              r={moonOrbitR}
               fill="none" stroke={ringStroke} strokeWidth={0.6}
             />
           )}
