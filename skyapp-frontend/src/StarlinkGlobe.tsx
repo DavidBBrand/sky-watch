@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback, memo } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import Globe, { GlobeMethods } from "react-globe.gl";
-import * as satellite from "satellite.js";
 import { useLocation } from "./LocationContext";
 import "./StarlinkGlobe.css";
 
@@ -67,6 +66,12 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night", isE
   const [satPoints, setSatPoints] = useState<SatPoint[]>([]);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
+  // Refs so the worker dispatch interval always sends the latest data
+  const tlesRef = useRef<TLEData[]>([]);
+  const latRef  = useRef(lat);
+  const lonRef  = useRef(lon);
+  const workerRef = useRef<Worker | null>(null);
+
   // Track container size so the globe fills the card
   useEffect(() => {
     const el = containerRef.current;
@@ -79,6 +84,10 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night", isE
     return () => ro.disconnect();
   }, []);
 
+  // Keep refs in sync so the worker dispatch always sends fresh data
+  useEffect(() => { tlesRef.current = tles; }, [tles]);
+  useEffect(() => { latRef.current = lat; lonRef.current = lon; }, [lat, lon]);
+
   // Fetch TLEs once — backend Redis cache serves subsequent requests instantly
   useEffect(() => {
     const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || "http://127.0.0.1:8000";
@@ -88,60 +97,36 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night", isE
       .catch(console.error);
   }, []);
 
-  // Propagate all TLEs to current geodetic positions
-  const propagate = useCallback(() => {
-    if (!tles.length) return;
-    const now = new Date();
-    const gmst = satellite.gstime(now);
-    const points: SatPoint[] = [];
-
-    // Precompute observer lat/lng in radians for haversine
-    const obsLatRad = lat !== null ? lat * Math.PI / 180 : null;
-    const obsLonRad = lon !== null ? lon * Math.PI / 180 : null;
-
-    for (const tle of tles) {
-      try {
-        const satrec = satellite.twoline2satrec(tle.TLE_LINE1, tle.TLE_LINE2);
-        if (satrec.error) continue;
-        const pv = satellite.propagate(satrec, now);
-        if (!pv || typeof pv.position === "boolean") continue;
-        const pos = pv.position as satellite.EciVec3<number>;
-        const geo = satellite.eciToGeodetic(pos, gmst);
-        // Skip satellites outside realistic Starlink altitude range (200–1200 km)
-        if (geo.height < 200 || geo.height > 1200) continue;
-
-        const satLatDeg = satellite.radiansToDegrees(geo.latitude);
-        const satLngDeg = satellite.radiansToDegrees(geo.longitude);
-
-        // Orange = within 300 miles ground distance (haversine) — tight overhead cluster
-        let aboveHorizon = false;
-        if (obsLatRad !== null && obsLonRad !== null) {
-          const φ2 = satLatDeg * Math.PI / 180;
-          const Δφ = φ2 - obsLatRad;
-          const Δλ = satLngDeg * Math.PI / 180 - obsLonRad;
-          const a = Math.sin(Δφ / 2) ** 2 + Math.cos(obsLatRad) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
-          aboveHorizon = 2 * 3958.8 * Math.asin(Math.sqrt(a)) <= 300;
-        }
-
-        points.push({
-          lat: satLatDeg,
-          lng: satLngDeg,
-          name: tle.OBJECT_NAME,
-          aboveHorizon,
-        });
-      } catch {
-        /* skip malformed TLEs */
-      }
-    }
-
-    setSatPoints(points);
-  }, [tles, lat, lon]);
-
+  // Spawn the Web Worker once. All TLE propagation (thousands of satellites) runs
+  // there, off the main thread, so the 5-second update never blocks the RAF loop.
   useEffect(() => {
-    propagate();
-    const timer = setInterval(propagate, 5000);
+    const worker = new Worker(
+      new URL("./starlinkGlobeWorker.ts", import.meta.url),
+      { type: "module" }
+    );
+    worker.onmessage = (e: MessageEvent<{ points: SatPoint[] }>) => {
+      setSatPoints(e.data.points);
+    };
+    worker.onerror = (err) => console.error("StarlinkGlobe worker error:", err);
+    workerRef.current = worker;
+    return () => { worker.terminate(); workerRef.current = null; };
+  }, []);
+
+  // Dispatch to the worker on first TLE load, then every 5 seconds.
+  useEffect(() => {
+    if (!tles.length) return;
+    const dispatch = () => {
+      if (!tlesRef.current.length) return;
+      workerRef.current?.postMessage({
+        tles: tlesRef.current,
+        lat: latRef.current,
+        lon: lonRef.current,
+      });
+    };
+    dispatch();
+    const timer = setInterval(dispatch, 5000);
     return () => clearInterval(timer);
-  }, [propagate]);
+  }, [tles, lat, lon]);
 
   // Fly to user location whenever it changes
   useEffect(() => {
