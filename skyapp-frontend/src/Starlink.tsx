@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, memo } from "react";
+import StarlinkWorker from "./starlinkWorker?worker";
 import { useLocation } from "./LocationContext";
 import "./Starlink.css";
 
@@ -95,10 +96,7 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
   const workerRef = useRef<Worker | null>(null);
 
   useEffect(() => {
-    const worker = new Worker(
-      new URL("./starlinkWorker.ts", import.meta.url),
-      { type: "module" }
-    );
+    const worker = new StarlinkWorker();
 
     worker.onmessage = (e: MessageEvent<WorkerOutput>) => {
       setNodes(e.data.nodes);

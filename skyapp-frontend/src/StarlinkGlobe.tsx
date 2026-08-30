@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, memo } from "react";
 import Globe, { GlobeMethods } from "react-globe.gl";
+import StarlinkGlobeWorker from "./starlinkGlobeWorker?worker";
 import { useLocation } from "./LocationContext";
 import "./StarlinkGlobe.css";
 
@@ -100,10 +101,7 @@ const StarlinkGlobe: React.FC<StarlinkGlobeProps> = memo(({ theme = "night", isE
   // Spawn the Web Worker once. All TLE propagation (thousands of satellites) runs
   // there, off the main thread, so the 5-second update never blocks the RAF loop.
   useEffect(() => {
-    const worker = new Worker(
-      new URL("./starlinkGlobeWorker.ts", import.meta.url),
-      { type: "module" }
-    );
+    const worker = new StarlinkGlobeWorker();
     worker.onmessage = (e: MessageEvent<{ points: SatPoint[] }>) => {
       setSatPoints(e.data.points);
     };
