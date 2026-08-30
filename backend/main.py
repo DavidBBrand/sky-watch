@@ -95,73 +95,109 @@ async def health():
     return {"status": "ok"}
 
 
+def _parse_3le(text: str) -> list:
+    """Parse 3LE (name + line1 + line2) text into structured satellite dicts."""
+    raw_lines = [line.strip() for line in text.splitlines() if line.strip()]
+    structured = []
+    for i in range(0, len(raw_lines) - 2, 3):
+        name  = raw_lines[i]
+        line1 = raw_lines[i + 1]
+        line2 = raw_lines[i + 2]
+        if line1.startswith("1 ") and line2.startswith("2 "):
+            norad_id = line1[2:7].strip()
+            structured.append({
+                "OBJECT_NAME": name,
+                "OBJECT_ID":   norad_id,
+                "TLE_LINE1":   line1,
+                "TLE_LINE2":   line2,
+            })
+    return structured
+
+
+def _save_backup(backup_path: Path, data: list) -> None:
+    """Atomic write so a mid-write crash never leaves the backup corrupted."""
+    tmp = backup_path.with_suffix(".tmp")
+    with open(tmp, "w") as f:
+        json.dump(data, f)
+    tmp.replace(backup_path)
+
+
 @app.get("/starlink-live")
 @cache_sky_data(ttl_seconds=86400)
 async def get_starlink_tles():
     backup_path = Path(__file__).parent / "starlink_backup.json"
 
+    # ── 1. Space-track (requires credentials) ────────────────────────────────
     username = os.getenv("SPACETRACK_USER")
     password = os.getenv("SPACETRACK_PASS")
 
     if not username or not password:
-        print("SPACETRACK credentials not set. Switching to local backup.")
+        print("SPACETRACK credentials not set — skipping.")
     else:
-        login_url = "https://www.space-track.org/ajaxauth/login"
-        tle_url = (
-            "https://www.space-track.org/basicspacedata/query/class/gp"
-            "/OBJECT_NAME/^^STARLINK/orderby/NORAD_CAT_ID/format/3le"
-        )
         try:
             async with httpx.AsyncClient(follow_redirects=True) as client:
-                # Authenticate
                 login_resp = await client.post(
-                    login_url,
+                    "https://www.space-track.org/ajaxauth/login",
                     data={"identity": username, "password": password},
-                    timeout=15.0
+                    timeout=15.0,
                 )
                 login_resp.raise_for_status()
 
-                # Fetch TLEs
-                tle_resp = await client.get(tle_url, timeout=30.0)
+                tle_resp = await client.get(
+                    "https://www.space-track.org/basicspacedata/query/class/gp"
+                    "/OBJECT_NAME/^^STARLINK/orderby/NORAD_CAT_ID/format/3le",
+                    timeout=30.0,
+                )
                 tle_resp.raise_for_status()
 
-                raw_lines = [line.strip() for line in tle_resp.text.splitlines() if line.strip()]
-
-                structured_sats = []
-                for i in range(0, len(raw_lines), 3):
-                    if i + 2 < len(raw_lines):
-                        name = raw_lines[i]
-                        line1 = raw_lines[i + 1]
-                        line2 = raw_lines[i + 2]
-                        if line1.startswith("1 ") and line2.startswith("2 "):
-                            norad_id = line1[2:7].strip()
-                            structured_sats.append({
-                                "OBJECT_NAME": name,
-                                "OBJECT_ID": norad_id,
-                                "TLE_LINE1": line1,
-                                "TLE_LINE2": line2
-                            })
-
-                if structured_sats:
-                    # Atomic write: write to temp file then rename so a mid-write
-                    # interruption never leaves the backup in a corrupted state.
-                    tmp_path = backup_path.with_suffix(".tmp")
-                    with open(tmp_path, "w") as f:
-                        json.dump(structured_sats, f)
-                    tmp_path.replace(backup_path)
-                    return structured_sats
+                sats = _parse_3le(tle_resp.text)
+                if sats:
+                    _save_backup(backup_path, sats)
+                    print(f"Space-track: fetched {len(sats)} Starlink TLEs.")
+                    return sats
 
         except Exception as e:
-            print(f"Space-track fetch failed: {e}. Switching to local backup.")
+            print(f"Space-track fetch failed: {e}. Trying CelesTrak.")
 
+    # ── 2. CelesTrak (public, no credentials needed) ─────────────────────────
+    # CelesTrak blocks Render IPs less aggressively than Space-track and
+    # requires no login. Returns identical 3LE format.
+    try:
+        async with httpx.AsyncClient(follow_redirects=True) as client:
+            ct_resp = await client.get(
+                "https://celestrak.org/SATCAT/elements/gp.php"
+                "?GROUP=STARLINK&FORMAT=tle",
+                timeout=30.0,
+            )
+            ct_resp.raise_for_status()
+
+            sats = _parse_3le(ct_resp.text)
+            if sats:
+                _save_backup(backup_path, sats)
+                print(f"CelesTrak: fetched {len(sats)} Starlink TLEs.")
+                return sats
+
+    except Exception as e:
+        print(f"CelesTrak fetch failed: {e}. Trying local backup.")
+
+    # ── 3. Local backup JSON ──────────────────────────────────────────────────
     if backup_path.exists():
         try:
             with open(backup_path, "r") as f:
-                return json.load(f)
+                content = f.read().strip()
+            if not content:
+                print("Backup JSON is empty.")
+            else:
+                sats = json.loads(content)
+                if isinstance(sats, list) and sats:
+                    print(f"Backup: loaded {len(sats)} Starlink TLEs.")
+                    return sats
         except Exception as e:
-            print(f"Backup JSON corrupted or unreadable: {e}")
+            print(f"Backup JSON unreadable: {e}")
 
-    return {"error": "Satellite link offline."}
+    # ── 4. All sources failed ─────────────────────────────────────────────────
+    print("All TLE sources failed — returning empty list.")
+    return []
 
 
 @app.get("/sky-summary")
