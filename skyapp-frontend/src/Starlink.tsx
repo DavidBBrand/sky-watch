@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, memo } from "react";
-import StarlinkWorker from "./starlinkWorker?worker";
+import React, { useState, useEffect, useCallback, useRef, memo } from "react";
+import * as satellite from "satellite.js";
 import { useLocation } from "./LocationContext";
 import "./Starlink.css";
 
@@ -21,11 +21,6 @@ interface RadarNode {
   id: string;
   name: string;
   distance: number;
-}
-
-interface WorkerOutput {
-  nodes: RadarNode[];
-  isAlert: boolean;
 }
 
 const MAPBOX_TOKEN = (import.meta.env.VITE_MAPBOX_TOKEN as string) || "";
@@ -53,16 +48,6 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
   const [radarSize, setRadarSize] = useState<number>(0);
   const radarRef = useRef<HTMLDivElement>(null);
 
-  // Refs so the worker dispatch interval always sends the latest data
-  // without needing to rebuild the interval on every TLE/location change.
-  const tlesRef = useRef<TLEData[]>([]);
-  const latRef  = useRef(lat);
-  const lonRef  = useRef(lon);
-
-  // Keep refs in sync with state / props
-  useEffect(() => { tlesRef.current = tles; }, [tles]);
-  useEffect(() => { latRef.current = lat; lonRef.current = lon; }, [lat, lon]);
-
   // Measure the actual rendered radar container so the map zoom is always correct
   useEffect(() => {
     const el = radarRef.current;
@@ -74,7 +59,6 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
     return () => ro.disconnect();
   }, []);
 
-  // Fetch TLEs from backend (once per location change)
   useEffect(() => {
     setLoading(true);
     const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || "http://127.0.0.1:8000";
@@ -86,52 +70,90 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
         setLoading(false);
       })
       .catch((e) => {
-        console.error("Starlink TLE fetch error:", e);
+        console.error(" DATA LOAD ERROR:", e);
         setLoading(false);
       });
   }, [lat, lon]);
 
-  // Spawn the Web Worker once. The heavy TLE propagation loop runs there,
-  // off the main thread, so it never blocks the solar system animation RAF.
-  const workerRef = useRef<Worker | null>(null);
+  const updateRadar = useCallback(() => {
+    if (!tles.length || lat === null || lon === null) return;
 
-  useEffect(() => {
-    const worker = new StarlinkWorker();
+    const now = new Date();
+    const gmst = satellite.gstime(now);
 
-    worker.onmessage = (e: MessageEvent<WorkerOutput>) => {
-      setNodes(e.data.nodes);
-      setIsAlert(e.data.isAlert);
+    // Observer position (Geodetic)
+    const observerGd = {
+      latitude: satellite.degreesToRadians(lat),
+      longitude: satellite.degreesToRadians(lon),
+      height: 0.122 // Ground altitude in km
     };
 
-    worker.onerror = (err) => {
-      console.error("Starlink worker error:", err);
-    };
+    const visiblePoints: RadarNode[] = [];
+    let closeContact = false;
 
-    workerRef.current = worker;
-    return () => {
-      worker.terminate();
-      workerRef.current = null;
-    };
-  }, []);
+    tles.forEach((sat) => {
+      try {
+        if (!sat || sat.error) return;
 
-  // Dispatch to the worker immediately when TLEs arrive, then every 3.5s.
-  // The interval itself is cheap (just a postMessage); all math runs in the worker.
-  useEffect(() => {
-    if (!tles.length) return;
+        const line1 = sat.TLE_LINE1;
+        const line2 = sat.TLE_LINE2;
 
-    const dispatch = () => {
-      if (!tlesRef.current.length || latRef.current === null || lonRef.current === null) return;
-      workerRef.current?.postMessage({
-        tles: tlesRef.current,
-        lat: latRef.current,
-        lon: lonRef.current,
-      });
-    };
+        if (!line1 || !line2) return;
 
-    dispatch(); // immediate on first load / location change
-    const timer = setInterval(dispatch, 3500);
-    return () => clearInterval(timer);
+        const satrec = satellite.twoline2satrec(line1, line2);
+
+        if (satrec && !satrec.error) {
+          const pv = satellite.propagate(satrec, now);
+
+          if (pv && typeof pv.position !== 'boolean') {
+            const satEcf = satellite.eciToEcf(pv.position, gmst);
+            const lookAngles = satellite.ecfToLookAngles(observerGd, satEcf);
+
+            // 30° minimum elevation — below this, passes are too far away to
+            // see with the naked eye and crowd the display with irrelevant dots.
+            const MIN_ELEVATION_RAD = 30 * (Math.PI / 180);
+            if (lookAngles.elevation > MIN_ELEVATION_RAD) {
+              const slantRangeKm = lookAngles.rangeSat;
+              const slantRangeMiles = slantRangeKm
+                ? Math.round(slantRangeKm * 0.621371)
+                : 0;
+
+              // Close-contact alert still uses slant range
+              if (slantRangeMiles < 150) closeContact = true;
+
+              // Remap 30°–90° to fill the full display radius.
+              const MIN_ELEVATION_DEG = 30;
+              const elevationDeg = lookAngles.elevation * (180 / Math.PI);
+              const r = (1 - (elevationDeg - MIN_ELEVATION_DEG) / (90 - MIN_ELEVATION_DEG)) * 48;
+              const theta = lookAngles.azimuth - Math.PI / 2;
+
+              const rawId = sat.OBJECT_ID || sat.NORAD_CAT_ID || Math.random();
+              const rawName = sat.OBJECT_NAME || "STARLINK";
+
+              visiblePoints.push({
+                x: 50 + r * Math.cos(theta),
+                y: 50 + r * Math.sin(theta),
+                id: String(rawId),
+                name: String(rawName),
+                distance: slantRangeMiles
+              });
+            }
+          }
+        }
+      } catch (e) {
+        // console.log(e);
+      }
+    });
+
+    setNodes(visiblePoints);
+    setIsAlert(closeContact);
   }, [tles, lat, lon]);
+
+  useEffect(() => {
+    updateRadar();
+    const timer = setInterval(updateRadar, 3500);
+    return () => clearInterval(timer);
+  }, [updateRadar]);
 
   return (
     <div className="starlink-card">
