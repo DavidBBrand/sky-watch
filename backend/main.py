@@ -157,41 +157,13 @@ async def get_starlink_tles():
                     return sats
 
         except Exception as e:
-            print(f"Space-track fetch failed: {e}. Trying CelesTrak.")
+            print(f"Space-track fetch failed: {e}. Falling back to local backup.")
 
-    # ── 2. CelesTrak (public, no credentials needed) ─────────────────────────
-    # FORMAT=json returns structured objects with OBJECT_NAME / TLE_LINE1 /
-    # TLE_LINE2 fields — no line-parsing required, immune to 2LE vs 3LE issues.
-    try:
-        async with httpx.AsyncClient(follow_redirects=True) as client:
-            ct_resp = await client.get(
-                "https://celestrak.org/SATCAT/elements/gp.php"
-                "?GROUP=STARLINK&FORMAT=json",
-                timeout=30.0,
-            )
-            ct_resp.raise_for_status()
-
-            raw = ct_resp.json()
-            sats = [
-                {
-                    "OBJECT_NAME": s.get("OBJECT_NAME", ""),
-                    "OBJECT_ID":   s.get("NORAD_CAT_ID", ""),
-                    "TLE_LINE1":   s.get("TLE_LINE1", ""),
-                    "TLE_LINE2":   s.get("TLE_LINE2", ""),
-                }
-                for s in raw
-                if s.get("TLE_LINE1") and s.get("TLE_LINE2")
-            ]
-            if sats:
-                _save_backup(backup_path, sats)
-                print(f"CelesTrak: fetched {len(sats)} Starlink TLEs.")
-                return sats
-            print("CelesTrak returned 0 usable TLEs.")
-
-    except Exception as e:
-        print(f"CelesTrak fetch failed: {e}. Trying local backup.")
-
-    # ── 3. Local backup JSON ──────────────────────────────────────────────────
+    # ── 2. Local backup JSON ──────────────────────────────────────────────────
+    # Kept fresh daily by .github/workflows/refresh-starlink-tles.yml which
+    # fetches from space-track.org using GitHub Actions runners (not blocked).
+    # CelesTrak is intentionally omitted: it sources from space-track.org so
+    # any IP blocked there is blocked here too.
     if backup_path.exists():
         try:
             with open(backup_path, "r") as f:
@@ -206,7 +178,7 @@ async def get_starlink_tles():
         except Exception as e:
             print(f"Backup JSON unreadable: {e}")
 
-    # ── 4. All sources failed ─────────────────────────────────────────────────
+    # ── 3. All sources failed ─────────────────────────────────────────────────
     print("All TLE sources failed — returning empty list.")
     return []
 
