@@ -160,22 +160,33 @@ async def get_starlink_tles():
             print(f"Space-track fetch failed: {e}. Trying CelesTrak.")
 
     # ── 2. CelesTrak (public, no credentials needed) ─────────────────────────
-    # CelesTrak blocks Render IPs less aggressively than Space-track and
-    # requires no login. Returns identical 3LE format.
+    # FORMAT=json returns structured objects with OBJECT_NAME / TLE_LINE1 /
+    # TLE_LINE2 fields — no line-parsing required, immune to 2LE vs 3LE issues.
     try:
         async with httpx.AsyncClient(follow_redirects=True) as client:
             ct_resp = await client.get(
                 "https://celestrak.org/SATCAT/elements/gp.php"
-                "?GROUP=STARLINK&FORMAT=tle",
+                "?GROUP=STARLINK&FORMAT=json",
                 timeout=30.0,
             )
             ct_resp.raise_for_status()
 
-            sats = _parse_3le(ct_resp.text)
+            raw = ct_resp.json()
+            sats = [
+                {
+                    "OBJECT_NAME": s.get("OBJECT_NAME", ""),
+                    "OBJECT_ID":   s.get("NORAD_CAT_ID", ""),
+                    "TLE_LINE1":   s.get("TLE_LINE1", ""),
+                    "TLE_LINE2":   s.get("TLE_LINE2", ""),
+                }
+                for s in raw
+                if s.get("TLE_LINE1") and s.get("TLE_LINE2")
+            ]
             if sats:
                 _save_backup(backup_path, sats)
                 print(f"CelesTrak: fetched {len(sats)} Starlink TLEs.")
                 return sats
+            print("CelesTrak returned 0 usable TLEs.")
 
     except Exception as e:
         print(f"CelesTrak fetch failed: {e}. Trying local backup.")
