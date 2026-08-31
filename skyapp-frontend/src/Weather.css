@@ -55,9 +55,9 @@
   margin-left: 12px;
   padding: 10px;
   border-radius: 1.2rem;
-  display: flex;
-  flex-direction:row;
-  gap:12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
   margin-bottom: 8px;
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.1),            /* Outer depth */
@@ -75,12 +75,23 @@
     text-align: center;
     display: flex;
     flex-direction: column;
+    /* Grid items default to min-width: auto, which stops a track from
+       shrinking below its content's intrinsic width (e.g. "30.09 inHg" as
+       one unbreakable run) — that pushed the whole grid wider than the
+       card, which clipped it since the card has overflow: hidden. */
+    min-width: 0;
 }
 .detail-item .label {
     font-size: 1.2rem; /* Smaller for hierarchy */
     text-transform: uppercase;
     color: var(--accent-color2);
     font-weight:500;
+    /* Single-word labels ("PRESSURE", "VISIBILITY") have no space to wrap
+       at, so a narrow column let them overflow into neighboring columns
+       instead of wrapping — force a break so they stay inside their own
+       cell. */
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 .weather-icon {
   font-size: 8rem;
@@ -97,6 +108,17 @@
     font-weight: 400;
     margin-top: 4px;
     font-family: 'Oxanium', sans-serif;
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+/* Phones: 4-across squeezes long labels like "VISIBILITY" into the card's
+   narrow width. Wrap into a 2x2 grid instead of shrinking text further. */
+@media (max-width: 480px) {
+  .weather-details-grid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 14px;
+  }
 }
 .weather-loading-pulse {
     animation: pulse 2s infinite ease-in-out;
