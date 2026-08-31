@@ -110,7 +110,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
 
               return (
                 <div key={name} className="planet-item">
-                  <div style={{ fontSize: "4.0rem", lineHeight: 1, display: "flex", justifyContent: "center", marginBottom: "-2px" }}>
+                  <div style={{ fontSize: "3.2rem", lineHeight: 1, display: "flex", justifyContent: "center", marginBottom: "-2px" }}>
                     {planetIcons[name] || "✨"}
                   </div>
 
