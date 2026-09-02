@@ -10,7 +10,8 @@
 }
 
 [data-theme="day"] .glass-card:has(> .solar-system-card) {
-  background: rgba(5, 10, 40, 0.55);
+  background: rgba(5, 10, 40, 0.694);
+  
 }
 
 [data-theme="day"] .solar-system-card .card-title {

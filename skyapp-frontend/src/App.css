@@ -480,8 +480,8 @@ img[src*="marker"],
   background: var(--card-bg);
   border-radius: 1.2rem;
   padding: 12px;
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

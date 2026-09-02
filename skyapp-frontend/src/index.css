@@ -7,7 +7,7 @@
   
   --card-bg: rgba(60, 87, 168, 0.1);
   --card-border: rgba(62, 51, 35, 0.2);
-  --glass-blur: blur(3px);
+  --glass-blur: blur(2px);
   
   --text-main: #181004;
   --text-sub: rgba(40, 34, 27, 0.92);
@@ -23,7 +23,7 @@
   --separator-glow3: rgba(151, 63, 15, 0.541);
   
   --star-opacity: 0;
-  --wave-opacity: 1;
+  --wave-opacity: .5;
 }
 
 [data-theme="night"] {
@@ -127,7 +127,7 @@ body::after {
   position: fixed;
   /* Oversized so corners stay covered after the 20° rotation */
   top: -30%; left: -30%; width: 160%; height: 160%;
-  transform: rotate(20deg);
+  transform: rotate(-26.7deg);
   transform-origin: center center;
   /*
    * Seamlessly tiling SVG wave grid (800×300 px tile):
