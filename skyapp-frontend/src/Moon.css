@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2px; /* Pull the Moon visual up closer */
+  margin-bottom: 4px; /* Pull the Moon visual up closer */
   width: 100%;
 }
 

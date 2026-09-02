@@ -348,6 +348,7 @@ async def get_moon_details(lat: float = Query(35.92), lon: float = Query(-86.86)
         "illumination": round(float(illumination * 100), 2),
         "altitude": round(float(alt.degrees), 2),
         "azimuth": round(float(az.degrees), 2),
+        "distance_km": round(float(distance.km)),
         "milestones": milestones
     }
 

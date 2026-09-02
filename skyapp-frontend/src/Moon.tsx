@@ -13,6 +13,7 @@ interface MoonData {
   altitude: number;
   azimuth: number;
   illumination: number;
+  distance_km: number;
   milestones: LunarMilestone[];
 }
 
@@ -146,6 +147,12 @@ const Moon: React.FC<MoonProps> = memo(({ date }) => {
               </div>
             </div>
           </div>
+
+          {moonData.distance_km != null && (
+            <div style={{ textAlign: "center", fontSize: "1.3rem", fontFamily: "Roboto Condensed", color: "var(--separator-glow3)", letterSpacing: "-0.5px", marginTop: "4px" }}>
+              {Math.round(moonData.distance_km * 0.621371).toLocaleString()} mi ({moonData.distance_km.toLocaleString()} km) from {location.name.split(',')[0]}
+            </div>
+          )}
 
           <div className="moon-details">
             {moonData.milestones?.map((m, i) => (
