@@ -54,7 +54,7 @@
   margin-right: 12px;
   margin-left: 12px;
   padding: 10px;
-  border-radius: 1.2rem;
+  border-radius: .67rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
