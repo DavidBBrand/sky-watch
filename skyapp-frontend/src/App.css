@@ -24,7 +24,8 @@
   transition: background-image 0.3s ease-in-out;
   border-radius: 50%;
   margin: 0 auto;
-  margin-top: 6px;
+  margin-top: -6px;
+  margin-bottom: 4px;
   display: block;
 }
 
@@ -41,7 +42,7 @@
 .main-title {
   font-family: 'Oxanium', sans-serif;
   font-size: 3.4rem;
-  font-weight: 400;
+  font-weight: 500;
   margin: 0px auto;
   text-transform: uppercase;
   color: var(--text-main);
@@ -478,7 +479,7 @@ img[src*="marker"],
   position: relative;
   overflow: hidden;
   background: var(--card-bg);
-  border-radius: 1.2rem;
+  border-radius: 1.6rem;
   padding: 12px;
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);

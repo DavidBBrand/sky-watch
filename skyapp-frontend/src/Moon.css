@@ -84,7 +84,7 @@
 .moon-details {
   margin-top: 6px;
   padding: 18px;
-  border-radius: .8rem;
+  border-radius: 1rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
@@ -139,7 +139,7 @@
   align-items: center;
   gap: 20px;
   width: 100%;
-  margin-top: 8px;
+  margin-top: 24px;
 }
 
 .moon-svg-frame {

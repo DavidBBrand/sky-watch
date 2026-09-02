@@ -252,12 +252,13 @@ const App: React.FC = () => {
 
       <header className="header-section">
         <h1 className="main-title">SKY WATCH</h1>
-        <h2 className="sub-title">Telemetry Dashboard</h2>
-
-        <div
+          <div
           className="logo-container"
           style={{ backgroundImage: `url(${currentLogo})` }}
         ></div>
+        <h2 className="sub-title">Telemetry Dashboard</h2>
+
+
         <div className="search-wrapper">
           <LocationSearch onLocationChange={updateLocation} />
         </div>

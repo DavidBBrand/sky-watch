@@ -73,12 +73,12 @@
   color: var(--text-sub);
   margin: 0;
   font-family: 'Oxanium', sans-serif;
-  font-weight:500;
+  font-weight:400;
   letter-spacing: -1px;
 }
 
 .telemetry-coords {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: var(--accent-color2);
   margin-top: 12px;
   margin-bottom: 12px;

@@ -102,10 +102,10 @@ const Moon: React.FC<MoonProps> = memo(({ date }) => {
           </svg>
         </div>
         <div className="text-center">
-          <h2 className="card-title perc" style={{ fontSize: "4rem", marginTop: "6px", marginBottom: "6px"}}>
+          <h2 className="card-title perc" style={{ fontSize: "4rem", marginTop: "2px", marginBottom: "6px"}}>
             {percentage?.toFixed(1)}%
           </h2>
-          <div className="card-title" style={{ fontSize: "2.5rem"}}>Illumination</div>
+          <div className="card-title" style={{ fontSize: "2.4rem", fontWeight: "400" }}>Illumination</div>
         </div>
       </div>
     );

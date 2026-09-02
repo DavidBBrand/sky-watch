@@ -3,6 +3,7 @@ import "./Planets.css";
 import {
   MercuryIcon,
   VenusIcon,
+  EarthIcon,
   MarsIcon,
   JupiterIcon,
   SaturnIcon,
@@ -40,6 +41,11 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
   if (!planets) return null;
 
   const planetIcons: Record<string, React.ReactNode> = {
+    Earth: (
+      <svg viewBox="0 0 100 100" style={{ width: "2.8rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
+        <EarthIcon cx={50} cy={50} r={43} />
+      </svg>
+    ),
     Mercury: (
       <svg viewBox="0 0 100 100" style={{ width: "2.5rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <MercuryIcon cx={50} cy={50} r={43} />
@@ -108,7 +114,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
               const alt = typeof info.altitude === 'string' ? parseFloat(info.altitude) : info.altitude;
               const isBelowHorizon = alt < 0;
 
-              return (
+              const card = (
                 <div key={name} className="planet-item">
                   <div style={{ fontSize: "1.2rem", lineHeight: 1, display: "flex", justifyContent: "center", marginBottom: "-2px" }}>
                     {planetIcons[name] || "✨"}
@@ -182,6 +188,38 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                   </div>
                 </div>
               );
+
+              if (name === "Venus") {
+                return (
+                  <React.Fragment key={name}>
+                    {card}
+                    <div key="Earth" className="planet-item">
+                      <div style={{ fontSize: "1.2rem", lineHeight: 1, display: "flex", justifyContent: "center", marginBottom: "-2px" }}>
+                        {planetIcons["Earth"]}
+                      </div>
+                      <div style={{ lineHeight: 1, margin: 0, padding: 0 }}>
+                        <span className="glow-sub" style={{ fontSize: "2rem", fontFamily: "serif", fontWeight: "400", display: "block", lineHeight: 1 }}>♁</span>
+                      </div>
+                      <div className="glow-sub2" style={{ fontSize: "2.2rem", fontWeight: "600", color: "var(--text-main)", fontFamily: "Share Tech, sans-serif", lineHeight: 1, marginBottom: "2px" }}>
+                        Earth
+                      </div>
+                      <span className="status-tag status-visible">You Are Here</span>
+                      <div className="glow-sub2" style={{ fontSize: "1.6rem", fontFamily: "Roboto Condensed", color: "var(--text-sub)", marginTop: "2px", letterSpacing: "-1px" }}>
+                        Third rock from the Sun
+                      </div>
+                      <div style={{ fontSize: "1.6rem", fontFamily: "Roboto Condensed", color: "#3baed4", fontWeight: "600", letterSpacing: "-1px", lineHeight: "1", marginBottom: "-1px" }}>
+                        0° Alt
+                      </div>
+                      <div style={{ lineHeight: "1", marginBottom: "6px" }}>
+                        <span className="distance">Distance: </span>
+                        <span className="glow-sub2" style={{ fontSize: "1.1rem" }}>1.00 AU</span>
+                      </div>
+                    </div>
+                  </React.Fragment>
+                );
+              }
+
+              return card;
             })}
           </div>
         </div>
