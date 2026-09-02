@@ -42,7 +42,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
 
   const planetIcons: Record<string, React.ReactNode> = {
     Earth: (
-      <svg viewBox="0 0 100 100" style={{ width: "2.8rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 100 100" style={{ width: "3rem", height: "4.0rem" }} xmlns="http://www.w3.org/2000/svg">
         <EarthIcon cx={50} cy={50} r={43} />
       </svg>
     ),
