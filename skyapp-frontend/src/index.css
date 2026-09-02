@@ -1,8 +1,8 @@
 :root {
   /* Day Theme (Refined Solar) */
   --bg-color: rgba(198, 222, 228, 0.95);
-  --mesh-1: rgb(250, 241, 212);
-  --mesh-2: rgb(223, 245, 231);
+  --mesh-1: rgb(243, 238, 222);
+  --mesh-2: rgb(236, 246, 240);
   --mesh-3: rgb(247, 244, 241); /* From index.css */
   
   --card-bg: rgba(60, 87, 168, 0.1);
@@ -23,7 +23,7 @@
   --separator-glow3: rgba(151, 63, 15, 0.541);
   
   --star-opacity: 0;
-  --wave-opacity: .8;
+  --wave-opacity: .6;
 }
 
 [data-theme="night"] {
@@ -127,7 +127,7 @@ body::after {
   position: fixed;
   /* Oversized so corners stay covered after the 20° rotation */
   top: -30%; left: -30%; width: 160%; height: 160%;
-  transform: rotate(-26.7deg);
+  transform: rotate(-24deg);
   transform-origin: center center;
   /*
    * Seamlessly tiling SVG wave grid (800×300 px tile):
