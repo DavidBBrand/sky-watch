@@ -210,15 +210,15 @@
   width: calc(100% - 24px); 
   box-sizing: border-box; 
   padding: 12px; 
-  margin: 10px auto; 
+  margin: 4px auto; 
   background: var(--card-bg);
   border: 1px solid var(--separator-glow2);
-  border-radius: 1.6rem;
+  border-radius: 1rem;
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.1), 
     inset 0 0 14px var(--separator-glow2);
     font-size:1.2rem;
-  backdrop-filter: blue(2px);
+  backdrop-filter: var(--glass-blur);
 }
 
 .telemetry-info span {
@@ -478,9 +478,9 @@ img[src*="marker"],
   position: relative;
   overflow: hidden;
   background: var(--card-bg);
-  border-radius: 2rem;
+  border-radius: 1.2rem;
   padding: 12px;
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(2px);
   display: flex;
   flex-direction: column;

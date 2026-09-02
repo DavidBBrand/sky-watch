@@ -57,7 +57,7 @@
   border-radius: 1.2rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 6px;
   margin-bottom: 8px;
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.1),            /* Outer depth */
@@ -82,7 +82,7 @@
     min-width: 0;
 }
 .detail-item .label {
-    font-size: 1.2rem; /* Smaller for hierarchy */
+    font-size: 1rem; /* Smaller for hierarchy */
     text-transform: uppercase;
     color: var(--accent-color2);
     font-weight:500;
@@ -92,6 +92,7 @@
        cell. */
     max-width: 100%;
     overflow-wrap: break-word;
+    letter-spacing: -1px;
 }
 .weather-icon {
   font-size: 8rem;
@@ -103,7 +104,7 @@
   margin-bottom: 8px;
 }
 .detail-item .value {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--text-main);
     font-weight: 400;
     margin-top: 4px;
