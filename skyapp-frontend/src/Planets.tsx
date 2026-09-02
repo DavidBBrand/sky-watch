@@ -212,7 +212,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       </div>
                       <div style={{ lineHeight: "1", marginBottom: "6px" }}>
                         <span className="distance">Distance: </span>
-                        <span className="glow-sub2" style={{ fontSize: "1.1rem" }}>1.00 AU</span>
+                        <span className="glow-sub2" style={{ fontSize: "1.1rem" }}>0.00 AU</span>
                       </div>
                     </div>
                   </React.Fragment>
