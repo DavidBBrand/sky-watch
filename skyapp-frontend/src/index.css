@@ -23,7 +23,7 @@
   --separator-glow3: rgba(151, 63, 15, 0.541);
   
   --star-opacity: 0;
-  --wave-opacity: .5;
+  --wave-opacity: .8;
 }
 
 [data-theme="night"] {

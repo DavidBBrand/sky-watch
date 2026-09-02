@@ -179,7 +179,7 @@ const Starlink: React.FC<StarlinkProps> = memo(({ theme = "night" }) => {
         <span className="radar-direction dir-w">W</span>
 
         <div className="radar-center-anchor">
-          <span className="radar-label label-center">{location.name}</span>
+          <span className="radar-label label-center">{location.name.split(',')[0]}</span>
         </div>
         <span className="radar-label label-r1">70°</span>
         <span className="radar-label label-r2">50°</span>
