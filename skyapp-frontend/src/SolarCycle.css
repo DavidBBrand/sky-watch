@@ -66,10 +66,26 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  background: rgba(117, 117, 111, 0.12);
   border-radius: 1rem;
-  padding: 6px 4px;
-  border: 0px solid rgb(83, 109, 118);
+  padding: 6px 12px;
+
+  /* Glass base */
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  /* Outer border */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  box-shadow:
+    /* Elevation lift */
+    0 4px 18px rgba(0, 0, 0, 0.08),
+    /* Top and left rim — catches light, simulates glass thickness */
+    inset 0  1px 0 rgba(255, 255, 255, 0.28),
+    inset  1px 0 0 rgba(255, 255, 255, 0.12),
+    /* Bottom and right rim — shadow side of the glass slab */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    inset -1px 0 0 rgba(0, 0, 0, 0.05);
 }
 
 .zenith-time {

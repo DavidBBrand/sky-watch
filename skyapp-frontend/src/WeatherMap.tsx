@@ -31,10 +31,10 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
   const OPENWEATHER_API_KEY = (import.meta.env.VITE_WIND_MAP_KEY as string) || "";
   const isNight = theme === "night";
 
-  // Refined Tile URLs: Light Voyager for Day, Dark Matter for Night
-  const baseTileUrl = isNight 
-    ? "https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png"
-    : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png";
+  // Stadia Maps tiles — free tier, no API key required, Carto-style aesthetic
+  const baseTileUrl = isNight
+    ? "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+    : "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
 
   const cloudsUrl = `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${OPENWEATHER_API_KEY}`;
 
@@ -55,7 +55,10 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
         style={{ height: "100%", width: "100%" }}      
       >
         {/* Base Layer */}
-        <TileLayer url={baseTileUrl} />        
+        <TileLayer
+          url={baseTileUrl}
+          attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        />
         
         {/* Weather/Cloud Layer */}
         <TileLayer url={cloudsUrl} />

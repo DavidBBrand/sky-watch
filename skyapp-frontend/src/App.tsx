@@ -194,7 +194,7 @@ const App: React.FC = () => {
         <div className="scanner"></div>
         <div>Loading...</div>
         <div>
-          Please click <strong>'Allow'</strong> for location access
+          Click <strong>'Allow'</strong> for location access
         </div>
       </div>
     );
