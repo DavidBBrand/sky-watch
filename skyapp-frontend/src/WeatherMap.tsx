@@ -29,12 +29,13 @@ interface WeatherMapProps {
 const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
   //  Type-safe access to your OpenWeather Wind/Map key
   const OPENWEATHER_API_KEY = (import.meta.env.VITE_WIND_MAP_KEY as string) || "";
+  const STADIA_API_KEY = (import.meta.env.VITE_STADIA_API_KEY as string) || "";
   const isNight = theme === "night";
 
-  // Stadia Maps tiles — free tier, no API key required, Carto-style aesthetic
-  const baseTileUrl = isNight
-    ? "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-    : "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
+  const stadiaBase = isNight
+    ? "alidade_smooth_dark"
+    : "alidade_smooth";
+  const baseTileUrl = `https://tiles.stadiamaps.com/tiles/${stadiaBase}/{z}/{x}/{y}{r}.png?api_key=${STADIA_API_KEY}`;
 
   const cloudsUrl = `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${OPENWEATHER_API_KEY}`;
 
