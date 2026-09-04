@@ -72,7 +72,7 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
             center={[lat, lon]}
             zoom={8}
             className="night-satellite-map"
-            style={{ width: "100%", height: "240px", borderRadius: "1.6rem" }}
+            style={{ width: "100%", height: "100%", borderRadius: "1.6rem" }}
             zoomControl={false}
             attributionControl={false}
             dragging={false}

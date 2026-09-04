@@ -28,10 +28,15 @@ const SolarCompass: FC<CompassProps> = ({ sunData }) => {
   return (
     <div className="solar-compass-wrapper">
       <div className="solar-gauge-track">
+        {/* Degree labels */}
+        <span className="gauge-label gauge-label-top sub-title">+90°</span>
+        <span className="gauge-label gauge-label-mid sub-title">0°</span>
+        <span className="gauge-label gauge-label-bot sub-title">−90°</span>
+
         <div className="horizon-line" />
-        <div 
+        <div
           className="sun-indicator"
-          style={{ 
+          style={{
             top: `${verticalPosition}%`,
             backgroundColor: getSunColor(),
             boxShadow: current_altitude > 0 ? `0 0 15px ${getSunColor()}` : 'none'
@@ -40,7 +45,6 @@ const SolarCompass: FC<CompassProps> = ({ sunData }) => {
       </div>
 
       <div className="altitude-readout">
-        {/* 3. Safety first: check if altitude is a number before calling toFixed */}
         <span className="altitude-value">
           {typeof current_altitude === 'number' ? current_altitude.toFixed(1) : "0.0"}°
         </span>
