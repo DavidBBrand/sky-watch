@@ -185,10 +185,6 @@ async def get_starlink_tles():
 
 # Notable satellites beyond the ISS (which already has its own dedicated
 # live-tracking card) — (NORAD catalog ID, friendly display name).
-# Sourced from space-track.org (same credentialed API /starlink-live already
-# uses), not CelesTrak: CelesTrak connections from Render's IP hang with a
-# ConnectTimeout (network-level block, not an HTTP rejection — confirmed via
-# Render logs), while space-track.org is already proven reachable from there.
 SATELLITE_WATCHLIST = [
     ("48274", "Tiangong"),
     ("20580", "Hubble Space Telescope"),
@@ -197,49 +193,70 @@ SATELLITE_WATCHLIST = [
 
 @cache_sky_data(ttl_seconds=86400)
 async def _fetch_watchlist_tles() -> dict:
-    """NORAD ID -> (line1, line2), via the same space-track login /starlink-live uses.
+    """NORAD ID -> (line1, line2) for SATELLITE_WATCHLIST.
 
-    Cached for 24h (same TTL as /starlink-live's own TLE fetch) so this hits
-    space-track.org roughly once a day instead of on every single page load.
-    Logging in on every request is what got us 403'd — space-track enforces
-    fair-use rate limits and doesn't like repeated re-authentication from one
-    account. TLEs this fresh are still accurate enough for pass predictions
-    days out. Cache key is location-independent (TLEs don't depend on the
-    observer): cache_sky_data defaults lat/lon when absent from kwargs, so
-    every caller shares the same cache entry, which is exactly what we want
-    here — and a failed fetch returns {} (falsy), so cache_sky_data's `if
-    result` check skips caching it, letting the next request retry instead
-    of being stuck returning nothing for 24h.
+    Same "try space-track.org live, fall back to a local backup file" shape
+    as /starlink-live, for the same reason: Render's IP gets a hard 403 on
+    space-track's login from here (confirmed via Render logs + a side-by-side
+    login attempt that succeeded from a non-Render IP with identical
+    credentials — an IP-level block, not bad credentials or an account
+    lockout). backend/satellite_watchlist_backup.json is refreshed daily by
+    .github/workflows/refresh-starlink-tles.yml on a GitHub Actions runner
+    (not Render, so not subject to whatever has Render's IP blocked) — same
+    file, same workflow, same daily commit as starlink_backup.json.
+
+    Cached here for 24h regardless of which path succeeds, so this doesn't
+    re-attempt (and re-fail) the live login on every single page load.
+    Cache key is location-independent (TLEs don't depend on the observer):
+    cache_sky_data defaults lat/lon when absent from kwargs, so every caller
+    shares one cache entry. A failed live+backup attempt returns {} (falsy),
+    which cache_sky_data's `if result` check skips caching, so the next
+    request retries instead of being stuck for 24h.
     """
     username = os.getenv("SPACETRACK_USER")
     password = os.getenv("SPACETRACK_PASS")
-    if not username or not password:
-        print("Satellite passes: SPACETRACK credentials not set.")
-        return {}
 
-    norad_ids = ",".join(norad_id for norad_id, _ in SATELLITE_WATCHLIST)
+    if username and password:
+        norad_ids = ",".join(norad_id for norad_id, _ in SATELLITE_WATCHLIST)
+        try:
+            async with httpx.AsyncClient(follow_redirects=True) as client:
+                login_resp = await client.post(
+                    "https://www.space-track.org/ajaxauth/login",
+                    data={"identity": username, "password": password},
+                    timeout=15.0,
+                )
+                login_resp.raise_for_status()
 
-    try:
-        async with httpx.AsyncClient(follow_redirects=True) as client:
-            login_resp = await client.post(
-                "https://www.space-track.org/ajaxauth/login",
-                data={"identity": username, "password": password},
-                timeout=15.0,
-            )
-            login_resp.raise_for_status()
+                tle_resp = await client.get(
+                    f"https://www.space-track.org/basicspacedata/query/class/gp"
+                    f"/NORAD_CAT_ID/{norad_ids}/format/3le",
+                    timeout=30.0,
+                )
+                tle_resp.raise_for_status()
 
-            tle_resp = await client.get(
-                f"https://www.space-track.org/basicspacedata/query/class/gp"
-                f"/NORAD_CAT_ID/{norad_ids}/format/3le",
-                timeout=30.0,
-            )
-            tle_resp.raise_for_status()
+                sats = _parse_3le(tle_resp.text)
+                if sats:
+                    return {s["OBJECT_ID"]: (s["TLE_LINE1"], s["TLE_LINE2"]) for s in sats}
+        except Exception as e:
+            print(f"Satellite passes: space-track live fetch failed: {type(e).__name__}: {e}")
+    else:
+        print("Satellite passes: SPACETRACK credentials not set — trying local backup.")
 
-            sats = _parse_3le(tle_resp.text)
-            return {s["OBJECT_ID"]: (s["TLE_LINE1"], s["TLE_LINE2"]) for s in sats}
-    except Exception as e:
-        print(f"Satellite passes: space-track fetch failed: {type(e).__name__}: {e}")
-        return {}
+    backup_path = Path(__file__).parent / "satellite_watchlist_backup.json"
+    if backup_path.exists():
+        try:
+            with open(backup_path, "r") as f:
+                content = f.read().strip()
+            if content:
+                sats = json.loads(content)
+                if isinstance(sats, list) and sats:
+                    print(f"Satellite passes: loaded {len(sats)} TLEs from local backup.")
+                    return {s["OBJECT_ID"]: (s["TLE_LINE1"], s["TLE_LINE2"]) for s in sats}
+        except Exception as e:
+            print(f"Satellite passes: backup JSON unreadable: {e}")
+
+    print("Satellite passes: all TLE sources failed.")
+    return {}
 
 
 @app.get("/satellite-passes")

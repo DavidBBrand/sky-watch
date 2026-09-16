@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: pip install httpx
 
-      - name: Fetch Starlink TLEs from space-track.org
+      - name: Fetch Starlink + satellite-watchlist TLEs from space-track.org
         env:
           SPACETRACK_USER: ${{ secrets.SPACETRACK_USER }}
           SPACETRACK_PASS: ${{ secrets.SPACETRACK_PASS }}
@@ -35,10 +35,31 @@ jobs:
           password = os.environ["SPACETRACK_PASS"]
 
           login_url = "https://www.space-track.org/ajaxauth/login"
-          tle_url = (
+          starlink_url = (
               "https://www.space-track.org/basicspacedata/query/class/gp"
               "/OBJECT_NAME/^^STARLINK/orderby/NORAD_CAT_ID/format/3le"
           )
+          # Tiangong (48274), Hubble (20580) — kept in sync with
+          # SATELLITE_WATCHLIST in backend/main.py.
+          watchlist_url = (
+              "https://www.space-track.org/basicspacedata/query/class/gp"
+              "/NORAD_CAT_ID/48274,20580/format/3le"
+          )
+
+          def parse_3le(text):
+              raw_lines = [l.strip() for l in text.splitlines() if l.strip()]
+              sats = []
+              for i in range(0, len(raw_lines), 3):
+                  if i + 2 < len(raw_lines):
+                      name, line1, line2 = raw_lines[i], raw_lines[i+1], raw_lines[i+2]
+                      if line1.startswith("1 ") and line2.startswith("2 "):
+                          sats.append({
+                              "OBJECT_NAME": name,
+                              "OBJECT_ID": line1[2:7].strip(),
+                              "TLE_LINE1": line1,
+                              "TLE_LINE2": line2
+                          })
+              return sats
 
           with httpx.Client(follow_redirects=True) as client:
               login = client.post(login_url, data={"identity": username, "password": password}, timeout=30)
@@ -49,41 +70,40 @@ jobs:
                   print("Login rejected by space-track.org — check SPACETRACK_USER / SPACETRACK_PASS secrets.")
                   sys.exit(1)
 
-              tle = client.get(tle_url, timeout=60)
-              print(f"TLE status: {tle.status_code}")
-              print(f"TLE body preview: {tle.text[:300]}")
-              tle.raise_for_status()
+              starlink_resp = client.get(starlink_url, timeout=60)
+              print(f"Starlink TLE status: {starlink_resp.status_code}")
+              starlink_resp.raise_for_status()
 
-          raw_lines = [l.strip() for l in tle.text.splitlines() if l.strip()]
-          print(f"Total lines received: {len(raw_lines)}")
+              watchlist_resp = client.get(watchlist_url, timeout=30)
+              print(f"Watchlist TLE status: {watchlist_resp.status_code}")
+              watchlist_resp.raise_for_status()
 
-          sats = []
-          for i in range(0, len(raw_lines), 3):
-              if i + 2 < len(raw_lines):
-                  name, line1, line2 = raw_lines[i], raw_lines[i+1], raw_lines[i+2]
-                  if line1.startswith("1 ") and line2.startswith("2 "):
-                      sats.append({
-                          "OBJECT_NAME": name,
-                          "OBJECT_ID": line1[2:7].strip(),
-                          "TLE_LINE1": line1,
-                          "TLE_LINE2": line2
-                      })
-
-          if not sats:
-              print("No satellites parsed — aborting.")
+          starlink_sats = parse_3le(starlink_resp.text)
+          print(f"Starlink satellites parsed: {len(starlink_sats)}")
+          if not starlink_sats:
+              print("No Starlink satellites parsed — aborting.")
               sys.exit(1)
 
           with open("backend/starlink_backup.json", "w") as f:
-              json.dump(sats, f)
+              json.dump(starlink_sats, f)
+          print(f"Written {len(starlink_sats)} satellites to backend/starlink_backup.json")
 
-          print(f"Written {len(sats)} satellites to backend/starlink_backup.json")
+          watchlist_sats = parse_3le(watchlist_resp.text)
+          print(f"Watchlist satellites parsed: {len(watchlist_sats)}")
+          if not watchlist_sats:
+              print("No watchlist satellites parsed — aborting.")
+              sys.exit(1)
+
+          with open("backend/satellite_watchlist_backup.json", "w") as f:
+              json.dump(watchlist_sats, f)
+          print(f"Written {len(watchlist_sats)} satellites to backend/satellite_watchlist_backup.json")
 
       - name: Commit updated TLEs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add backend/starlink_backup.json
+          git add backend/starlink_backup.json backend/satellite_watchlist_backup.json
           git diff --staged --quiet && echo "No changes — backup already current." && exit 0
-          git commit -m "chore: refresh Starlink TLEs [skip actions]"
+          git commit -m "chore: refresh Starlink + satellite-watchlist TLEs [skip actions]"
           git pull --rebase origin main
           git push
