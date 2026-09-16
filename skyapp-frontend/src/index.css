@@ -27,12 +27,12 @@
 }
 
 [data-theme="night"] {
-  --bg-color: rgba(10, 5, 40, 0.95);
-  --mesh-1: rgb(0, 2, 12);
-  --mesh-2: rgb(4, 1, 33);
-  --mesh-3: rgb(6, 2, 23);
+  --bg-color: rgba(1, 1, 16, 0.95);
+  --mesh-1: rgb(0, 0, 3);
+  --mesh-2: rgb(0, 0, 4);
+  --mesh-3: rgb(0, 0, 0);
 
-  --card-bg: rgba(42, 51, 75, 0.15); /* Slightly darker for better contrast */
+  --card-bg: rgba(48, 63, 92, 0.15); /* Slightly darker for better contrast */
   --card-border: rgba(255, 255, 255, 0.1);
   
   --text-main: #ffffff;

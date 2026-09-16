@@ -169,7 +169,7 @@
   right: 4%;
   bottom: 3%;
   font-family: "Oxanium", sans-serif;
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: 600;
   color: var(--accent-radar);
   opacity: 0.85;
@@ -186,7 +186,7 @@
   .solar-date-display {
     right: 5%;
     bottom: 4%;
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
 }
 
@@ -197,5 +197,5 @@
   bottom: 12%;
   right: 4%;
   transform: none;
-  font-size: clamp(0.9rem, 2vw, 1.7rem);
+  font-size: clamp(2rem, 2vw, 2rem);
 }
