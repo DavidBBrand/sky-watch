@@ -205,8 +205,19 @@ async def get_satellite_passes(lat: float = Query(35.92), lon: float = Query(-86
     sun_obj = eph['sun']
 
     passes = []
+    any_fetch_succeeded = False
 
-    async with httpx.AsyncClient(follow_redirects=True) as client:
+    # Some CelesTrak requests from datacenter/cloud IPs get blocked or
+    # Cloudflare-challenged when they carry httpx's generic default
+    # User-Agent — a browser-like one avoids that.
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+        )
+    }
+
+    async with httpx.AsyncClient(follow_redirects=True, headers=headers) as client:
         for object_name, display_name in SATELLITE_WATCHLIST:
             try:
                 resp = await client.get(
@@ -219,6 +230,8 @@ async def get_satellite_passes(lat: float = Query(35.92), lon: float = Query(-86
                 if len(lines) < 3:
                     print(f"Satellite passes: no TLE returned for {object_name}")
                     continue
+
+                any_fetch_succeeded = True
 
                 _, line1, line2 = lines[0], lines[1], lines[2]
                 satellite = EarthSatellite(line1, line2, display_name, ts)
@@ -260,11 +273,21 @@ async def get_satellite_passes(lat: float = Query(35.92), lon: float = Query(-86
                             })
 
             except Exception as e:
-                print(f"Satellite passes fetch failed for {object_name}: {e}")
+                print(f"Satellite passes fetch failed for {object_name}: {type(e).__name__}: {e}")
                 continue
 
     passes.sort(key=lambda p: p["rise_time"])
-    return {"passes": passes[:6]}
+    result = {"passes": passes[:6]}
+
+    # If every satellite's TLE fetch failed (network hiccup, transient block,
+    # etc.), this "no passes" result is meaningless noise, not a real answer
+    # — don't let @cache_sky_data lock it in for 30 minutes. The "error" key
+    # makes the decorator skip caching; the frontend only reads .passes, so
+    # this extra key is otherwise harmless.
+    if not any_fetch_succeeded:
+        result["error"] = "no TLE sources reachable"
+
+    return result
 
 
 @app.get("/sky-summary")
