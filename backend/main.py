@@ -313,6 +313,7 @@ async def get_weather(lat: float = Query(35.92), lon: float = Query(-86.86)):
                 "humidity": current.get("humidity"),
                 "pressure": display_pressure,
                 "visibility": current.get("visibility"),
+                "cloudcover": current.get("cloudcover"),
                 "description": current.get("conditions"),
                 "timezone": data.get("timezone", "UTC")
             }

@@ -11,6 +11,7 @@ import Starlink from "./Starlink";
 const StarlinkGlobe = lazy(() => import("./StarlinkGlobe"));
 import SolarSystem from "./SolarSystem";
 import Moon from "./Moon";
+import StargazingWindow from "./StargazingWindow";
 import logoDay from "./assets/skywatchday.png";
 import logoNight from "./assets/skywatch.png";
 
@@ -333,6 +334,9 @@ const App: React.FC = () => {
               <div>Syncing with {location.name}...</div>
             </div>
           )}
+        </div>
+        <div className="glass-card">
+          <StargazingWindow skyData={skyData} weatherData={weatherData} />
         </div>
         <div className="glass-card grid-span-2">
           <SolarSystem

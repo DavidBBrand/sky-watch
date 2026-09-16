@@ -11,6 +11,7 @@ interface WeatherData {
   pressure: number;
   visibility: number;
   windspeed: number;
+  cloudcover?: number;
   timezone?: string;
   error?: boolean;
 }
