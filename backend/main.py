@@ -195,8 +195,22 @@ SATELLITE_WATCHLIST = [
 ]
 
 
+@cache_sky_data(ttl_seconds=86400)
 async def _fetch_watchlist_tles() -> dict:
-    """NORAD ID -> (line1, line2), via the same space-track login /starlink-live uses."""
+    """NORAD ID -> (line1, line2), via the same space-track login /starlink-live uses.
+
+    Cached for 24h (same TTL as /starlink-live's own TLE fetch) so this hits
+    space-track.org roughly once a day instead of on every single page load.
+    Logging in on every request is what got us 403'd — space-track enforces
+    fair-use rate limits and doesn't like repeated re-authentication from one
+    account. TLEs this fresh are still accurate enough for pass predictions
+    days out. Cache key is location-independent (TLEs don't depend on the
+    observer): cache_sky_data defaults lat/lon when absent from kwargs, so
+    every caller shares the same cache entry, which is exactly what we want
+    here — and a failed fetch returns {} (falsy), so cache_sky_data's `if
+    result` check skips caching it, letting the next request retry instead
+    of being stuck returning nothing for 24h.
+    """
     username = os.getenv("SPACETRACK_USER")
     password = os.getenv("SPACETRACK_PASS")
     if not username or not password:
