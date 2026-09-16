@@ -12,6 +12,7 @@ const StarlinkGlobe = lazy(() => import("./StarlinkGlobe"));
 import SolarSystem from "./SolarSystem";
 import Moon from "./Moon";
 import StargazingWindow from "./StargazingWindow";
+import SatellitePasses from "./SatellitePasses";
 import logoDay from "./assets/skywatchday.png";
 import logoNight from "./assets/skywatch.png";
 
@@ -307,6 +308,9 @@ const App: React.FC = () => {
           }`}
         >
           <ISSWatcher onDistanceUpdate={setIssDistance} />
+        </div>
+        <div className="glass-card">
+          <SatellitePasses />
         </div>
         <div className="glass-card">
           <Starlink theme={isNight ? "night" : "day"} />

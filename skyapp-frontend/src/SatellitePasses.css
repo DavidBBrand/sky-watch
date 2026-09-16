@@ -1,0 +1,84 @@
+.satpasses-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.satpasses-loading,
+.satpasses-empty {
+  font-size: 1.2rem;
+  opacity: 0.7;
+  margin-top: 12px;
+  padding: 0 8px;
+}
+
+.satpasses-signal-lost {
+  color: var(--accent-color2);
+  font-size: 2rem;
+  text-align: center;
+}
+
+.satpasses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.satpasses-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: 1rem;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--separator-glow2);
+}
+
+.satpasses-item-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  /* Header items can shrink below their content's intrinsic width instead
+     of overflowing the card at narrow widths (see Weather.css for the bug
+     this same fix addressed there). */
+  min-width: 0;
+}
+
+.satpasses-name {
+  font-size: 1.3rem;
+  font-family: 'Oxanium', sans-serif;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.satpasses-time {
+  font-size: 1rem;
+  font-family: 'Roboto Condensed', sans-serif;
+  color: var(--accent-color2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.satpasses-detail {
+  font-size: 0.95rem;
+  font-family: 'Roboto Condensed', sans-serif;
+  color: var(--text-sub);
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 480px) {
+  .satpasses-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+}
