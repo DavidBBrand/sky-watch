@@ -184,14 +184,48 @@ async def get_starlink_tles():
 
 
 # Notable satellites beyond the ISS (which already has its own dedicated
-# live-tracking card) — (CelesTrak object name, friendly display name).
-# CelesTrak is fine to use here (unlike Starlink): these are tiny,
-# unauthenticated, low-volume requests, not the IP-block-risk bulk pull
-# that made Starlink go through space-track.org instead.
+# live-tracking card) — (NORAD catalog ID, friendly display name).
+# Sourced from space-track.org (same credentialed API /starlink-live already
+# uses), not CelesTrak: CelesTrak connections from Render's IP hang with a
+# ConnectTimeout (network-level block, not an HTTP rejection — confirmed via
+# Render logs), while space-track.org is already proven reachable from there.
 SATELLITE_WATCHLIST = [
-    ("CSS (TIANHE)", "Tiangong"),
-    ("HST", "Hubble Space Telescope"),
+    ("48274", "Tiangong"),
+    ("20580", "Hubble Space Telescope"),
 ]
+
+
+async def _fetch_watchlist_tles() -> dict:
+    """NORAD ID -> (line1, line2), via the same space-track login /starlink-live uses."""
+    username = os.getenv("SPACETRACK_USER")
+    password = os.getenv("SPACETRACK_PASS")
+    if not username or not password:
+        print("Satellite passes: SPACETRACK credentials not set.")
+        return {}
+
+    norad_ids = ",".join(norad_id for norad_id, _ in SATELLITE_WATCHLIST)
+
+    try:
+        async with httpx.AsyncClient(follow_redirects=True) as client:
+            login_resp = await client.post(
+                "https://www.space-track.org/ajaxauth/login",
+                data={"identity": username, "password": password},
+                timeout=15.0,
+            )
+            login_resp.raise_for_status()
+
+            tle_resp = await client.get(
+                f"https://www.space-track.org/basicspacedata/query/class/gp"
+                f"/NORAD_CAT_ID/{norad_ids}/format/3le",
+                timeout=30.0,
+            )
+            tle_resp.raise_for_status()
+
+            sats = _parse_3le(tle_resp.text)
+            return {s["OBJECT_ID"]: (s["TLE_LINE1"], s["TLE_LINE2"]) for s in sats}
+    except Exception as e:
+        print(f"Satellite passes: space-track fetch failed: {type(e).__name__}: {e}")
+        return {}
 
 
 @app.get("/satellite-passes")
@@ -205,76 +239,57 @@ async def get_satellite_passes(lat: float = Query(35.92), lon: float = Query(-86
     sun_obj = eph['sun']
 
     passes = []
-    any_fetch_succeeded = False
+    tles_by_id = await _fetch_watchlist_tles()
+    any_fetch_succeeded = bool(tles_by_id)
 
-    # Some CelesTrak requests from datacenter/cloud IPs get blocked or
-    # Cloudflare-challenged when they carry httpx's generic default
-    # User-Agent — a browser-like one avoids that.
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-        )
-    }
-
-    async with httpx.AsyncClient(follow_redirects=True, headers=headers) as client:
-        for object_name, display_name in SATELLITE_WATCHLIST:
-            try:
-                resp = await client.get(
-                    "https://celestrak.org/NORAD/elements/gp.php",
-                    params={"NAME": object_name, "FORMAT": "TLE"},
-                    timeout=15.0,
-                )
-                resp.raise_for_status()
-                lines = [line.strip() for line in resp.text.splitlines() if line.strip()]
-                if len(lines) < 3:
-                    print(f"Satellite passes: no TLE returned for {object_name}")
-                    continue
-
-                any_fetch_succeeded = True
-
-                _, line1, line2 = lines[0], lines[1], lines[2]
-                satellite = EarthSatellite(line1, line2, display_name, ts)
-                difference = satellite - user_location
-
-                # 10 deg minimum altitude: below that, horizon haze/obstructions
-                # usually make a pass not worth showing anyway.
-                event_times, events = satellite.find_events(
-                    user_location, t0, t1, altitude_degrees=10.0
-                )
-
-                # find_events returns clean rise(0)/culminate(1)/set(2) triples
-                # for any pass fully contained in [t0, t1]; a triple split by
-                # the window edges just won't match here and gets skipped.
-                for i in range(len(events) - 2):
-                    if events[i] == 0 and events[i + 1] == 1 and events[i + 2] == 2:
-                        rise_t, culm_t, set_t = event_times[i], event_times[i + 1], event_times[i + 2]
-
-                        # "Visible" = satellite lit by the sun AND observer's sky
-                        # dark enough to see it — checked at peak elevation, a
-                        # reasonable single-point stand-in for the whole pass.
-                        is_sunlit = bool(satellite.at(culm_t).is_sunlit(eph))
-                        sun_alt, _, _ = observer.at(culm_t).observe(sun_obj).apparent().altaz()
-                        sky_is_dark = float(sun_alt.degrees) < -6
-
-                        if is_sunlit and sky_is_dark:
-                            culm_alt, culm_az, _ = difference.at(culm_t).altaz()
-                            _, rise_az, _ = difference.at(rise_t).altaz()
-                            _, set_az, _ = difference.at(set_t).altaz()
-
-                            passes.append({
-                                "satellite": display_name,
-                                "rise_time": rise_t.utc_iso(),
-                                "culminate_time": culm_t.utc_iso(),
-                                "set_time": set_t.utc_iso(),
-                                "max_altitude": round(float(culm_alt.degrees), 1),
-                                "rise_azimuth": round(float(rise_az.degrees), 1),
-                                "set_azimuth": round(float(set_az.degrees), 1),
-                            })
-
-            except Exception as e:
-                print(f"Satellite passes fetch failed for {object_name}: {type(e).__name__}: {e}")
+    for norad_id, display_name in SATELLITE_WATCHLIST:
+        try:
+            if norad_id not in tles_by_id:
+                print(f"Satellite passes: no TLE returned for {display_name} ({norad_id})")
                 continue
+
+            line1, line2 = tles_by_id[norad_id]
+            satellite = EarthSatellite(line1, line2, display_name, ts)
+            difference = satellite - user_location
+
+            # 10 deg minimum altitude: below that, horizon haze/obstructions
+            # usually make a pass not worth showing anyway.
+            event_times, events = satellite.find_events(
+                user_location, t0, t1, altitude_degrees=10.0
+            )
+
+            # find_events returns clean rise(0)/culminate(1)/set(2) triples
+            # for any pass fully contained in [t0, t1]; a triple split by
+            # the window edges just won't match here and gets skipped.
+            for i in range(len(events) - 2):
+                if events[i] == 0 and events[i + 1] == 1 and events[i + 2] == 2:
+                    rise_t, culm_t, set_t = event_times[i], event_times[i + 1], event_times[i + 2]
+
+                    # "Visible" = satellite lit by the sun AND observer's sky
+                    # dark enough to see it — checked at peak elevation, a
+                    # reasonable single-point stand-in for the whole pass.
+                    is_sunlit = bool(satellite.at(culm_t).is_sunlit(eph))
+                    sun_alt, _, _ = observer.at(culm_t).observe(sun_obj).apparent().altaz()
+                    sky_is_dark = float(sun_alt.degrees) < -6
+
+                    if is_sunlit and sky_is_dark:
+                        culm_alt, culm_az, _ = difference.at(culm_t).altaz()
+                        _, rise_az, _ = difference.at(rise_t).altaz()
+                        _, set_az, _ = difference.at(set_t).altaz()
+
+                        passes.append({
+                            "satellite": display_name,
+                            "rise_time": rise_t.utc_iso(),
+                            "culminate_time": culm_t.utc_iso(),
+                            "set_time": set_t.utc_iso(),
+                            "max_altitude": round(float(culm_alt.degrees), 1),
+                            "rise_azimuth": round(float(rise_az.degrees), 1),
+                            "set_azimuth": round(float(set_az.degrees), 1),
+                        })
+
+        except Exception as e:
+            print(f"Satellite passes computation failed for {display_name}: {type(e).__name__}: {e}")
+            continue
 
     passes.sort(key=lambda p: p["rise_time"])
     result = {"passes": passes[:6]}
