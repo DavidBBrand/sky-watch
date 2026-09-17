@@ -362,16 +362,16 @@
   position: relative;
   top: 0;
   right: 0;
-  margin: 10px auto; /* Centered on mobile */
+  margin: 8px auto; /* Centered on mobile */
   display: block;
-  padding: 8px 16px;
-  border-radius: 2rem;
+  padding: 4px 6px;
+  border-radius: 1rem;
   border: 2px groove var(--card-border);
   color: var(--text-main);
   backdrop-filter: blur(3px);
   font-weight: 400;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
+  font-size: 1rem;
+  letter-spacing: 0px;
   transition: all 0.3s ease;
   z-index: 1000;
   width: fit-content;
