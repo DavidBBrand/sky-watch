@@ -112,7 +112,7 @@ const MapCard: React.FC<MapCardProps> = memo(({ theme, skyData, date }) => {
               style={{
                 width: "100%",
                 height: "100%",
-                borderRadius: "2rem",
+                borderRadius: "1rem",
                 display: "block",
                 transition: "opacity 0.5s ease",
               }}
