@@ -2,7 +2,7 @@
 .weather-map-wrapper {
   height: 250px;
   width: 100%;
-  border-radius: 2rem;
+  border-radius: 1rem;
   overflow: hidden;
   position: relative;
   margin:0.5rem auto;
