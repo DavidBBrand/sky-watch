@@ -407,6 +407,32 @@
   }
 }
 
+/* Phones: centered-pill shape + size was a near-exact visual match for the
+   Dynamic Island/camera cutout on iPhones (reported on iPhone 17 running
+   this as a PWA), so it read as a second camera cutout. Move it out of that
+   zone entirely — pinned to the top-right corner, ~30% smaller — instead of
+   centered up top. */
+@media (max-width: 480px) {
+  .theme-toggle-btn {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    margin: 0;
+    padding: 6px 11px;
+    font-size: 0.84rem;
+    min-width: 0;
+    width: fit-content;
+  }
+
+  /* Taking the button out of flow (position: fixed) collapses the row it
+     used to occupy above the title, so without this the "SKY WATCH" title
+     (and the loading status bar) render underneath the now-floating
+     button. Push content down by roughly the button's own footprint. */
+  .app-container {
+    padding-top: 50px;
+  }
+}
+
 img[src*="marker"],
 .leaflet-marker-icon,
 .mapboxgl-marker {
