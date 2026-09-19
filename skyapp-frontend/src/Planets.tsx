@@ -140,7 +140,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                     style={{
                       fontSize: "2.6rem",
                       fontWeight: "400",
-                      
+                      color: "var(--text-main)",
                       fontFamily: "Share Tech, sans-serif",
                       lineHeight: 1,
                       marginBottom: "2px",
@@ -200,7 +200,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       <div style={{ lineHeight: 1, margin: 0, padding: 0 }}>
                         <span className="glow-sub" style={{ fontSize: "2rem", fontFamily: "serif", fontWeight: "400", display: "block", lineHeight: 1 }}>♁</span>
                       </div>
-                      <div className="glow-sub2" style={{ fontSize: "2.6rem", fontWeight: "400", color: "var(--text-main)", fontFamily: "Share Tech, sans-serif", lineHeight: 1, marginBottom: "2px" }}>
+                      <div className="glow-sub3" style={{ fontSize: "2.6rem", fontWeight: "400", color: "var(--text-main)", fontFamily: "Share Tech, sans-serif", lineHeight: 1, marginBottom: "2px" }}>
                         Earth
                       </div>
                       <span className="status-tag status-visible">You Are Here</span>
