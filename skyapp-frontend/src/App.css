@@ -202,6 +202,27 @@
   font-family: 'Roboto Condensed', sans-serif;
 }
 
+.glow-sub3 {
+  font-weight: 400;
+  opacity: 0.88;
+  text-shadow:
+    0 1px 1px rgba(6, 76, 114, 0.3),
+    0px 0px 2px var(--separator-glow);
+  background: linear-gradient(
+    to bottom,
+    var(--text-main) 0%,
+    var(--text-sub) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.5s ease-in-out;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto Condensed', sans-serif;
+}
 .telemetry-info {
   display: flex;
   flex-wrap: wrap;

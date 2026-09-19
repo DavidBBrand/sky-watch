@@ -136,11 +136,11 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                   </div>
 
                   <div
-                    className="glow-sub2"
+                    className="glow-sub3"
                     style={{
-                      fontSize: "2.2rem",
-                      fontWeight: "600",
-                      color: "var(--text-main)",
+                      fontSize: "2.6rem",
+                      fontWeight: "400",
+                      
                       fontFamily: "Share Tech, sans-serif",
                       lineHeight: 1,
                       marginBottom: "2px",
@@ -200,12 +200,12 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       <div style={{ lineHeight: 1, margin: 0, padding: 0 }}>
                         <span className="glow-sub" style={{ fontSize: "2rem", fontFamily: "serif", fontWeight: "400", display: "block", lineHeight: 1 }}>♁</span>
                       </div>
-                      <div className="glow-sub2" style={{ fontSize: "2.2rem", fontWeight: "600", color: "var(--text-main)", fontFamily: "Share Tech, sans-serif", lineHeight: 1, marginBottom: "2px" }}>
+                      <div className="glow-sub2" style={{ fontSize: "2.6rem", fontWeight: "400", color: "var(--text-main)", fontFamily: "Share Tech, sans-serif", lineHeight: 1, marginBottom: "2px" }}>
                         Earth
                       </div>
                       <span className="status-tag status-visible">You Are Here</span>
                       <div className="glow-sub2" style={{ fontSize: "1.6rem", fontFamily: "Roboto Condensed", color: "var(--text-sub)", marginTop: "2px", letterSpacing: "-1px" }}>
-                        Third rock from the Sun
+                       Still Our Only Home 
                       </div>
                       <div style={{ fontSize: "1.6rem", fontFamily: "Roboto Condensed", color: "#3baed4", fontWeight: "600", letterSpacing: "-1px", lineHeight: "1", marginBottom: "-1px" }}>
                         0° Alt
