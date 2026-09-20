@@ -27,7 +27,7 @@
 }
 
 [data-theme="night"] {
-  --bg-color: rgba(1, 1, 16, 0.95);
+  --bg-color: rgba(0, 0, 5, 0.95);
   --mesh-1: rgb(0, 0, 3);
   --mesh-2: rgb(0, 0, 4);
   --mesh-3: rgb(0, 0, 0);
