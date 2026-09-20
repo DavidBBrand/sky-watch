@@ -34,3 +34,9 @@ skyapp-frontend/env
 # Specific path for your React app
 skyapp-frontend/.env
 skyapp-frontend/.env.local
+
+# Local-only Starlink TLE cache written by /starlink-live when a live fetch
+# succeeds on a dev machine. Keeps the backend from ever modifying the
+# tracked backend/starlink_backup.json, which the daily bot commit owns.
+backend/starlink_local_cache.json
+backend/starlink_local_cache.tmp

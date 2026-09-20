@@ -8,10 +8,15 @@ Both files are TLE data caches. They are **intentionally tracked** and
 committed daily, together, by `.github/workflows/refresh-starlink-tles.yml`,
 a cron job that fetches fresh data from space-track.org and pushes straight
 to `main` (commits show up as "chore: refresh Starlink + satellite-watchlist
-TLEs [skip ci]"). Each is also written locally as a fallback cache by its
-matching backend endpoint — `starlink_backup.json` by `/starlink-live`,
-`satellite_watchlist_backup.json` by the `_fetch_watchlist_tles()` helper
-`/satellite-passes` uses.
+TLEs [skip ci]"). The backend only ever **reads** them — `/starlink-live`
+writes its local fallback cache to the gitignored
+`backend/starlink_local_cache.json` instead (and reads whichever of the two
+is newer), so running the backend locally no longer leaves the tracked file
+modified. That local modification used to get autostashed on every
+`git pull` and conflict on re-apply, which is how conflict markers got
+committed into `starlink_backup.json` in `fea4b13` and broke both Starlink
+cards. If either file still shows up as modified locally, just
+`git checkout -- <file>` before pulling.
 
 Because they change upstream almost every day, these are the files most
 likely to show a stale "both modified" / "modify-delete" conflict during

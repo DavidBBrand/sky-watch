@@ -125,7 +125,14 @@ def _save_backup(backup_path: Path, data: list) -> None:
 @app.get("/starlink-live")
 @cache_sky_data(ttl_seconds=86400)
 async def get_starlink_tles():
+    # Two files, on purpose:
+    # - starlink_backup.json is TRACKED and only ever written by the daily
+    #   GitHub Actions refresh. The backend never writes it, so a local run
+    #   can't leave it modified and collide with the bot's commit on pull.
+    # - starlink_local_cache.json is GITIGNORED and written here whenever a
+    #   live fetch succeeds (i.e. on a dev machine; Render's IP is blocked).
     backup_path = Path(__file__).parent / "starlink_backup.json"
+    local_cache_path = Path(__file__).parent / "starlink_local_cache.json"
 
     # ── 1. Space-track (requires credentials) ────────────────────────────────
     username = os.getenv("SPACETRACK_USER")
@@ -152,7 +159,7 @@ async def get_starlink_tles():
 
                 sats = _parse_3le(tle_resp.text)
                 if sats:
-                    _save_backup(backup_path, sats)
+                    _save_backup(local_cache_path, sats)
                     print(f"Space-track: fetched {len(sats)} Starlink TLEs.")
                     return sats
 
@@ -164,19 +171,26 @@ async def get_starlink_tles():
     # fetches from space-track.org using GitHub Actions runners (not blocked).
     # CelesTrak is intentionally omitted: it sources from space-track.org so
     # any IP blocked there is blocked here too.
-    if backup_path.exists():
+    # Newest file first, so a fresh local cache beats a days-old pull and a
+    # fresh pull beats a stale local cache.
+    candidates = sorted(
+        (p for p in (local_cache_path, backup_path) if p.exists()),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    for path in candidates:
         try:
-            with open(backup_path, "r") as f:
+            with open(path, "r") as f:
                 content = f.read().strip()
             if not content:
-                print("Backup JSON is empty.")
-            else:
-                sats = json.loads(content)
-                if isinstance(sats, list) and sats:
-                    print(f"Backup: loaded {len(sats)} Starlink TLEs.")
-                    return sats
+                print(f"{path.name} is empty.")
+                continue
+            sats = json.loads(content)
+            if isinstance(sats, list) and sats:
+                print(f"Backup: loaded {len(sats)} Starlink TLEs from {path.name}.")
+                return sats
         except Exception as e:
-            print(f"Backup JSON unreadable: {e}")
+            print(f"{path.name} unreadable: {e}")
 
     # ── 3. All sources failed ─────────────────────────────────────────────────
     print("All TLE sources failed — returning empty list.")
