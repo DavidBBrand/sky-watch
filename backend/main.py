@@ -197,6 +197,9 @@ async def get_starlink_tles():
     return []
 
 
+# Minimum peak elevation (degrees) for a pass to be listed.
+MIN_PASS_ALTITUDE_DEG = 15.0
+
 # Notable satellites beyond the ISS (which already has its own dedicated
 # live-tracking card) — (NORAD catalog ID, friendly display name).
 SATELLITE_WATCHLIST = [
@@ -297,10 +300,13 @@ async def get_satellite_passes(lat: float = Query(35.92), lon: float = Query(-86
             satellite = EarthSatellite(line1, line2, display_name, ts)
             difference = satellite - user_location
 
-            # 10 deg minimum altitude: below that, horizon haze/obstructions
-            # usually make a pass not worth showing anyway.
+            # Minimum altitude for a pass to be worth listing: below this,
+            # horizon haze/obstructions usually spoil it. Raised 10 -> 15 deg.
+            # Not higher: Hubble's 28.5 deg inclination caps it at roughly 27 deg
+            # of elevation from mid-northern latitudes, so a 20 deg floor would
+            # filter out most of its passes entirely.
             event_times, events = satellite.find_events(
-                user_location, t0, t1, altitude_degrees=10.0
+                user_location, t0, t1, altitude_degrees=MIN_PASS_ALTITUDE_DEG
             )
 
             # find_events returns clean rise(0)/culminate(1)/set(2) triples

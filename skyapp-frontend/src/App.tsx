@@ -253,7 +253,7 @@ const App: React.FC = () => {
       </button>
 
       <header className="header-section">
-        <h1 className="main-title">SKY WATCH</h1>
+        <h1 className="main-title">DAVID'S MOON</h1>
           <div
           className="logo-container"
           style={{ backgroundImage: `url(${currentLogo})` }}

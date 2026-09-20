@@ -69,7 +69,7 @@ const SatellitePasses: React.FC = memo(() => {
 
   return (
     <div className="satpasses-container">
-      <div className="card-title">Satellite Passes</div>
+      <div className="card-title">Tiangong and Hubble Passes</div>
 
       {error ? (
         <p className="satpasses-signal-lost">SIGNAL LOST</p>
