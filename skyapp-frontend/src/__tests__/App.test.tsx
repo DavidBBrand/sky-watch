@@ -87,11 +87,12 @@ test('renders Sky Watch title and toggles theme', async () => {
   expect(document.documentElement.getAttribute('data-theme')).toBe('day');
 
   // 3. Find button by its ARIA LABEL
-  const toggleBtn = screen.getByLabelText(/toggle day\/night mode/i);
+  const toggleBtn = screen.getByLabelText(/switch to night mode/i);
   
   // 4. Toggle to NIGHT
   fireEvent.click(toggleBtn);
   
-  // 5. Verify change to NIGHT
+  // 5. Verify change to NIGHT (and the button now offers the way back)
   expect(document.documentElement.getAttribute('data-theme')).toBe('night');
+  expect(toggleBtn).toHaveAccessibleName(/switch to day mode/i);
 });

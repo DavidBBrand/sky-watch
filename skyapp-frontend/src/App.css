@@ -379,13 +379,13 @@
 }
 
 .theme-toggle-btn {
-  /* Default Mobile Styles */
-  position: relative;
-  top: 0;
-  right: 0;
-  margin: 8px auto; /* Centered on mobile */
+  /* Pinned to the top-right corner at every viewport width */
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  margin: 0;
   display: block;
-  padding: 4px 6px;
+  padding: 6px 12px;
   border-radius: 1rem;
   border: 2px groove var(--card-border);
   color: var(--text-main);
@@ -396,7 +396,7 @@
   transition: all 0.3s ease;
   z-index: 1000;
   width: fit-content;
-  min-width: 140px;
+  min-width: 0;
   font-family: "Oxanium", sans-serif;
   opacity: 0.92;
   /* Glass  Effect */
@@ -422,35 +422,22 @@
   border: 2px solid var(--separator-glow2);
 }
 
-@media (max-width: 767px) {
-  .theme-toggle-btn {
-    margin: 5px auto 15px auto; /* Tightens the gap between button and title */
-  }
+/* The button is out of flow (position: fixed), so reserve room above the
+   title / loading status bar so they don't render underneath it. The
+   fullscreen globe / solar views don't render the button, so skip them. */
+.app-container:not(.fullscreen-page) {
+  padding-top: 50px;
 }
 
-/* Phones: centered-pill shape + size was a near-exact visual match for the
-   Dynamic Island/camera cutout on iPhones (reported on iPhone 17 running
-   this as a PWA), so it read as a second camera cutout. Move it out of that
-   zone entirely — pinned to the top-right corner, ~30% smaller — instead of
-   centered up top. */
+/* Phones: the old centered pill read as a second camera cutout next to the
+   iPhone Dynamic Island (seen on iPhone 17 as a PWA), which is why the
+   button lives in the corner. Tuck it in a bit tighter and smaller here. */
 @media (max-width: 480px) {
   .theme-toggle-btn {
-    position: fixed;
     top: 8px;
     right: 8px;
-    margin: 0;
     padding: 6px 11px;
     font-size: 0.84rem;
-    min-width: 0;
-    width: fit-content;
-  }
-
-  /* Taking the button out of flow (position: fixed) collapses the row it
-     used to occupy above the title, so without this the "SKY WATCH" title
-     (and the loading status bar) render underneath the now-floating
-     button. Push content down by roughly the button's own footprint. */
-  .app-container {
-    padding-top: 50px;
   }
 }
 

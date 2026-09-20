@@ -247,9 +247,9 @@ const App: React.FC = () => {
       <button
         onClick={() => setIsNight(!isNight)}
         className="theme-toggle-btn"
-        aria-label="Toggle day/night mode"
+        aria-label={isNight ? "Switch to day mode" : "Switch to night mode"}
       >
-        {isNight ? "🌙 Night Mode" : "☀️ Day Mode"}
+        {isNight ? "☀️ Switch to Day" : "🌙 Switch to Night"}
       </button>
 
       <header className="header-section">
