@@ -32,24 +32,35 @@
 /* Base Map Layer (The Land) */
 .mode-night .leaflet-tile-pane .leaflet-layer:nth-child(1) {
   /*  turns a bright map into a deep navy/charcoal 'Night' map */
-  filter: brightness(3) contrast(1.2) saturate(0.5) hue-rotate(180deg) invert(10%);
+  filter: brightness(3) contrast(1.2) saturate(0) hue-rotate(180deg) invert(10%);
+}
+
+/* Weather.css has a global `.leaflet-tile-pane { mix-blend-mode: screen; opacity: 0.81 }`
+   (left over from the old wind map). Undo it here so this map's tiles aren't screened
+   onto the dark container background, which washed the clouds out. */
+.weather-map-wrapper .leaflet-tile-pane {
+  mix-blend-mode: normal;
+  opacity: 1;
 }
 
 /* Cloud Layer (The Weather) */
 .mode-night .clouds-layer {
-  /* 'screen' makes dark pixels transparent and light pixels glow */
-  mix-blend-mode: screen !important;
-  /* Boost brightness so the grey clouds become white 'wisps' */
-  filter: brightness(1.5) contrast(1.5) saturate(0) !important;
-  opacity: 0.1 !important; /* Higher opacity works now because blend-mode handles the 'darkness' */
+  /* Normal blend: screen over the light-grey night base barely changed anything */
+  mix-blend-mode: normal;
+  /* Strip OWM's tint and push the grey clouds toward bright white */
+  filter: saturate(0) brightness(2) contrast(1.3);
+  opacity: 0.9;
 }
 
-/* Day Mode: Clean and Simple */
+/* Day Mode: white clouds with a defined shadow so they read on a light map */
 .mode-day .clouds-layer {
-  mix-blend-mode: multiply !important; /* Clouds darken the land slightly */
-  filter: brightness(0.7) contrast(1.5);
-  opacity: 0.9 !important;
+  mix-blend-mode: normal;
+  filter: saturate(0) brightness(1.15) contrast(1.3)
+    drop-shadow(0 0 2px rgba(20, 30, 50, 0.6))
+    drop-shadow(0 2px 6px rgba(20, 30, 50, 0.35));
+  opacity: 1;
 }
+
 /* Dim the Day Mode Base Map so clouds pop */
 .mode-day .leaflet-tile-pane .leaflet-layer:nth-child(1) {
   /* Drops brightness by 15%, slightly fades the harsh map colors, and boosts contrast */

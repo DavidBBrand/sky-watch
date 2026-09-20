@@ -62,7 +62,7 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
         />
         
         {/* Weather/Cloud Layer */}
-        <TileLayer url={cloudsUrl} />
+        <TileLayer url={cloudsUrl} className="clouds-layer" />
         
         <RecenterMap lat={lat} lon={lon} />
       </MapContainer>
