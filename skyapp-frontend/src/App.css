@@ -45,6 +45,7 @@
   font-weight: 500;
   margin: 0px auto;
   text-transform: uppercase;
+  letter-spacing:4px;
   color: var(--text-main);
   opacity: 0.89;
   /*  Etched Glass  Effect */
@@ -456,12 +457,12 @@ img[src*="marker"],
 }
 
 .copyright {
-  font-size: 1rem;
+  font-size: 1.4rem;
   opacity: 0.76;
   margin-top: 40px;
   color: var(--text-sub);
   font-weight: 300;
-  font-family: "Roboto", sans-serif !important;
+  font-family: "Oxanium", sans-serif !important;
 }
 
 /* Responsive Breakpoints */
@@ -602,8 +603,8 @@ img[src*="marker"],
 
 .loading-screen {
   font-size: 1.6rem;
-  font-family: 'Roboto Condensed', sans-serif;
-  letter-spacing: -1px;
+  font-family: 'Oxanium', sans-serif;
+  letter-spacing: 0px;
   margin-top: 5rem;
 }
 
