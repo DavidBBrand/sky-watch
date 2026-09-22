@@ -160,7 +160,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       fontFamily: "Roboto Condensed",
                       color: "var(--text-sub)",
                       marginTop: "2px",
-                      letterSpacing: "-1px"
+                      letterSpacing: "0px"
                     }}
                   >
                     {getCompassDirection(info.azimuth)} at {info.azimuth}° Az

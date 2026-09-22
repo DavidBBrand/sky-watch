@@ -43,11 +43,12 @@
 
 .status-visible {
   background: rgba(74, 222, 128, 0.096);
-  color: #23753acf; /* Darker green for Day Mode readability */
-  font-family: "Roboto Condensed", sans-serif;
-  border: 1px solid green;
+  color: rgba(10, 71, 28, 0.81);
+  font-family: "Oxanium", sans-serif;
+  font-weight: 600;
+  border: .5px solid green;
   opacity: 0.78;
-  font-size:1.1rem;
+  font-size:1rem;
 }
 
 
@@ -59,9 +60,10 @@
   background: rgba(169, 3, 3, 0.128);
   color: var(--text-sub);
   opacity: 0.78;
-  font-size: 1.1rem;
-  font-family: "Roboto Condensed", sans-serif;
-  border: 1px solid red;
+  font-size: 1rem;
+  font-family: "Oxanium", sans-serif;
+  font-weight: 600;
+  border: .5px solid red;
 }
 
 .distance {
