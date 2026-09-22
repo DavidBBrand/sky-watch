@@ -34,7 +34,7 @@ const WEIGHTS = { cloud: 0.5, moon: 0.35, visibility: 0.15 };
 function getVerdict(score: number): Verdict {
   if (score >= 75) return { label: "Excellent", className: "verdict-excellent" };
   if (score >= 55) return { label: "Good", className: "verdict-good" };
-  if (score >= 35) return { label: "Fair", className: "verdict-fair" };
+  if (score >= 35) return { label: "Fair/Meh", className: "verdict-fair" };
   return { label: "Poor", className: "verdict-poor" };
 }
 
