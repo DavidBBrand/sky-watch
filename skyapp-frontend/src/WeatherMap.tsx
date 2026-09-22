@@ -57,12 +57,16 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, theme }) => {
       >
         {/* Base Layer */}
         <TileLayer
+          key={isNight ? "base-night" : "base-day"}
           url={baseTileUrl}
+          className="base-layer"
+          zIndex={1}
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         />
         
         {/* Weather/Cloud Layer */}
-        <TileLayer url={cloudsUrl} className="clouds-layer" />
+        <TileLayer url={cloudsUrl} className="clouds-layer" zIndex={2} />
+
         
         <RecenterMap lat={lat} lon={lon} />
       </MapContainer>
