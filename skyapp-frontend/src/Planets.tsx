@@ -205,7 +205,7 @@ const Planets: React.FC<PlanetsProps> = memo(({ skyData }) => {
                       </div>
                       <span className="status-tag status-visible">You Are Here</span>
                       <div className="glow-sub2" style={{ fontSize: "1.6rem", fontFamily: "Roboto Condensed", color: "var(--text-sub)", marginTop: "2px", letterSpacing: "-1px" }}>
-                       Still Our Only Home 
+                       Home 
                       </div>
                       <div style={{ fontSize: "1.6rem", fontFamily: "Roboto Condensed", color: "#3baed4", fontWeight: "600", letterSpacing: "-1px", lineHeight: "1", marginBottom: "-1px" }}>
                         0° Alt
