@@ -457,7 +457,7 @@ img[src*="marker"],
 }
 
 .copyright {
-  font-size: 1.4rem;
+  font-size: .8rem;
   opacity: 0.76;
   margin-top: 40px;
   color: var(--text-sub);
