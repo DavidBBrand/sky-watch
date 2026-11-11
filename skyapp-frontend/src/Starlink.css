@@ -4,7 +4,7 @@
   aspect-ratio: 1 / 1;
   margin: 50px auto;
   max-width: 500px;
-  background: rgba(124, 145, 150, 0.188); 
+  background: rgba(252, 253, 253, 0.188); 
   border-radius: 50%;
 
   /*  Glow Effect */
@@ -37,7 +37,7 @@
 
 [data-theme="day"] .radar-map-overlay {
   opacity: 0.88;
-  filter: brightness(0.72) contrast(1.6);
+  filter: brightness(0.85) contrast(1.6);
 }
 
 .radar-scanner {

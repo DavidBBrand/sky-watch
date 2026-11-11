@@ -602,9 +602,9 @@ img[src*="marker"],
 }
 
 .loading-screen {
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   font-family: 'Oxanium', sans-serif;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
   margin-top: 5rem;
 }
 

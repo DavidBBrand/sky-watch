@@ -1,11 +1,11 @@
 :root {
   /* Day Theme (Refined Solar) */
-  --bg-color: rgba(229, 237, 244, 0.95);
-  --mesh-1: rgb(227, 239, 245);
-  --mesh-2: rgb(213, 220, 240);
-  --mesh-3: rgb(209, 227, 232); /* From index.css */
+  --bg-color: rgba(244, 244, 222, 0.95);
+  --mesh-1: rgb(250, 243, 239);
+  --mesh-2: rgb(239, 227, 214);
+  --mesh-3: rgb(232, 230, 211); /* From index.css */
   
-  --card-bg: rgba(26, 86, 37, 0.154);
+  --card-bg: rgba(227, 209, 183, 0.29);
   --card-border: rgba(62, 51, 35, 0.2);
   --glass-blur: blur(2px);
   
@@ -27,10 +27,10 @@
 }
 
 [data-theme="night"] {
-  --bg-color: rgba(0, 0, 5, 0.95);
+  --bg-color: rgba(0, 0, 18, 0.95);
   --mesh-1: rgb(0, 0, 3);
   --mesh-2: rgb(0, 0, 4);
-  --mesh-3: rgb(0, 0, 0);
+  --mesh-3: rgba(179, 137, 137, 0.454);
 
   --card-bg: rgba(48, 63, 92, 0.15); /* Slightly darker for better contrast */
   --card-border: rgba(255, 255, 255, 0.1);
